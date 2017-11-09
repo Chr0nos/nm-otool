@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/09 17:59:12 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/09 18:43:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,22 @@
 #include <stdlib.h>
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+
+static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
+{
+	const char				*stringtable = (char *)(ptr + sym->stroff);
+	const struct nlist_64	*array = (void*)(ptr + sym->symoff);
+	const char				*name;
+	size_t					i;
+
+	i = 0;
+	while (i < sym->nsyms)
+	{
+		name = &stringtable[array[i].n_un.n_strx];
+		ft_printf("name: %s\n", name);
+		i++;
+	}
+}
 
 static void	handle_x64(char *fileraw)
 {
@@ -33,6 +49,7 @@ static void	handle_x64(char *fileraw)
 		{
 			sym = (struct symtab_command *)(size_t)lc;
 			ft_printf("nb symboles: %d\n", sym->nsyms);
+			print_symb_64(sym, (size_t)fileraw);
 			break ;
 		}
 		lc = (void*)((size_t)lc + lc->cmdsize);
