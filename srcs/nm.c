@@ -6,7 +6,7 @@
 /*   By: snicolet <marvin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/09 18:43:52 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/09 19:22:54 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,19 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
 	const struct nlist_64	*array = (void*)(ptr + sym->symoff);
-	const char				*name;
 	size_t					i;
+	const char				*name;
 
 	i = 0;
 	while (i < sym->nsyms)
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		ft_printf("name: %s\n", name);
+		if (array[i].n_value > 0)
+			ft_printf("%08x%08x %1s %s\n",
+					array[i].n_type & N_EXT,
+					array[i].n_value, "X", name);
+		else
+			ft_printf("%16s %1s %s\n", "", "U", name);
 		i++;
 	}
 }
