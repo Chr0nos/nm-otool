@@ -3,64 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   nm.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: snicolet <marvin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/09 19:22:54 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/10 03:45:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <fcntl.h>
-#include <stdlib.h>
-#include <mach-o/loader.h>
-#include <mach-o/nlist.h>
-
-static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
-{
-	const char				*stringtable = (char *)(ptr + sym->stroff);
-	const struct nlist_64	*array = (void*)(ptr + sym->symoff);
-	size_t					i;
-	const char				*name;
-
-	i = 0;
-	while (i < sym->nsyms)
-	{
-		name = &stringtable[array[i].n_un.n_strx];
-		if (array[i].n_value > 0)
-			ft_printf("%08x%08x %1s %s\n",
-					array[i].n_type & N_EXT,
-					array[i].n_value, "X", name);
-		else
-			ft_printf("%16s %1s %s\n", "", "U", name);
-		i++;
-	}
-}
-
-static void	handle_x64(char *fileraw)
-{
-	struct mach_header_64		*header;
-	struct load_command			*lc;
-	struct symtab_command		*sym;
-	size_t						i;
-
-	ft_printf("%s\n", "valid 64 bits file handled");
-	header = (void*)(size_t)fileraw;
-	i = 0;
-	lc = (struct load_command*)((size_t)fileraw + sizeof(*header));
-	while (i < header->ncmds)
-	{
-		if (lc->cmd == LC_SYMTAB)
-		{
-			sym = (struct symtab_command *)(size_t)lc;
-			ft_printf("nb symboles: %d\n", sym->nsyms);
-			print_symb_64(sym, (size_t)fileraw);
-			break ;
-		}
-		lc = (void*)((size_t)lc + lc->cmdsize);
-		i++;
-	}
-}
+#include "nm.h"
 
 static void	handle_files(const char *filepath)
 {
@@ -76,6 +27,8 @@ static void	handle_files(const char *filepath)
 		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
 	else if (*(unsigned int *)(size_t)fileraw == MH_MAGIC_64)
 		handle_x64(fileraw);
+	else if (*(unsigned int *)(size_t)fileraw == MH_MAGIC)
+		handle_x32(fileraw);
 	else
 		ft_dprintf(2, "%s%s\n", "error: unknow file type: ", filepath);
 	free(fileraw);
@@ -87,11 +40,11 @@ int			main(int ac, char **av)
 
 	if (ac < 2)
 	{
-		ft_dprintf(2, "%s", "usage: ./nm [filepath]\n");
-		return (EXIT_FAILURE);
+		handle_files("a.out");
+		return (EXIT_SUCCESS);
 	}
 	p = 1;
 	while (p < ac)
-		handle_files(av[p++]);	
+		handle_files(av[p++]);
 	return (EXIT_SUCCESS);
 }
