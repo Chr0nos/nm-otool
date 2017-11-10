@@ -6,12 +6,31 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/10 14:24:10 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/10 21:28:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "nm.h"
+
+char		nm_getletter(const t_sym *sym)
+{
+	const size_t		type = sym->type & N_TYPE;
+	char				ret;
+
+	ret = '?';
+	if (type == N_UNDF)
+		ret = 'U';
+	else if (type == N_ABS)
+		ret = 'A';
+	else if (type == N_INDR)
+		ret = 'I';
+	else if (sym->type & N_STAB)
+		ret = 'Z';
+	if ((type & N_EXT) == 0 && ret != '?')
+		ret += 32;
+	return (ret);
+}
 
 t_list		*nm_display_list(t_list *lst)
 {
@@ -23,11 +42,11 @@ t_list		*nm_display_list(t_list *lst)
 	{
 		sym = lst->content;
 		if (sym->value > 0)
-			ft_printf("%08x%08x %1s %s\n",
+			ft_printf("%08x%08x %1c %s\n",
 					sym->type & N_EXT,
-					sym->value, "X", sym->name);
+					sym->value, nm_getletter(sym), sym->name);
 		else
-			ft_printf("%16s %1s %s\n", "", "U", sym->name);
+			ft_printf("%16s %1c %s\n", "", 'U', sym->name);
 		lst = lst->next;
 	}
 	return (origin);
@@ -35,9 +54,12 @@ t_list		*nm_display_list(t_list *lst)
 
 int			handle_sort(t_list *a, t_list *b)
 {
-	return (ft_strcmp(
-		((t_sym*)(a->content))->name,
-		((t_sym*)(b->content))->name));
+	const t_sym		*as = a->content;
+	const t_sym		*bs = b->content;
+
+	if (as->value != bs->value)
+		return ((as->value < bs->value) ? 1 : -1);
+	return (ft_strcmp(as->name, bs->name));
 }
 
 static void	handle_files(const char *filepath)
