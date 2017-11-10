@@ -6,12 +6,22 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/10 03:45:58 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/10 14:23:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
-#include "libft.h"
+
+static void	handle_x64_list(t_list **lst,
+	const struct nlist_64 *item, const char *name)
+{
+	t_sym		sym;
+
+	sym.name = (char*)(size_t)name;
+	sym.type = item->n_type;
+	sym.value = item->n_value;
+	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
+}
 
 static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
 {
@@ -19,19 +29,18 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
 	const struct nlist_64	*array = (void*)(ptr + sym->symoff);
 	size_t					i;
 	const char				*name;
+	t_list					*lst;
 
 	i = 0;
+	lst = NULL;
 	while (i < sym->nsyms)
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		if (array[i].n_value > 0)
-			ft_printf("%08x%08x %1s %s\n",
-					array[i].n_type & N_EXT,
-					array[i].n_value, "X", name);
-		else
-			ft_printf("%16s %1s %s\n", "", "U", name);
+		handle_x64_list(&lst, &array[i],  name);
 		i++;
 	}
+	nm_display_list(lst);
+	ft_lstdel(&lst, ft_lstpulverisator);
 }
 
 void		handle_x64(char *fileraw)

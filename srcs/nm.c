@@ -6,12 +6,39 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/10 03:45:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/10 14:24:10 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "nm.h"
+
+t_list		*nm_display_list(t_list *lst)
+{
+	t_list		*origin;
+	t_sym		*sym;
+
+	origin = lst;
+	while (lst)
+	{
+		sym = lst->content;
+		if (sym->value > 0)
+			ft_printf("%08x%08x %1s %s\n",
+					sym->type & N_EXT,
+					sym->value, "X", sym->name);
+		else
+			ft_printf("%16s %1s %s\n", "", "U", sym->name);
+		lst = lst->next;
+	}
+	return (origin);
+}
+
+int			handle_sort(t_list *a, t_list *b)
+{
+	return (ft_strcmp(
+		((t_sym*)(a->content))->name,
+		((t_sym*)(b->content))->name));
+}
 
 static void	handle_files(const char *filepath)
 {
