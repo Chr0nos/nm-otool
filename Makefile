@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#*   Updated: 2017/11/11 02:09:14 by snicolet         ###   ########.fr       *#
+#    Updated: 2017/11/11 02:17:22 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ CFLAGS=-Wall -Werror -Wextra -Weverything
 INC=-I./libft -I.
 LINKER=-L./libft -lft
 NAME=nm
-OBJS=nm.o nm_x32.o nm_x64.o
+OBJS=nm.o nm_x32.o nm_x64.o nm_display.o
 CC=clang
 
 all: $(NAME)
