@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/10 21:21:03 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/11 00:35:42 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,15 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
 	{
 		name = &stringtable[array[i].n_un.n_strx];
 		handle_x64_list(&lst, &array[i],  name);
-		ft_printf("%hhu\n", array[i].n_sect);
 		i++;
 	}
 	nm_display_list(lst);
 	ft_lstdel(&lst, ft_lstpulverisator);
+}
+
+static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr)
+{
+	ft_printf("segment name: %s\n", seg->segname, ptr);
 }
 
 void		handle_x64(char *fileraw)
@@ -65,6 +69,8 @@ void		handle_x64(char *fileraw)
 			print_symb_64(sym, (size_t)fileraw);
 			break ;
 		}
+		else if (lc->cmd == LC_SEGMENT_64)
+			handle_x64_segment((void*)lc, (size_t)fileraw);
 		lc = (void*)((size_t)lc + lc->cmdsize);
 		i++;
 	}

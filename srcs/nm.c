@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/10 21:28:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/11 00:08:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ char		nm_getletter(const t_sym *sym)
 
 	ret = '?';
 	if (type == N_UNDF)
+		ret = 'U';
+	else if (type == N_PBUD)
+		ret = 'U';
+	else if (type == N_SECT)
 		ret = 'U';
 	else if (type == N_ABS)
 		ret = 'A';
