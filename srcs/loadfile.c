@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 16:13:21 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/11 16:26:20 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/11 16:30:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static size_t	filesize(const char *filepath)
 {
 	struct stat		st;
 
-	if (stat(filepath, &st) != 0)
+	if (lstat(filepath, &st) != 0)
 		return (0);
 	return ((size_t)st.st_size);
 }
