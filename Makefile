@@ -6,14 +6,14 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2017/11/11 02:17:22 by snicolet         ###   ########.fr        #
+#*   Updated: 2017/11/12 20:48:32 by snicolet         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS=-Wall -Werror -Wextra -Weverything
+CFLAGS=-Wall -Werror -Wextra -Weverything -Wno-reserved-id-macro
 INC=-I./libft -I.
 LINKER=-L./libft -lft
-NAME=nm
+NAME=ft_nm
 OBJS=nm.o nm_x32.o nm_x64.o nm_display.o
 CC=clang
 
