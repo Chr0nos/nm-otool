@@ -6,12 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/11 02:21:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/11 16:27:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "nm.h"
+#include <sys/mman.h>
 
 int			handle_sort(t_list *a, t_list *b)
 {
@@ -39,7 +40,8 @@ static void	handle_files(const char *filepath)
 		handle_x32(fileraw);
 	else
 		ft_dprintf(2, "%s%s\n", "error: unknow file type: ", filepath);
-	free(fileraw);
+	// free(fileraw);
+	munmap(fileraw, size);
 }
 
 int			main(int ac, char **av)

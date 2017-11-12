@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/11 02:16:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/11 16:28:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ t_list						*nm_display_list(t_list *lst);
 void						nm_display_sym(const t_sym *sym);
 int							handle_sort(t_list *a, t_list *b);
 char						nm_getletter(const t_sym *sym);
+char						*loadfile(const char *filepath, size_t *usize);
 
 #endif
