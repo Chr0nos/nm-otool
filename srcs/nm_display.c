@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2017/12/05 00:22:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/12/05 00:24:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char		nm_getletter(const t_sym *sym)
 		ret += 32;
 	return (ret);
 }
-#include <stdio.h>
+
 void		nm_display_sym(const t_sym *sym, t_list *segments)
 {
 	(void)segments;
