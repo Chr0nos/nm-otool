@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/12 21:11:34 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/11/13 22:06:12 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
 
 static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr)
 {
-	ft_printf("%s%12s%s%p%s%11lu%s%11lu%s%11u%s%4u%s%4u%s%4u\n",
+	ft_printf("%s%12s%s%p%s%11lx%s%11lx%s%11u%s%4u%s%4u%s%4u\n",
 		"segment name: ", seg->segname,
 		" address: ", ptr,
 		" vmaddr: ", seg->vmaddr,
