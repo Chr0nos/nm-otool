@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/13 22:06:12 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/12/04 23:58:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static void	handle_x64_list(t_list **lst,
 	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
 }
 
-static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
+static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
+	t_list *segments)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
 	const struct nlist_64	*array = (void*)(ptr + sym->symoff);
@@ -41,11 +42,13 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr)
 		handle_x64_list(&lst, &array[i],  name);
 		i++;
 	}
-	nm_display_list(lst);
+	nm_display_list(lst, segments);
 	ft_lstdel(&lst, ft_lstpulverisator);
+	ft_lstdel(&segments, NULL);
 }
 
-static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr)
+static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr,
+	t_list **segments)
 {
 	ft_printf("%s%12s%s%p%s%11lx%s%11lx%s%11u%s%4u%s%4u%s%4u\n",
 		"segment name: ", seg->segname,
@@ -56,6 +59,7 @@ static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr)
 		" initprot: ", seg->initprot,
 		" nsects: ", seg->nsects,
 		" flags: ", seg->flags);
+	ft_lstpush_back(segments, ft_lstnewlink(seg, sizeof(*seg)));
 }
 
 void		handle_x64(char *fileraw)
@@ -63,22 +67,24 @@ void		handle_x64(char *fileraw)
 	struct mach_header_64		*header;
 	struct load_command			*lc;
 	struct symtab_command		*sym;
+	t_list						*segments;
 	size_t						i;
 
 	ft_printf("%s\n", "valid 64 bits file handled");
 	header = (void*)(size_t)fileraw;
 	i = 0;
 	lc = (struct load_command*)((size_t)fileraw + sizeof(*header));
+	segments = NULL;
 	while (i < header->ncmds)
 	{
 		if (lc->cmd == LC_SYMTAB)
 		{
 			sym = (struct symtab_command *)(size_t)lc;
-			print_symb_64(sym, (size_t)fileraw);
+			print_symb_64(sym, (size_t)fileraw, segments);
 			break ;
 		}
 		else if (lc->cmd == LC_SEGMENT_64)
-			handle_x64_segment((void*)lc, (size_t)fileraw);
+			handle_x64_segment((void*)lc, (size_t)fileraw, &segments);
 		lc = (void*)((size_t)lc + lc->cmdsize);
 		i++;
 	}
