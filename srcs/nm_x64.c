@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2017/12/04 23:58:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/12/09 03:38:14 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,9 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
 	}
 	nm_display_list(lst, segments);
 	ft_lstdel(&lst, ft_lstpulverisator);
-	ft_lstdel(&segments, NULL);
 }
 
-static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr,
-	t_list **segments)
+static void	ds_x64(struct segment_command_64 *seg, size_t const ptr)
 {
 	ft_printf("%s%12s%s%p%s%11lx%s%11lx%s%11u%s%4u%s%4u%s%4u\n",
 		"segment name: ", seg->segname,
@@ -59,6 +57,14 @@ static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr,
 		" initprot: ", seg->initprot,
 		" nsects: ", seg->nsects,
 		" flags: ", seg->flags);
+}
+
+static void	handle_x64_segment(struct segment_command_64 *seg, size_t const ptr,
+	t_list **segments)
+{
+	(void)ds_x64;
+	(void)ptr;
+	ds_x64(seg, ptr);
 	ft_lstpush_back(segments, ft_lstnewlink(seg, sizeof(*seg)));
 }
 
@@ -88,4 +94,5 @@ void		handle_x64(char *fileraw)
 		lc = (void*)((size_t)lc + lc->cmdsize);
 		i++;
 	}
+	ft_lstdel(&segments, NULL);
 }

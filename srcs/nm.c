@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/11 16:27:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/12/09 03:41:49 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,27 @@ int			handle_sort(t_list *a, t_list *b)
 	return (ft_strcmp(as->name, bs->name));
 }
 
+static void	handle_files_types(unsigned int magic, char *fileraw)
+{
+	const t_handlers	ptrs[] = {
+		(t_handlers){MH_MAGIC_64, 0, &handle_x64},
+		(t_handlers){MH_CIGAM_64, 0, &handle_x64},
+		(t_handlers){MH_MAGIC, 0, &handle_x32},
+	};
+	size_t				p;
+
+	p = 2;
+	while (p--)
+	{
+		if (ptrs[p].magic == magic)
+		{
+			ptrs[p].run(fileraw);
+			return ;
+		}
+	}
+	ft_dprintf(2, "%s\n", "error: unknow file type");
+}
+
 static void	handle_files(const char *filepath)
 {
 	char	*fileraw;
@@ -34,13 +55,7 @@ static void	handle_files(const char *filepath)
 	}
 	if (size < 4)
 		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
-	else if (*(unsigned int *)(size_t)fileraw == MH_MAGIC_64)
-		handle_x64(fileraw);
-	else if (*(unsigned int *)(size_t)fileraw == MH_MAGIC)
-		handle_x32(fileraw);
-	else
-		ft_dprintf(2, "%s%s\n", "error: unknow file type: ", filepath);
-	// free(fileraw);
+	handle_files_types(*(unsigned int *)(size_t)fileraw, fileraw);
 	munmap(fileraw, size);
 }
 
