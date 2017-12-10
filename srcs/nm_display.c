@@ -6,33 +6,35 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2017/12/09 03:48:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/12/10 02:01:36 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static char	get_address_segment(const size_t addr, t_list *segments)
+static char	get_address_segment(const unsigned int nsect, t_list *segments)
 {
 	struct segment_command_64	*seg;
+	uint8_t						index;
 
+	index = 0;
 	while (segments)
 	{
 		seg = segments->content;
-		// FIXME
-		if ((addr >= seg->vmaddr) && (addr <= seg->vmaddr + seg->vmsize))
+		if (index == nsect)
 		{
-			if (!ft_strcmp(seg->segname, "__TEXT"))
+			if (!ft_strcmp(seg->segname, SEG_TEXT))
 				return (SYM_TEXT);
-			else if (!ft_strcmp(seg->segname, "__DATA"))
+			else if (!ft_strcmp(seg->segname, SEG_DATA))
 				return (SYM_DATA);
-			else if (!ft_strcmp(seg->segname, "__BSS"))
+			else if (!ft_strcmp(seg->segname, SECT_BSS))
 				return (SYM_BSS);
 			return ('S');
 		}
+		index++;
 		segments = segments->next;
 	}
-	return ('?');
+	return ('S');
 }
 
 char		nm_getletter(const t_sym *sym, t_list *segments)
@@ -46,7 +48,7 @@ char		nm_getletter(const t_sym *sym, t_list *segments)
 	else if (type == N_PBUD)
 		ret = 'U';
 	else if (type == N_SECT)
-		ret = get_address_segment(sym->value, segments);
+		ret = get_address_segment(sym->nsect, segments);
 	else if (type == N_ABS)
 		ret = 'A';
 	else if (type == N_INDR)
