@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2017/12/10 02:02:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2017/12/10 02:05:03 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,6 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
 	ft_lstdel(&lst, ft_lstpulverisator);
 }
 
-static void	handle_x64_segment(struct segment_command_64 *seg,
-	t_list **segments)
-{
-	ft_lstpush_back(segments, ft_lstnewlink(seg, sizeof(*seg)));
-}
-
 void		handle_x64(char *fileraw)
 {
 	struct mach_header_64		*header;
@@ -73,7 +67,7 @@ void		handle_x64(char *fileraw)
 			break ;
 		}
 		else if (lc->cmd == LC_SEGMENT_64)
-			handle_x64_segment((void*)lc, &segments);
+			ft_lstpush_back(&segments, ft_lstnewlink(lc, 0));
 		lc = (void*)((size_t)lc + lc->cmdsize);
 		i++;
 	}
