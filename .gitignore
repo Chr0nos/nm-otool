@@ -4,4 +4,3 @@ otool
 *.a
 ft_nm
 ft_otool
-mach-o

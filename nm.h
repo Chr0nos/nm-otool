@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2017/12/09 03:33:03 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/13 08:35:43 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef struct				s_sym
 	unsigned int			nsect;
 	unsigned int			ndesc;
 	char					*name;
+	unsigned int			display_size;
+	unsigned int			padding;
 }							t_sym;
 
 typedef struct				s_handlers

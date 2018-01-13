@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/13 08:16:44 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/13 08:37:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	handle_x32_list(t_list **lst,
 	sym.value = item->n_value;
 	sym.nsect = (unsigned int)item->n_sect;
 	sym.ndesc = (unsigned int)item->n_desc;
+	sym.display_size = 8;
 	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
 }
 
@@ -68,7 +69,6 @@ void			handle_x32(char *fileraw)
 	struct symtab_command		*sym;
 	size_t						i;
 
-	ft_printf("%s\n", "valid 32 bits file handled");
 	header = (void*)fileraw;
 	i = 0;
 	lc = (struct load_command *)((size_t)fileraw + sizeof(*header));
@@ -83,6 +83,7 @@ void			handle_x32(char *fileraw)
 		}
 		else if (lc->cmd == LC_SEGMENT)
 			handle_x32_segment(&segments, lc);
+		lc = (void*)((size_t)lc + lc->cmdsize);
 		i++;
 	}
 	ft_lstdel(&segments, &ft_lstpulverisator);
