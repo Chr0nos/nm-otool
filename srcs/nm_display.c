@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/13 08:41:36 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/13 11:12:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ char		nm_getletter(const t_sym *sym, t_list *segments)
 
 void		nm_display_sym(const t_sym *sym, t_list *segments)
 {
-	if (sym->value > 0)
+	if (sym->type & N_DESC_DISCARDED)
+		;
+	else if (sym->value > 0)
 	{
 		ft_printf("%0*lx %c %s\n",
 			sym->display_size,
