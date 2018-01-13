@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2017/12/09 03:41:49 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/13 08:12:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	handle_files_types(unsigned int magic, char *fileraw)
 	};
 	size_t				p;
 
-	p = 2;
+	p = 3;
 	while (p--)
 	{
 		if (ptrs[p].magic == magic)
