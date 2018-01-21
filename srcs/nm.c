@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/13 08:12:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/21 02:54:54 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ static void	handle_files_types(unsigned int magic, char *fileraw)
 		(t_handlers){MH_MAGIC_64, 0, &handle_x64},
 		(t_handlers){MH_CIGAM_64, 0, &handle_x64},
 		(t_handlers){MH_MAGIC, 0, &handle_x32},
+		(t_handlers){MH_CIGAM, 0, &handle_x32},
+		(t_handlers){FAT_MAGIC_64, 0, &handle_fat64},
+		(t_handlers){FAT_CIGAM, 0, &handle_fat}
 	};
 	size_t				p;
 
-	p = 3;
+	p = 6;
 	while (p--)
 	{
 		if (ptrs[p].magic == magic)
@@ -40,7 +43,7 @@ static void	handle_files_types(unsigned int magic, char *fileraw)
 			return ;
 		}
 	}
-	ft_dprintf(2, "%s\n", "error: unknow file type");
+	ft_dprintf(2, "%s%#x\n", "error: unknow file type: ", magic);
 }
 
 static void	handle_files(const char *filepath)
