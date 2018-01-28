@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/21 02:54:54 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/28 11:45:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	handle_files_types(unsigned int magic, char *fileraw)
 		(t_handlers){MH_CIGAM_64, 0, &handle_x64},
 		(t_handlers){MH_MAGIC, 0, &handle_x32},
 		(t_handlers){MH_CIGAM, 0, &handle_x32},
-		(t_handlers){FAT_MAGIC_64, 0, &handle_fat64},
+		(t_handlers){FAT_MAGIC_64, 0, &handle_fat},
 		(t_handlers){FAT_CIGAM, 0, &handle_fat}
 	};
 	size_t				p;

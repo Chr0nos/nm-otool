@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/28 11:30:06 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/28 11:44:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,34 +40,37 @@ static void	fat_fix_cigam(struct fat_arch *arch)
 	arch->align = swap(arch->align);
 }
 
+static int	fat_loop(struct fat_arch *arch, const struct fat_header *header,
+	char *fileraw)
+{
+	if (header->magic == FAT_CIGAM)
+		fat_fix_cigam(arch);
+	if (arch->cputype == CPU_TYPE_X86_64)
+	{
+		handle_x64(&fileraw[arch->offset]);
+		return (2);
+	}
+	if (arch->cputype == CPU_TYPE_X86)
+	{
+		handle_x32(&fileraw[arch->offset]);
+		return (1);
+	}
+	return (0);
+}
+
 void		handle_fat(char *fileraw)
 {
 	struct fat_header		*header;
 	struct fat_arch			*arch;
 	unsigned int			p;
 
+	(void)show;
 	header = (void*)(size_t)fileraw;
 	if (header->magic == FAT_CIGAM)
 		header->nfat_arch = swap(header->nfat_arch);
 	arch = (void*)((size_t)fileraw + sizeof(*header));
 	p = header->nfat_arch;
-	while (p--)
-	{
-		if (header->magic == FAT_CIGAM)
-			fat_fix_cigam(arch);
-		if (arch->cputype == CPU_TYPE_X86_64)
-		{
-			ft_printf("%s", "64 bits found !\n");
-			handle_x64(&fileraw[arch->offset]);
-			// return ;
-		}
-		if (arch->cputype == CPU_TYPE_X86)
-		{
-			ft_printf("%s", "32 bits found.\n");
-			handle_x32(&fileraw[arch->offset]);
-			// return ;
-		}
-		show(arch);
-		arch++;
-	}
+	arch += p;
+	while ((p--) && (!(fat_loop(arch--, header, fileraw))))
+		;
 }

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/25 19:30:19 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/01/28 11:45:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct				s_handlers
 
 void						handle_x32(char *fileraw);
 void						handle_x64(char *fileraw);
-void						handle_fat64(char *fileraw);
 void						handle_fat(char *fileraw);
 t_list						*nm_display_list(t_list *lst, t_list *segments);
 void						nm_display_sym(const t_sym *sym, t_list *segments);
