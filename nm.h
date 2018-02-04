@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 17:16:17 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 17:23:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,15 @@ typedef struct				s_sym
 	unsigned int			nsect;
 	unsigned int			ndesc;
 	char					*name;
-	unsigned int			display_size;
-	unsigned int			padding;
 }							t_sym;
+
+/*
+** magic        : the magic tag of the file, the start of fileraw
+** display_size : for 64 bits binnaries it will be 16, 8 for 32
+** filepath     : the source file path
+** segments     : chained list to internal segments
+** fileraw      : the content of the file, all of it mmaped into the memory
+*/
 
 typedef struct				s_nm
 {
