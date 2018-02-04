@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 14:26:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 17:15:33 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	handle_x32_list(t_list **lst,
 }
 
 static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
-	t_list *segments)
+		t_nm *nm)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
 	const struct nlist		*array = (void*)(ptr + sym->symoff);
@@ -44,7 +44,7 @@ static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
 		handle_x32_list(&lst, &array[i],  name);
 		i++;
 	}
-	nm_display_list(lst, segments);
+	nm_display_list(lst, nm);
 	ft_lstdel(&lst, ft_lstpulverisator);
 }
 
@@ -63,7 +63,6 @@ static void		handle_x32_segment(t_list **segments, struct load_command *lc)
 
 void			handle_x32(t_nm *nm)
 {
-	t_list						*segments;
 	struct mach_header			*header;
 	struct load_command			*lc;
 	struct symtab_command		*sym;
@@ -72,19 +71,18 @@ void			handle_x32(t_nm *nm)
 	header = (void*)nm->fileraw;
 	i = 0;
 	lc = (struct load_command *)((size_t)nm->fileraw + sizeof(*header));
-	segments = NULL;
 	while (i < header->ncmds)
 	{
 		if (lc->cmd == LC_SYMTAB)
 		{
 			sym = (struct symtab_command *)(size_t)lc;
-			print_symb_32(sym, (size_t)nm->fileraw, segments);
+			print_symb_32(sym, (size_t)nm->fileraw, nm);
 			break ;
 		}
 		else if (lc->cmd == LC_SEGMENT)
-			handle_x32_segment(&segments, lc);
+			handle_x32_segment(&nm->segments, lc);
 		lc = (void*)((size_t)lc + lc->cmdsize);
 		i++;
 	}
-	ft_lstdel(&segments, &ft_lstpulverisator);
+	ft_lstdel(&nm->segments, &ft_lstpulverisator);
 }

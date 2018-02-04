@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/13 11:12:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 17:14:17 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char		nm_getletter(const t_sym *sym, t_list *segments)
 	return (ret);
 }
 
-void		nm_display_sym(const t_sym *sym, t_list *segments)
+void		nm_display_sym(const t_sym *sym, t_nm *nm)
 {
 	if (sym->type & N_DESC_DISCARDED)
 		;
@@ -68,20 +68,20 @@ void		nm_display_sym(const t_sym *sym, t_list *segments)
 	{
 		ft_printf("%0*lx %c %s\n",
 			sym->display_size,
-			sym->value, nm_getletter(sym, segments), sym->name);
+			sym->value, nm_getletter(sym, nm->segments), sym->name);
 	}
 	else
 		ft_printf("%*s %c %s\n", sym->display_size, "", 'U', sym->name);
 }
 
-t_list		*nm_display_list(t_list *lst, t_list *segments)
+t_list		*nm_display_list(t_list *lst, t_nm *nm)
 {
 	t_list		*origin;
 
 	origin = lst;
 	while (lst)
 	{
-		nm_display_sym(lst->content, segments);
+		nm_display_sym(lst->content, nm);
 		lst = lst->next;
 	}
 	return (origin);

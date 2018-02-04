@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 14:25:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 17:16:17 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ typedef struct				s_sym
 	unsigned int			display_size;
 	unsigned int			padding;
 }							t_sym;
+
 typedef struct				s_nm
 {
 	unsigned int			magic;
 	unsigned int			display_size;
 	char					*fileraw;
 	const char				*filepath;
+	t_list					*segments;
+	void					*padding;
 }							t_nm;
 
 typedef struct				s_handlers
@@ -50,8 +53,8 @@ typedef struct				s_handlers
 void						handle_x32(t_nm *nm);
 void						handle_x64(t_nm *nm);
 void						handle_fat(t_nm *nm);
-t_list						*nm_display_list(t_list *lst, t_list *segments);
-void						nm_display_sym(const t_sym *sym, t_list *segments);
+t_list						*nm_display_list(t_list *lst, t_nm *nm);
+void						nm_display_sym(const t_sym *sym, t_nm *nm);
 int							handle_sort(t_list *a, t_list *b);
 char						nm_getletter(const t_sym *sym, t_list *segments);
 char						*loadfile(const char *filepath, size_t *usize);
