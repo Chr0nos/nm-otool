@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 15:06:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 18:42:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	fat_loop(struct fat_arch *arch, const struct fat_header *header,
 		fat_fix_cigam(arch);
 	if (arch->cputype == CPU_TYPE_X86_64)
 	{
+		nm->display_size = 16;
 		nm->fileraw = &nm->fileraw[arch->offset];
 		handle_x64(nm);
 		return (2);

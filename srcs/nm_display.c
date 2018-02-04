@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 17:23:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 18:44:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,11 @@ char		nm_getletter(const t_sym *sym, t_list *segments)
 	return (ret);
 }
 
-void		nm_display_sym(const t_sym *sym, t_nm *nm)
+static void	nm_display_foreach(void *content, void *userdata)
 {
+	const t_nm		*nm = userdata;
+	const t_sym		*sym = content;
+
 	if (sym->type & N_DESC_DISCARDED)
 		;
 	else if (sym->value > 0)
@@ -76,13 +79,6 @@ void		nm_display_sym(const t_sym *sym, t_nm *nm)
 
 t_list		*nm_display_list(t_list *lst, t_nm *nm)
 {
-	t_list		*origin;
-
-	origin = lst;
-	while (lst)
-	{
-		nm_display_sym(lst->content, nm);
-		lst = lst->next;
-	}
-	return (origin);
+	ft_lstforeach(lst, nm, &nm_display_foreach);
+	return (lst);
 }

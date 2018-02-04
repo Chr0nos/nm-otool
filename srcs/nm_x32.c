@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 17:15:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 17:28:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static void	handle_x32_list(t_list **lst,
 	sym.value = item->n_value;
 	sym.nsect = (unsigned int)item->n_sect;
 	sym.ndesc = (unsigned int)item->n_desc;
-	sym.display_size = 8;
 	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
 }
 
