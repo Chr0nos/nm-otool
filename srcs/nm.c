@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/28 11:45:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 14:24:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,31 @@ int			handle_sort(t_list *a, t_list *b)
 	return (ft_strcmp(as->name, bs->name));
 }
 
-static void	handle_files_types(unsigned int magic, char *fileraw)
+static void	handle_files_types(unsigned int magic, char *fileraw,
+		const char *filepath)
 {
 	const t_handlers	ptrs[] = {
-		(t_handlers){MH_MAGIC_64, 0, &handle_x64},
-		(t_handlers){MH_CIGAM_64, 0, &handle_x64},
-		(t_handlers){MH_MAGIC, 0, &handle_x32},
-		(t_handlers){MH_CIGAM, 0, &handle_x32},
+		(t_handlers){MH_MAGIC_64, 16, &handle_x64},
+		(t_handlers){MH_CIGAM_64, 16, &handle_x64},
+		(t_handlers){MH_MAGIC, 8, &handle_x32},
+		(t_handlers){MH_CIGAM, 8, &handle_x32},
 		(t_handlers){FAT_MAGIC_64, 0, &handle_fat},
 		(t_handlers){FAT_CIGAM, 0, &handle_fat}
 	};
 	size_t				p;
+	t_nm				nm;
 
+	ft_bzero(&nm, sizeof(nm));
 	p = 6;
 	while (p--)
 	{
 		if (ptrs[p].magic == magic)
 		{
-			ptrs[p].run(fileraw);
+			nm.magic = magic;
+			nm.fileraw = fileraw;
+			nm.filepath = filepath;
+			nm.display_size = ptrs[p].display_size;
+			ptrs[p].run(&nm);
 			return ;
 		}
 	}
@@ -58,7 +65,7 @@ static void	handle_files(const char *filepath)
 	}
 	if (size < 4)
 		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
-	handle_files_types(*(unsigned int *)(size_t)fileraw, fileraw);
+	handle_files_types(*(unsigned int *)(size_t)fileraw, fileraw, filepath);
 	munmap(fileraw, size);
 }
 

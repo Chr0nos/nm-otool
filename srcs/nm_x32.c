@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/13 08:37:30 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 14:26:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void		handle_x32_segment(t_list **segments, struct load_command *lc)
 	ft_lstpush_back(segments, ft_lstnewlink(nseg, 0));
 }
 
-void			handle_x32(char *fileraw)
+void			handle_x32(t_nm *nm)
 {
 	t_list						*segments;
 	struct mach_header			*header;
@@ -69,16 +69,16 @@ void			handle_x32(char *fileraw)
 	struct symtab_command		*sym;
 	size_t						i;
 
-	header = (void*)fileraw;
+	header = (void*)nm->fileraw;
 	i = 0;
-	lc = (struct load_command *)((size_t)fileraw + sizeof(*header));
+	lc = (struct load_command *)((size_t)nm->fileraw + sizeof(*header));
 	segments = NULL;
 	while (i < header->ncmds)
 	{
 		if (lc->cmd == LC_SYMTAB)
 		{
 			sym = (struct symtab_command *)(size_t)lc;
-			print_symb_32(sym, (size_t)fileraw, segments);
+			print_symb_32(sym, (size_t)nm->fileraw, segments);
 			break ;
 		}
 		else if (lc->cmd == LC_SEGMENT)

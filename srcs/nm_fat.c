@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/01/28 11:44:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/04 15:06:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,36 +41,38 @@ static void	fat_fix_cigam(struct fat_arch *arch)
 }
 
 static int	fat_loop(struct fat_arch *arch, const struct fat_header *header,
-	char *fileraw)
+	t_nm *nm)
 {
 	if (header->magic == FAT_CIGAM)
 		fat_fix_cigam(arch);
 	if (arch->cputype == CPU_TYPE_X86_64)
 	{
-		handle_x64(&fileraw[arch->offset]);
+		nm->fileraw = &nm->fileraw[arch->offset];
+		handle_x64(nm);
 		return (2);
 	}
 	if (arch->cputype == CPU_TYPE_X86)
 	{
-		handle_x32(&fileraw[arch->offset]);
+		nm->fileraw = &nm->fileraw[arch->offset];
+		handle_x32(nm);
 		return (1);
 	}
 	return (0);
 }
 
-void		handle_fat(char *fileraw)
+void		handle_fat(t_nm *nm)
 {
 	struct fat_header		*header;
 	struct fat_arch			*arch;
 	unsigned int			p;
 
 	(void)show;
-	header = (void*)(size_t)fileraw;
+	header = (void*)(size_t)nm->fileraw;
 	if (header->magic == FAT_CIGAM)
 		header->nfat_arch = swap(header->nfat_arch);
-	arch = (void*)((size_t)fileraw + sizeof(*header));
+	arch = (void*)((size_t)nm->fileraw + sizeof(*header));
 	p = header->nfat_arch;
 	arch += p;
-	while ((p--) && (!(fat_loop(arch--, header, fileraw))))
+	while ((p--) && (!(fat_loop(arch--, header, nm))))
 		;
 }
