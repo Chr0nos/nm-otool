@@ -6,11 +6,34 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 17:27:52 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/07 18:26:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
+
+static t_nm	*mkindexes(t_nm *nm)
+{
+	struct segment_command_64	*seg;
+	t_list						*lst;
+	unsigned int				index;
+
+	lst = nm->segments;
+	index = 0;
+	while (lst)
+	{
+		seg = lst->content;
+		if (!ft_strcmp(seg->segname, SEG_TEXT))
+			nm->indexes.text = index;
+		else if (!ft_strcmp(seg->segname, SEG_DATA))
+			nm->indexes.data = index;
+		// else if (!ft_strcmp(seg->sectname, SECT_BSS))
+			// nm->indexes.bss = index;
+		index++;
+		lst = lst->next;
+	}
+	return (nm);
+}
 
 static void	handle_x64_list(t_list **lst,
 	const struct nlist_64 *item, const char *name)
@@ -42,7 +65,7 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
 		handle_x64_list(&lst, &array[i],  name);
 		i++;
 	}
-	nm_display_list(lst, nm);
+	nm_display_list(lst, mkindexes(nm));
 	ft_lstdel(&lst, ft_lstpulverisator);
 }
 

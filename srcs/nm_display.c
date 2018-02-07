@@ -6,55 +6,41 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 18:44:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/07 18:31:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static char	get_address_segment(const unsigned int nsect, t_list *segments)
+static char get_sect_letter(const t_nm *nm, const unsigned int nsect)
 {
-	struct segment_command_64	*seg;
-	uint8_t						index;
-
-	index = 0;
-	while (segments)
-	{
-		seg = segments->content;
-		if (index == nsect)
-		{
-			if (!ft_strcmp(seg->segname, SEG_TEXT))
-				return (SYM_TEXT);
-			else if (!ft_strcmp(seg->segname, SEG_DATA))
-				return (SYM_DATA);
-			else if (!ft_strcmp(seg->segname, SECT_BSS))
-				return (SYM_BSS);
-			return ('S');
-		}
-		index++;
-		segments = segments->next;
-	}
+	if (nsect == nm->indexes.text)
+		return ('T');
+	if (nsect == nm->indexes.data)
+		return ('D');
+	if (nsect == nm->indexes.bss)
+		return ('B');
 	return ('S');
 }
 
-char		nm_getletter(const t_sym *sym, t_list *segments)
+char		nm_getletter(const t_sym *sym, const t_nm *nm)
 {
 	const size_t		type = sym->type & N_TYPE;
 	char				ret;
 
 	ret = '?';
+	if (sym->type == N_STAB)
+		return ('-');
 	if (type == N_UNDF)
 		ret = (sym->value == 0) ? 'U' : 'C';
 	else if (type == N_PBUD)
 		ret = 'U';
 	else if (type == N_SECT)
-		ret = get_address_segment(sym->nsect, segments);
+		ret = get_sect_letter(nm, sym->nsect);
 	else if (type == N_ABS)
 		ret = 'A';
 	else if (type == N_INDR)
 		ret = 'I';
-	else if (sym->type & N_STAB)
-		ret = 'Z';
 	if ((!(sym->type & N_EXT) && (ret != '?')))
 		ret += 32;
 	return (ret);
@@ -71,7 +57,7 @@ static void	nm_display_foreach(void *content, void *userdata)
 	{
 		ft_printf("%0*lx %c %s\n",
 			nm->display_size,
-			sym->value, nm_getletter(sym, nm->segments), sym->name);
+			sym->value, nm_getletter(sym, nm), sym->name);
 	}
 	else
 		ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);

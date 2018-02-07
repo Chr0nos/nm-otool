@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 17:23:41 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/07 18:28:17 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 # include <mach-o/fat.h>
 # include <mach/machine.h>
 # include "libft.h"
-# define SYM_TEXT 'T'
-# define SYM_DATA 'D'
-# define SYM_BSS 'B'
 
 typedef struct				s_sym
 {
@@ -30,6 +27,14 @@ typedef struct				s_sym
 	unsigned int			ndesc;
 	char					*name;
 }							t_sym;
+
+typedef struct				s_segindex
+{
+	unsigned int			text;
+	unsigned int			data;
+	unsigned int			bss;
+	unsigned int			padding;
+}							t_segindex;
 
 /*
 ** magic        : the magic tag of the file, the start of fileraw
@@ -43,10 +48,11 @@ typedef struct				s_nm
 {
 	unsigned int			magic;
 	unsigned int			display_size;
+	t_segindex				indexes;
 	char					*fileraw;
 	const char				*filepath;
 	t_list					*segments;
-	void					*padding;
+	void*					padding;
 }							t_nm;
 
 typedef struct				s_handlers
@@ -62,7 +68,7 @@ void						handle_fat(t_nm *nm);
 t_list						*nm_display_list(t_list *lst, t_nm *nm);
 void						nm_display_sym(const t_sym *sym, t_nm *nm);
 int							handle_sort(t_list *a, t_list *b);
-char						nm_getletter(const t_sym *sym, t_list *segments);
+char						nm_getletter(const t_sym *sym, const t_nm *nm);
 char						*loadfile(const char *filepath, size_t *usize);
 
 #endif
