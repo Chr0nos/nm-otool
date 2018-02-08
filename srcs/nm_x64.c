@@ -6,32 +6,43 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/07 18:26:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/08 02:10:03 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
+static void		indexes_core(size_t index, void *userdata, size_t content_size,
+	void *content)
+{
+	t_nm							*nm;
+	const struct segment_command_64	*seg = (void*)(size_t)content;
+	struct section_64				*sec =
+		(void*)((size_t)content + sizeof(*seg));
+
+	(void)content_size;
+	nm = userdata;
+	ft_printf("%-16p - %s%u%s%s%s%s] (%u) size: %u\n", seg,
+		"index: [", index,
+		"] sectname: [", sec->sectname,
+		"] segname:  [", sec->segname,
+		seg->cmdsize, sec->size);
+	if (!ft_strcmp(seg->segname, SEG_TEXT))
+		nm->indexes.text = (unsigned int)index;
+	else if (!ft_strcmp(sec->segname, SEG_DATA))
+	{
+		if (!ft_strcmp(sec->sectname, SECT_BSS))
+			nm->indexes.bss = (unsigned int)index;
+		else
+			nm->indexes.data = (unsigned int)index;
+	}
+}
+
 static t_nm	*mkindexes(t_nm *nm)
 {
-	struct segment_command_64	*seg;
-	t_list						*lst;
-	unsigned int				index;
-
-	lst = nm->segments;
-	index = 0;
-	while (lst)
-	{
-		seg = lst->content;
-		if (!ft_strcmp(seg->segname, SEG_TEXT))
-			nm->indexes.text = index;
-		else if (!ft_strcmp(seg->segname, SEG_DATA))
-			nm->indexes.data = index;
-		// else if (!ft_strcmp(seg->sectname, SECT_BSS))
-			// nm->indexes.bss = index;
-		index++;
-		lst = lst->next;
-	}
+	ft_lstforeachi(nm->segments, nm, &indexes_core);
+	ft_printf("T: %u - D: %u - B: %u\n", nm->indexes.text, nm->indexes.data,
+		nm->indexes.bss);
 	return (nm);
 }
 
@@ -62,7 +73,7 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
 	while (i < sym->nsyms)
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		handle_x64_list(&lst, &array[i],  name);
+		handle_x64_list(&lst, &array[i], name);
 		i++;
 	}
 	nm_display_list(lst, mkindexes(nm));
