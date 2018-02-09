@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 18:15:51 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 18:32:29 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static int	handle_files(const char *filepath)
 		ft_dprintf(2, "%s%s\n", "error: failed to open: ", filepath);
 		return (NM_ERROR);
 	}
+	nm.rootraw = nm.fileraw;
 	if (nm.filesize < 4)
 		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
 	else
@@ -66,7 +67,7 @@ static int	handle_files(const char *filepath)
 		nm.magic = *(unsigned int *)(size_t)nm.fileraw;
 		handle_files_types(&nm);
 	}
-	munmap(nm.fileraw, nm.filesize);
+	munmap(nm.rootraw, nm.filesize);
 	return (NM_SUCCESS);
 }
 
