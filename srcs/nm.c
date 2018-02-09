@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/04 18:42:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 18:15:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int			handle_sort(t_list *a, t_list *b)
 	return (ft_strcmp(as->name, bs->name));
 }
 
-static void	handle_files_types(unsigned int magic, char *fileraw,
-		const char *filepath)
+static int	handle_files_types(t_nm *nm)
 {
 	const t_handlers	ptrs[] = {
 		(t_handlers){MH_MAGIC_64, 16, &handle_x64},
@@ -34,39 +33,58 @@ static void	handle_files_types(unsigned int magic, char *fileraw,
 		(t_handlers){FAT_CIGAM, 8, &handle_fat}
 	};
 	size_t				p;
-	t_nm				nm;
 
-	ft_bzero(&nm, sizeof(nm));
 	p = 6;
 	while (p--)
 	{
-		if (ptrs[p].magic == magic)
+		if (ptrs[p].magic == nm->magic)
 		{
-			nm.magic = magic;
-			nm.fileraw = fileraw;
-			nm.filepath = filepath;
-			nm.display_size = ptrs[p].display_size;
-			ptrs[p].run(&nm);
-			return ;
+			nm->display_size = ptrs[p].display_size;
+			ptrs[p].run(nm);
+			return (NM_SUCCESS);
 		}
 	}
-	ft_dprintf(2, "%s%#x\n", "error: unknow file type: ", magic);
+	ft_dprintf(2, "%s%#x\n", "error: unknow file type: ", nm->magic);
+	return (NM_ERROR);
 }
 
-static void	handle_files(const char *filepath)
+static int	handle_files(const char *filepath)
 {
-	char	*fileraw;
-	size_t	size;
+	t_nm		nm;
 
-	if (!(fileraw = ft_readfile(filepath, &size)))
+	ft_bzero(&nm, sizeof(nm));
+	if (!(nm.fileraw = ft_readfile(filepath, &nm.filesize)))
 	{
 		ft_dprintf(2, "%s%s\n", "error: failed to open: ", filepath);
-		return ;
+		return (NM_ERROR);
 	}
-	if (size < 4)
+	if (nm.filesize < 4)
 		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
-	handle_files_types(*(unsigned int *)(size_t)fileraw, fileraw, filepath);
-	munmap(fileraw, size);
+	else
+	{
+		nm.filepath = filepath;
+		nm.magic = *(unsigned int *)(size_t)nm.fileraw;
+		handle_files_types(&nm);
+	}
+	munmap(nm.fileraw, nm.filesize);
+	return (NM_SUCCESS);
+}
+
+int			nm_security(const t_nm *nm, const void *ptr, const size_t size)
+{
+	const void		*lastptr;
+	const void		*endptr;
+
+	if ((!nm) || (!nm->fileraw))
+		return (NM_ERROR);
+	lastptr = (void*)((size_t)nm->fileraw + (size_t)nm->filesize);
+	endptr = (void*)((size_t)ptr + size);
+	if (endptr > lastptr)
+	{
+		ft_dprintf(STDERR_FILENO, "%s", "the file is corrupted.\n");
+		return (NM_ERROR);
+	}
+	return (NM_SUCCESS);
 }
 
 int			main(int ac, char **av)

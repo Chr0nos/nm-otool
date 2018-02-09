@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/08 02:10:03 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 18:18:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
 	const char				*name;
 	t_list					*lst;
 
+	if (nm_security(nm, stringtable, sizeof(*stringtable) * sym->nsyms))
+		return ;
 	i = 0;
 	lst = NULL;
 	while (i < sym->nsyms)
@@ -90,8 +92,11 @@ void		handle_x64(t_nm *nm)
 	header = (void*)(size_t)nm->fileraw;
 	i = 0;
 	lc = (struct load_command*)((size_t)nm->fileraw + sizeof(*header));
+	if (nm_security(nm, lc, header->ncmds) == NM_ERROR)
+		return ;
 	while (i < header->ncmds)
 	{
+		ft_printf("command -> %x\n", lc->cmd);
 		if (lc->cmd == LC_SYMTAB)
 		{
 			sym = (struct symtab_command *)(size_t)lc;

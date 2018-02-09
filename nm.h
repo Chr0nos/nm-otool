@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/07 18:28:17 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 18:10:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <mach-o/fat.h>
 # include <mach/machine.h>
 # include "libft.h"
+# define NM_ERROR 1
+# define NM_SUCCESS 0
 
 typedef struct				s_sym
 {
@@ -42,6 +44,7 @@ typedef struct				s_segindex
 ** filepath     : the source file path
 ** segments     : chained list to internal segments
 ** fileraw      : the content of the file, all of it mmaped into the memory
+** filesize     : the total file size in the mapped region, dont read after it
 */
 
 typedef struct				s_nm
@@ -52,7 +55,7 @@ typedef struct				s_nm
 	char					*fileraw;
 	const char				*filepath;
 	t_list					*segments;
-	void*					padding;
+	size_t					filesize;
 }							t_nm;
 
 typedef struct				s_handlers
@@ -62,6 +65,8 @@ typedef struct				s_handlers
 	void					(*run)(t_nm *);
 }							t_handlers;
 
+int							nm_security(const t_nm *nm, const void *ptr,
+	const size_t size);
 void						handle_x32(t_nm *nm);
 void						handle_x64(t_nm *nm);
 void						handle_fat(t_nm *nm);
