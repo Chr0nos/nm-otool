@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 18:32:29 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 18:59:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	handle_files(const char *filepath)
 	return (NM_SUCCESS);
 }
 
-int			nm_security(const t_nm *nm, const void *ptr, const size_t size)
+int			nm_security(t_nm *nm, const void *ptr, const size_t size)
 {
 	const void		*lastptr;
 	const void		*endptr;
@@ -83,6 +83,7 @@ int			nm_security(const t_nm *nm, const void *ptr, const size_t size)
 	if (endptr > lastptr)
 	{
 		ft_dprintf(STDERR_FILENO, "%s", "the file is corrupted.\n");
+		nm->flags |= NM_ERROR;
 		return (NM_ERROR);
 	}
 	return (NM_SUCCESS);

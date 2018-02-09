@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 18:18:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 19:51:29 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,33 @@ static void		indexes_core(size_t index, void *userdata, size_t content_size,
 	void *content)
 {
 	t_nm							*nm;
+	unsigned int					p;
 	const struct segment_command_64	*seg = (void*)(size_t)content;
 	struct section_64				*sec =
 		(void*)((size_t)content + sizeof(*seg));
 
-	(void)content_size;
 	nm = userdata;
-	ft_printf("%-16p - %s%u%s%s%s%s] (%u) size: %u\n", seg,
-		"index: [", index,
-		"] sectname: [", sec->sectname,
-		"] segname:  [", sec->segname,
-		seg->cmdsize, sec->size);
-	if (!ft_strcmp(seg->segname, SEG_TEXT))
-		nm->indexes.text = (unsigned int)index;
-	else if (!ft_strcmp(sec->segname, SEG_DATA))
+	if (nm_security(nm, seg, content_size) == NM_ERROR)
+		return ;
+	p = 0;
+	while (p < seg->nsects)
 	{
-		if (!ft_strcmp(sec->sectname, SECT_BSS))
-			nm->indexes.bss = (unsigned int)index;
-		else
-			nm->indexes.data = (unsigned int)index;
+		ft_printf("%-16p - %s%u%s%s%s%s] (%u) size: %u\n", seg,
+			"index: [", index,
+			"] sectname: [", sec->sectname,
+			"] segname:  [", sec->segname,
+			seg->cmdsize, sec->size, content_size);
+		if (!ft_strcmp(seg->segname, SEG_TEXT))
+			nm->indexes.text = (unsigned int)index;
+		else if (!ft_strcmp(sec->segname, SEG_DATA))
+		{
+			if (!ft_strcmp(sec->sectname, SECT_BSS))
+				nm->indexes.bss = (unsigned int)index;
+			else
+				nm->indexes.data = (unsigned int)index;
+		}
+		sec++;
+		p++;
 	}
 }
 
@@ -96,7 +104,6 @@ void		handle_x64(t_nm *nm)
 		return ;
 	while (i < header->ncmds)
 	{
-		ft_printf("command -> %x\n", lc->cmd);
 		if (lc->cmd == LC_SYMTAB)
 		{
 			sym = (struct symtab_command *)(size_t)lc;
@@ -104,7 +111,7 @@ void		handle_x64(t_nm *nm)
 			break ;
 		}
 		else if (lc->cmd == LC_SEGMENT_64)
-			ft_lstpush_back(&nm->segments, ft_lstnewlink(lc, 0));
+			ft_lstpush_back(&nm->segments, ft_lstnewlink(lc, SEGSIZE64));
 		lc = (void*)((size_t)lc + lc->cmdsize);
 		i++;
 	}

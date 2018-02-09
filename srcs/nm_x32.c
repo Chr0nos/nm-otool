@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/07 18:32:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 18:54:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void		handle_x32_segment(t_list **segments, struct load_command *lc)
 	seg = (void*)lc;
 	ft_strcpy(nseg->segname, seg->segname);
 	nseg->nsects = seg->nsects;
-	ft_lstpush_back(segments, ft_lstnewlink(nseg, 0));
+	ft_lstpush_back(segments, ft_lstnewlink(nseg, SEGSIZE32));
 }
 
 void			handle_x32(t_nm *nm)
