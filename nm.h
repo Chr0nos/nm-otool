@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 18:59:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 22:29:40 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct				s_handlers
 	void					(*run)(t_nm *);
 }							t_handlers;
 
+void						nm_display_foreach(void *content, void *userdata);
 int							nm_security(t_nm *nm, const void *ptr,
 	const size_t size);
 void						handle_x32(t_nm *nm);

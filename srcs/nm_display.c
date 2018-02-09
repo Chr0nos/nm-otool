@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/07 19:03:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 22:30:43 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char		nm_getletter(const t_sym *sym, const t_nm *nm)
 	return (ret);
 }
 
-static void	nm_display_foreach(void *content, void *userdata)
+void		nm_display_foreach(void *content, void *userdata)
 {
 	const t_nm		*nm = userdata;
 	const t_sym		*sym = content;
@@ -61,10 +61,4 @@ static void	nm_display_foreach(void *content, void *userdata)
 	}
 	else
 		ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);
-}
-
-t_list		*nm_display_list(t_list *lst, t_nm *nm)
-{
-	ft_lstforeach(lst, nm, &nm_display_foreach);
-	return (lst);
 }
