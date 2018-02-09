@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 19:51:29 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/09 21:48:09 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@ static void		indexes_core(size_t index, void *userdata, size_t content_size,
 	void *content)
 {
 	t_nm							*nm;
-	unsigned int					p;
 	const struct segment_command_64	*seg = (void*)(size_t)content;
+	const void						*endsector;
 	struct section_64				*sec =
 		(void*)((size_t)content + sizeof(*seg));
 
 	nm = userdata;
 	if (nm_security(nm, seg, content_size) == NM_ERROR)
 		return ;
-	p = 0;
-	while (p < seg->nsects)
+	endsector = (void*)((size_t)sec + (seg->nsects * sizeof(*sec)));
+	while ((void*)sec < endsector)
 	{
-		ft_printf("%-16p - %s%u%s%s%s%s] (%u) size: %u\n", seg,
+		ft_printf("%-16p - %s%u%-10s%20s%-10s%-10s] (%u) size: %5u\n", seg,
 			"index: [", index,
 			"] sectname: [", sec->sectname,
 			"] segname:  [", sec->segname,
@@ -42,7 +42,6 @@ static void		indexes_core(size_t index, void *userdata, size_t content_size,
 				nm->indexes.data = (unsigned int)index;
 		}
 		sec++;
-		p++;
 	}
 }
 
