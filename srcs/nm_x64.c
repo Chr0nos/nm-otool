@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 22:30:38 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/10 03:11:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void		indexes_core(size_t index, void *userdata, size_t content_size,
 	}
 }
 
-static t_nm	*mkindexes(t_nm *nm)
+static t_nm		*mkindexes(t_nm *nm)
 {
 	ft_lstforeachi(nm->segments, nm, &indexes_core);
 	ft_printf("T: %u - D: %u - B: %u\n", nm->indexes.text, nm->indexes.data,
@@ -53,7 +53,7 @@ static t_nm	*mkindexes(t_nm *nm)
 	return (nm);
 }
 
-static void	handle_x64_list(t_list **lst,
+static void		handle_x64_list(t_list **lst,
 	const struct nlist_64 *item, const char *name)
 {
 	t_sym		sym;
@@ -66,7 +66,7 @@ static void	handle_x64_list(t_list **lst,
 	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
 }
 
-static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
+static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 	t_nm *nm)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
@@ -89,7 +89,7 @@ static void	print_symb_64(struct symtab_command *sym, size_t const ptr,
 	ft_lstdel(&lst, ft_lstpulverisator);
 }
 
-void		handle_x64(t_nm *nm)
+void			handle_x64(t_nm *nm)
 {
 	struct mach_header_64		*header;
 	struct load_command			*lc;
@@ -99,7 +99,7 @@ void		handle_x64(t_nm *nm)
 	header = (void*)(size_t)nm->fileraw;
 	i = 0;
 	lc = (struct load_command*)((size_t)nm->fileraw + sizeof(*header));
-	if (nm_security(nm, lc, header->ncmds) == NM_ERROR)
+	if (nm_security(nm, lc, header->ncmds * sizeof(*lc)) == NM_ERROR)
 		return ;
 	while (i < header->ncmds)
 	{
