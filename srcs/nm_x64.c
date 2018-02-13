@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 14:13:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 21:15:23 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void		indexes_core(void *userdata, size_t content_size, void *content)
 	}
 }
 
-static void		handle_x64_list(t_list **lst,
+static void		handle_x64_list(t_nm *nm, t_list **lst,
 	const struct nlist_64 *item, const char *name)
 {
 	t_sym		sym;
@@ -57,6 +57,9 @@ static void		handle_x64_list(t_list **lst,
 	sym.value = (size_t)item->n_value;
 	sym.nsect = (unsigned int)item->n_sect;
 	sym.ndesc = (unsigned int)item->n_desc;
+	if (nm->flags & NM_FLAG_CIGAM)
+	{
+	}
 	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
 }
 
@@ -76,7 +79,7 @@ static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 	while (i < sym->nsyms)
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		handle_x64_list(&lst, &array[i], name);
+		handle_x64_list(nm, &lst, &array[i], name);
 		i++;
 	}
 	ft_lstforeach(lst,

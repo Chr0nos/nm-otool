@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 20:33:27 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 21:15:12 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct				s_handlers
 }							t_handlers;
 
 uint32_t					swap(uint32_t x);
+size_t						swap64(const size_t x);
 void						nm_display_foreach(void *userdata, size_t size,
 	void *content);
 int							nm_security(t_nm *nm, const void *ptr,

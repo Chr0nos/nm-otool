@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 20:32:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 21:05:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	fat_loop(struct fat_arch *arch, t_nm *nm)
 		fat_fix_cigam(arch);
 	if ((arch->cputype == CPU_TYPE_X86_64) || (arch->cputype == CPU_TYPE_X86))
 	{
-		nm->flags &= NM_FLAG_CIGAM;
+		nm->flags &= ~NM_FLAG_CIGAM;
 		nm->fileraw = &nm->fileraw[arch->offset];
 		nm->filesize -= arch->offset;
 		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
