@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 16:39:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:44:06 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int			handle_sort(t_list *a, t_list *b)
 	return (cmp);
 }
 
-static int	handle_files_types(t_nm *nm)
+int			handle_files_types(t_nm *nm)
 {
 	const t_handlers	ptrs[] = {
 		(t_handlers){MH_MAGIC_64, 16, &handle_x64, NM_FLAG_NONE, "64bits"},

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 18:30:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:44:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,9 @@ static void	fat_fix_cigam(struct fat_arch *arch)
 	arch->align = swap(arch->align);
 }
 
-static int	fat_loop(struct fat_arch *arch, const struct fat_header *header,
-	t_nm *nm)
+static int	fat_loop(struct fat_arch *arch, t_nm *nm)
 {
-	if (header->magic == FAT_CIGAM)
+	if (nm->flags & NM_FLAG_CIGAM)
 		fat_fix_cigam(arch);
 	if (arch->cputype == CPU_TYPE_X86_64)
 	{
@@ -71,13 +70,13 @@ void		handle_fat(t_nm *nm)
 		return ;
 	(void)show;
 	header = (void*)(size_t)nm->fileraw;
-	if (header->magic == FAT_CIGAM)
+	if (nm->flags & NM_FLAG_CIGAM)
 		header->nfat_arch = swap(header->nfat_arch);
 	arch = (void*)((size_t)nm->fileraw + sizeof(*header));
 	if (nm_security(nm, arch, sizeof(*arch)) == NM_ERROR)
 		return ;
 	p = header->nfat_arch;
 	arch += p;
-	while ((p--) && (!(fat_loop(arch--, header, nm))))
+	while ((p--) && (!(fat_loop(arch--, nm))))
 		;
 }

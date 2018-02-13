@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 16:32:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:44:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int							nm_security(t_nm *nm, const void *ptr,
 void						handle_x32(t_nm *nm);
 void						handle_x64(t_nm *nm);
 void						handle_fat(t_nm *nm);
+int							handle_files_types(t_nm *nm);
 t_list						*nm_display_list(t_list *lst, t_nm *nm);
 void						nm_display_sym(const t_sym *sym, t_nm *nm);
 int							handle_sort(t_list *a, t_list *b);
