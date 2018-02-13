@@ -6,11 +6,17 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 07:23:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 07:30:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
+
+/*
+** creates the indexes for TEXT, DATA and _bss sections
+** the index is based on the current section number (initialized by the
+** bzero call) when t_nm struct is made.
+*/
 
 static void		indexes_core(void *userdata, size_t content_size, void *content)
 {
@@ -27,7 +33,7 @@ static void		indexes_core(void *userdata, size_t content_size, void *content)
 	while ((void*)sec < endsector)
 	{
 		nm->indexes.sector++;
-		if ((!ft_strcmp(seg->segname, SEG_TEXT)) &&
+		if ((!ft_strcmp(sec->segname, SEG_TEXT)) &&
 				(!ft_strcmp(sec->sectname, SECT_TEXT)))
 			nm->indexes.text = nm->indexes.sector;
 		else if (!ft_strcmp(sec->segname, SEG_DATA))
