@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 07:40:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:39:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int			handle_sort(t_list *a, t_list *b)
 static int	handle_files_types(t_nm *nm)
 {
 	const t_handlers	ptrs[] = {
-		(t_handlers){MH_MAGIC_64, 16, &handle_x64},
-		(t_handlers){MH_CIGAM_64, 16, &handle_x64},
-		(t_handlers){MH_MAGIC, 8, &handle_x32},
-		(t_handlers){MH_CIGAM, 8, &handle_x32},
-		(t_handlers){FAT_MAGIC_64, 8, &handle_fat},
-		(t_handlers){FAT_CIGAM, 8, &handle_fat}
+		(t_handlers){MH_MAGIC_64, 16, &handle_x64, NM_FLAG_NONE, "64bits"},
+		(t_handlers){MH_CIGAM_64, 16, &handle_x64, NM_FLAG_CIGAM, "64bits-cig"},
+		(t_handlers){MH_MAGIC, 8, &handle_x32, NM_FLAG_NONE, "32bits"},
+		(t_handlers){MH_CIGAM, 8, &handle_x32, NM_FLAG_CIGAM, "32bits-cigam"},
+		(t_handlers){FAT_MAGIC_64, 8, &handle_fat, NM_FLAG_NONE, "fat binary"},
+		(t_handlers){FAT_CIGAM, 8, &handle_fat, NM_FLAG_CIGAM, "fat binary-cig"}
 	};
 	size_t				p;
 
@@ -44,6 +44,7 @@ static int	handle_files_types(t_nm *nm)
 		if (ptrs[p].magic == nm->magic)
 		{
 			nm->display_size = ptrs[p].display_size;
+			nm->flags |= ptrs[p].flags;
 			ptrs[p].run(nm);
 			return (NM_SUCCESS);
 		}
@@ -87,7 +88,7 @@ int			nm_security(t_nm *nm, const void *ptr, const size_t size)
 	if (endptr > lastptr)
 	{
 		ft_dprintf(STDERR_FILENO, "%s", "error: the file is corrupted.\n");
-		nm->flags |= NM_ERROR;
+		nm->flags |= NM_FLAG_ERROR;
 		return (NM_ERROR);
 	}
 	return (NM_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 07:18:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 16:32:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,17 @@ typedef struct				s_nm
 	size_t					filesize;
 }							t_nm;
 
+# define NM_FLAG_NONE	0
+# define NM_FLAG_ERROR (1u << 0)
+# define NM_FLAG_CIGAM (1u << 1)
+
 typedef struct				s_handlers
 {
 	unsigned int			magic;
 	unsigned int			display_size;
 	void					(*run)(t_nm *);
+	size_t					flags;
+	const char				*name;
 }							t_handlers;
 
 void						nm_display_foreach(void *userdata, size_t size,
