@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 16:44:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 17:06:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,16 @@ static int	fat_loop(struct fat_arch *arch, t_nm *nm)
 {
 	if (nm->flags & NM_FLAG_CIGAM)
 		fat_fix_cigam(arch);
-	if (arch->cputype == CPU_TYPE_X86_64)
+	if ((arch->cputype == CPU_TYPE_X86_64) || (arch->cputype == CPU_TYPE_X86))
 	{
-		nm->display_size = 16;
+		nm->flags &= NM_FLAG_CIGAM;
 		nm->fileraw = &nm->fileraw[arch->offset];
-		handle_x64(nm);
-		return (2);
+		nm->filesize -= arch->offset;
+		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
+		handle_files_types(nm);
+		return (NM_SUCCESS);
 	}
-	if (arch->cputype == CPU_TYPE_X86)
-	{
-		nm->fileraw = &nm->fileraw[arch->offset];
-		handle_x32(nm);
-		return (1);
-	}
-	return (0);
+	return (NM_ERROR);
 }
 
 void		handle_fat(t_nm *nm)
@@ -77,6 +73,6 @@ void		handle_fat(t_nm *nm)
 		return ;
 	p = header->nfat_arch;
 	arch += p;
-	while ((p--) && (!(fat_loop(arch--, nm))))
+	while ((p--) && (fat_loop(arch--, nm) == NM_ERROR))
 		;
 }

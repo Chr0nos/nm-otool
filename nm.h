@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 16:44:26 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 17:00:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct				s_nm
 	const char				*filepath;
 	t_list					*segments;
 	size_t					filesize;
+	size_t					rfs;
 }							t_nm;
 
 # define NM_FLAG_NONE	0
