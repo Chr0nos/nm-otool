@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#*   Updated: 2018/02/08 02:13:21 by snicolet         ###   ########.fr       *#
+#    Updated: 2018/02/13 14:28:32 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ INC=-I./libft/include -I.
 LINKER=-L./libft -lft
 NAME=ft_nm
 OBJS=nm.o nm_x32.o nm_x64.o loadfile.o nm_display.o nm_fat.o
+SRCS=$(OBJS:%.o=srcs/%.c)
 CC=clang
 
 all: $(NAME)
@@ -35,3 +36,9 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+
+norminette:
+	make -C libft norminette
+	norminette $(SRCS) nm.h
+
+.PHONY: re all clean fclean
