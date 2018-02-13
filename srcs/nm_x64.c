@@ -6,14 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 06:19:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 07:23:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static void		indexes_core(size_t index, void *userdata, size_t content_size,
-	void *content)
+static void		indexes_core(void *userdata, size_t content_size, void *content)
 {
 	t_nm							*nm;
 	const struct segment_command_64	*seg = (void*)(size_t)content;
@@ -28,31 +27,18 @@ static void		indexes_core(size_t index, void *userdata, size_t content_size,
 	while ((void*)sec < endsector)
 	{
 		nm->indexes.sector++;
-		ft_printf("%2u) %-16p - %s%u%-10s%24s%-10s%-10s] (%-5u) size: %5u\n",
-			nm->indexes.sector, seg, "index: [", index,
-			"] sectname: [", sec->sectname,
-			"] segname:  [", sec->segname,
-			seg->cmdsize, sec->size, content_size);
-		// index = nm->indexes.sector;
-		if (!ft_strcmp(seg->segname, SEG_TEXT))
-			nm->indexes.text = (unsigned int)index;
+		if ((!ft_strcmp(seg->segname, SEG_TEXT)) &&
+				(!ft_strcmp(sec->sectname, SECT_TEXT)))
+			nm->indexes.text = nm->indexes.sector;
 		else if (!ft_strcmp(sec->segname, SEG_DATA))
 		{
 			if (!ft_strcmp(sec->sectname, SECT_BSS))
 				nm->indexes.bss = nm->indexes.sector;
-			else
-				nm->indexes.data = (unsigned int)index;
+			else if (!ft_strcmp(sec->sectname, SECT_DATA))
+				nm->indexes.data = nm->indexes.sector;
 		}
 		sec++;
 	}
-}
-
-static t_nm		*mkindexes(t_nm *nm)
-{
-	ft_lstforeachi(nm->segments, nm, &indexes_core);
-	ft_printf("T: %u - D: %u - B: %u\n", nm->indexes.text, nm->indexes.data,
-		nm->indexes.bss);
-	return (nm);
 }
 
 static void		handle_x64_list(t_list **lst,
@@ -87,7 +73,9 @@ static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 		handle_x64_list(&lst, &array[i], name);
 		i++;
 	}
-	ft_lstforeach(lst, mkindexes(nm), &nm_display_foreach);
+	ft_lstforeach(lst,
+		ft_lstforeach(nm->segments, nm, &indexes_core),
+		&nm_display_foreach);
 	ft_lstdel(&lst, ft_lstpulverisator);
 }
 

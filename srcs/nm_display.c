@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 06:09:48 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 07:18:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ char		nm_getletter(const t_sym *sym, const t_nm *nm)
 	return (ret);
 }
 
-void		nm_display_foreach(void *content, void *userdata)
+void		nm_display_foreach(void *userdata, size_t size, void *content)
 {
 	const t_nm		*nm = userdata;
 	const t_sym		*sym = content;
 	char			letter;
 
+	(void)size;
 	if (sym->type & N_DESC_DISCARDED)
 		return ;
 	letter = nm_getletter(sym, nm);
