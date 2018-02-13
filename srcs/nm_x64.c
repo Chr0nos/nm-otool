@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/10 03:11:08 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 06:19:33 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,19 @@ static void		indexes_core(size_t index, void *userdata, size_t content_size,
 	endsector = (void*)((size_t)sec + (seg->nsects * sizeof(*sec)));
 	while ((void*)sec < endsector)
 	{
-		ft_printf("%-16p - %s%u%-10s%20s%-10s%-10s] (%u) size: %5u\n", seg,
-			"index: [", index,
+		nm->indexes.sector++;
+		ft_printf("%2u) %-16p - %s%u%-10s%24s%-10s%-10s] (%-5u) size: %5u\n",
+			nm->indexes.sector, seg, "index: [", index,
 			"] sectname: [", sec->sectname,
 			"] segname:  [", sec->segname,
 			seg->cmdsize, sec->size, content_size);
+		// index = nm->indexes.sector;
 		if (!ft_strcmp(seg->segname, SEG_TEXT))
 			nm->indexes.text = (unsigned int)index;
 		else if (!ft_strcmp(sec->segname, SEG_DATA))
 		{
 			if (!ft_strcmp(sec->sectname, SECT_BSS))
-				nm->indexes.bss = (unsigned int)index;
+				nm->indexes.bss = nm->indexes.sector;
 			else
 				nm->indexes.data = (unsigned int)index;
 		}

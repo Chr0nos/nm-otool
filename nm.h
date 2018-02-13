@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 22:29:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 05:57:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct				s_segindex
 	unsigned int			text;
 	unsigned int			data;
 	unsigned int			bss;
-	unsigned int			padding;
+	unsigned int			sector;
 }							t_segindex;
 
 /*
