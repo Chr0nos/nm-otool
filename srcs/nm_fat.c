@@ -6,19 +6,11 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 17:06:20 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 20:32:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
-
-static uint32_t	swap(uint32_t x)
-{
-	return ((x & 0xff000000) >> 24 |
-		(x & 0x00ff0000) >> 8 |
-		(x & 0x0000ff00) << 8 |
-		(x & 0x000000ff) << 24);
-}
 
 static void show(struct fat_arch *arch)
 {
@@ -39,6 +31,19 @@ static void	fat_fix_cigam(struct fat_arch *arch)
 	arch->size = swap(arch->size);
 	arch->align = swap(arch->align);
 }
+
+/*
+** this function will iterate throuth all availables architectures from the
+** end of the list (to get 64 bits first if available),
+** any architecture who's not 32 or 64 bits will return a NM_ERROR,
+** thus signal will allow the parent function to continue, the first NM_SUCCESS
+** stop the course of the loop
+** the filesize will be reduced by the offset,
+** the fileraw will be set at the good position,
+** please note that the REAL pointer is stored into rootraw and the real size is
+** stored into nm->rfs (Real File Size)
+** this implementation has been choosen to allow FAT inside FAT etc...
+*/
 
 static int	fat_loop(struct fat_arch *arch, t_nm *nm)
 {
