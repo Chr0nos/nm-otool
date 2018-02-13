@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/09 22:23:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/13 07:40:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,14 @@
 
 int			handle_sort(t_list *a, t_list *b)
 {
-	return (ft_strcmp(((t_sym*)a->content)->name, ((t_sym*)b->content)->name));
+	const t_sym		*sym_a = a->content;
+	const t_sym		*sym_b = b->content;
+	int				cmp;
+
+	cmp = ft_strcmp(sym_a->name, sym_b->name);
+	if (!cmp)
+		return ((int)(sym_a->value - sym_b->value));
+	return (cmp);
 }
 
 static int	handle_files_types(t_nm *nm)
