@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 21:15:23 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/14 10:01:49 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ static void		handle_x64_list(t_nm *nm, t_list **lst,
 	sym.ndesc = (unsigned int)item->n_desc;
 	if (nm->flags & NM_FLAG_CIGAM)
 	{
+		sym.type = swap64(sym.type);
+		sym.value = swap64(sym.value);
+		sym.nsect = swap(sym.nsect);
+		sym.ndesc = swap(sym.ndesc);
 	}
 	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
 }
@@ -74,6 +78,7 @@ static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 
 	if (nm_security(nm, stringtable, sizeof(*stringtable) * sym->nsyms))
 		return ;
+	nm->flags |= NM_FLAG_SYMTAB;
 	i = 0;
 	lst = NULL;
 	while (i < sym->nsyms)

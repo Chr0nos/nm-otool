@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 17:00:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/14 10:03:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,12 @@ static int	handle_files(const char *filepath)
 		handle_files_types(&nm);
 	}
 	munmap(nm.rootraw, nm.rfs);
-	return (NM_SUCCESS);
+	if (!(nm.flags & NM_FLAG_SYMTAB))
+	{
+		ft_dprintf(STDERR_FILENO, "%s", "error: no symboles table found.\n");
+		return (NM_ERROR);
+	}
+	return ((nm.flags & NM_FLAG_ERROR) != NM_FLAG_NONE);
 }
 
 int			nm_security(t_nm *nm, const void *ptr, const size_t size)
@@ -98,14 +103,13 @@ int			nm_security(t_nm *nm, const void *ptr, const size_t size)
 int			main(int ac, char **av)
 {
 	int		p;
+	int		errcode;
 
 	if (ac < 2)
-	{
-		handle_files("a.out");
-		return (EXIT_SUCCESS);
-	}
+		return (handle_files("a.out"));
 	p = 1;
+	errcode = EXIT_SUCCESS;
 	while (p < ac)
-		handle_files(av[p++]);
-	return (EXIT_SUCCESS);
+		errcode += handle_files(av[p++]);
+	return (errcode);
 }

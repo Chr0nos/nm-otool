@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 13:32:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/14 10:01:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
 	const char				*name;
 	t_list					*lst;
 
+	nm->flags |= NM_FLAG_SYMTAB;
 	i = 0;
 	lst = NULL;
 	while (i < sym->nsyms)
