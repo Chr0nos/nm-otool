@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/14 10:01:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 12:46:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	handle_x32_list(t_list **lst,
 	sym.value = item->n_value;
 	sym.nsect = (unsigned int)item->n_sect;
 	sym.ndesc = (unsigned int)item->n_desc;
-	ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
+	ft_lstpush_front(lst, ft_lstnew(&sym, sizeof(sym)));
 }
 
 static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
@@ -72,9 +72,7 @@ static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
 		handle_x32_list(&lst, &array[i],  name);
 		i++;
 	}
-	ft_lstforeach(lst,
-		ft_lstforeach(nm->segments, nm, &indexes_core),
-		&nm_display_foreach);
+	nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
 	ft_lstdel(&nm->segments, NULL);
 }

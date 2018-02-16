@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 12:43:20 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 12:53:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ void		nm_display(t_list *lst, t_nm *nm)
 	index = 0;
 	while (tab[index])
 	{
-		sym = tab[index];
+		sym = tab[index++];
 		if (sym->type & (N_DESC_DISCARDED | N_STAB))
-			return ;
+			continue ;
 		letter = nm_getletter(sym, nm);
 		if (!ft_strchr("uU?", letter))
 		{
@@ -79,7 +79,6 @@ void		nm_display(t_list *lst, t_nm *nm)
 		}
 		else
 			ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);
-		index++;
 	}
 	free(tab);
 }
