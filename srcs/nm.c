@@ -6,25 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/14 10:03:57 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 12:54:40 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "nm.h"
 #include <sys/mman.h>
-
-int			handle_sort(t_list *a, t_list *b)
-{
-	const t_sym		*sym_a = a->content;
-	const t_sym		*sym_b = b->content;
-	int				cmp;
-
-	cmp = ft_strcmp(sym_a->name, sym_b->name);
-	if (!cmp)
-		return ((int)(sym_a->value - sym_b->value));
-	return (cmp);
-}
 
 int			handle_files_types(t_nm *nm)
 {

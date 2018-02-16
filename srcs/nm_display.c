@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 12:53:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 12:54:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,22 +81,4 @@ void		nm_display(t_list *lst, t_nm *nm)
 			ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);
 	}
 	free(tab);
-}
-
-void		nm_display_foreach(void *userdata, size_t size, void *content)
-{
-	const t_nm		*nm = userdata;
-	const t_sym		*sym = content;
-	char			letter;
-
-	if (sym->type & (N_DESC_DISCARDED | N_STAB))
-		return ;
-	letter = nm_getletter(sym, nm);
-	if (!ft_strchr("uU?", letter))
-	{
-		ft_printf("%0*lx %c %s\n",
-			nm->display_size, sym->value, letter, sym->name, size);
-	}
-	else
-		ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);
 }

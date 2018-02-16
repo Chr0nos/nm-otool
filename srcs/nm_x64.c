@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 12:48:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 12:54:21 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,6 @@ static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 		handle_x64_list(nm, &lst, &array[i], name);
 		i++;
 	}
-	// ft_lstforeach(lst,
-	// 	ft_lstforeach(nm->segments, nm, &indexes_core),
-	// 	&nm_display_foreach);
 	nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
 }
