@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 16:13:21 by snicolet          #+#    #+#             */
-/*   Updated: 2017/11/11 16:30:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 16:38:42 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ char			*loadfile(const char *filepath, size_t *usize)
 	fd = 0;
 	data = NULL;
 	if ((!size) || (!(fd = open(filepath, O_RDONLY))) ||
-		(!(data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, -1))))
+		((data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0)) ==
+		MAP_FAILED))
 	{
 		if (*usize)
 			*usize = 0;
