@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 16:13:21 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 17:34:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 19:40:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,26 @@
 #include <sys/mman.h>
 #include "nm.h"
 
-static size_t	filesize(const char *filepath)
+static size_t	filesize(const int fd, int *symlink)
 {
 	struct stat		st;
 
-	if (stat(filepath, &st) != 0)
+	if (fstat(fd, &st) < 0)
 		return (0);
+	*symlink = (S_ISLNK(st.st_mode)) ? 1 : 0;
 	return ((size_t)st.st_size);
 }
 
-char			*loadfile(const char *filepath, size_t *usize)
+char			*loadfile(const char *filepath, size_t *usize, int *symlink)
 {
-	const size_t	size = filesize(filepath);
+	size_t			size;
 	int				fd;
 	char			*data;
 
 	fd = 0;
 	data = NULL;
-	if ((!size) || (!(fd = open(filepath, O_RDONLY))) ||
+	if ((!(fd = open(filepath, O_RDONLY))) ||
+		(!(size = filesize(fd, symlink))) ||
 		((data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0))
 		== MAP_FAILED))
 	{
@@ -43,7 +45,7 @@ char			*loadfile(const char *filepath, size_t *usize)
 			close(fd);
 		return (NULL);
 	}
+	*usize = filesize(fd, symlink);
 	close(fd);
-	*usize = size;
 	return (data);
 }

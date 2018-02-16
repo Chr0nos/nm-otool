@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 17:35:18 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 19:27:04 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ int			handle_files_types(t_nm *nm)
 }
 
 static void	handle_real(t_nm *nm, const char *filepath,
-	const unsigned int magic)
+	const unsigned int magic, const int is_link)
 {
-	if (nm->total_files > 1)
+	if ((nm->total_files > 1) || (is_link))
+		nm->flags |= NM_FLAG_SHOWNAME;
+	if (nm->flags & NM_FLAG_SHOWNAME)
 		ft_printf((nm->current_index > 1) ? "\n%s:\n" : "%s:\n", filepath);
 	nm->fileraw = nm->rootraw;
 	nm->filesize = nm->rfs;
@@ -57,9 +59,10 @@ static int	handle_files(const char *filepath, const int files_count,
 	const int index)
 {
 	t_nm		nm;
+	int			is_link;
 
 	ft_bzero(&nm, sizeof(nm));
-	if (!(nm.rootraw = loadfile(filepath, &nm.rfs)))
+	if (!(nm.rootraw = loadfile(filepath, &nm.rfs, &is_link)))
 	{
 		ft_dprintf(2, "%s%s\n", "error: failed to open: ", filepath);
 		return (NM_ERROR);
@@ -70,7 +73,8 @@ static int	handle_files(const char *filepath, const int files_count,
 	{
 		nm.total_files = (unsigned int)files_count;
 		nm.current_index = (unsigned int)index;
-		handle_real(&nm, filepath, *(unsigned int *)(size_t)nm.rootraw);
+		handle_real(&nm, filepath, *(unsigned int *)(size_t)nm.rootraw,
+			is_link);
 	}
 	munmap(nm.rootraw, nm.rfs);
 	if ((!(nm.flags & NM_FLAG_SYMTAB)) && (!(nm.flags & NM_FLAG_ERROR)))
@@ -94,9 +98,6 @@ int			nm_security(t_nm *nm, const void *ptr, const size_t size)
 	{
 		ft_dprintf(STDERR_FILENO, "%s", "error: the file is corrupted.\n");
 		nm->flags |= NM_FLAG_ERROR;
-		// ft_printf("req: %p - start: %p - end: %p (req: %lu - avl: %lu) miss: %lu\n",
-		// 	ptr, endptr, nm->fileraw, size, nm->filesize,
-		// 	(size_t)endptr - (size_t)lastptr);
 		return (NM_ERROR);
 	}
 	return (NM_SUCCESS);

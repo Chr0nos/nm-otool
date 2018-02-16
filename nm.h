@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 16:57:18 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 19:26:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct				s_nm
 # define NM_FLAG_CIGAM		(1u << 1)
 # define NM_FLAG_SYMTAB		(1u << 2)
 # define NM_FLAG_FAT		(1u << 3)
+# define NM_FLAG_SHOWNAME	(1u << 4)
 
 typedef struct				s_handlers
 {
@@ -96,6 +97,7 @@ void						nm_display(t_list *lst, t_nm *nm);
 t_list						*nm_display_list(t_list *lst, t_nm *nm);
 void						nm_display_sym(const t_sym *sym, t_nm *nm);
 char						nm_getletter(const t_sym *sym, const t_nm *nm);
-char						*loadfile(const char *filepath, size_t *usize);
+char						*loadfile(const char *filepath, size_t *usize,
+	int * is_link);
 
 #endif
