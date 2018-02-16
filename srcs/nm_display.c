@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 12:54:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 15:51:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,9 @@ char		nm_getletter(const t_sym *sym, const t_nm *nm)
 
 static int	handle_qsort(t_sym *a, t_sym *b)
 {
-	int				cmp;
+	const int	cmp = ft_strcmp(a->name, b->name);
 
-	cmp = ft_strcmp(a->name, b->name);
-	if (!cmp)
-		return ((int)(a->value - b->value));
-	return (cmp);
+	return ((cmp == 0) ? (int)(a->value - b->value) : cmp);
 }
 
 void		nm_display(t_list *lst, t_nm *nm)
@@ -73,10 +70,8 @@ void		nm_display(t_list *lst, t_nm *nm)
 			continue ;
 		letter = nm_getletter(sym, nm);
 		if (!ft_strchr("uU?", letter))
-		{
 			ft_printf("%0*lx %c %s\n",
 				nm->display_size, sym->value, letter, sym->name);
-		}
 		else
 			ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);
 	}

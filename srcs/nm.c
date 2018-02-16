@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 12:54:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 15:53:34 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	handle_files(const char *filepath)
 		handle_files_types(&nm);
 	}
 	munmap(nm.rootraw, nm.rfs);
-	if (!(nm.flags & NM_FLAG_SYMTAB))
+	if ((!(nm.flags & NM_FLAG_SYMTAB)) && (!(nm.flags & NM_FLAG_ERROR)))
 	{
 		ft_dprintf(STDERR_FILENO, "%s", "error: no symboles table found.\n");
 		return (NM_ERROR);
