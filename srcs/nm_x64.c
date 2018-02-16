@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 12:54:21 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 17:00:14 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static void		handle_x64_list(t_nm *nm, t_list **lst,
 		sym.nsect = swap(sym.nsect);
 		sym.ndesc = swap(sym.ndesc);
 	}
-	// ft_lstpush_sort(lst, ft_lstnew(&sym, sizeof(sym)), &handle_sort);
 	ft_lstpush_front(lst, ft_lstnew(&sym, sizeof(sym)));
 }
 

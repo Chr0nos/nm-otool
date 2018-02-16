@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 16:39:52 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 17:35:18 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,15 @@ int			nm_security(t_nm *nm, const void *ptr, const size_t size)
 
 	if ((!nm) || (!nm->fileraw))
 		return (NM_ERROR);
-	lastptr = (void*)((size_t)nm->fileraw + (size_t)nm->filesize);
+	lastptr = (void*)((size_t)nm->fileraw + nm->filesize);
 	endptr = (void*)((size_t)ptr + size);
 	if (endptr > lastptr)
 	{
 		ft_dprintf(STDERR_FILENO, "%s", "error: the file is corrupted.\n");
 		nm->flags |= NM_FLAG_ERROR;
+		// ft_printf("req: %p - start: %p - end: %p (req: %lu - avl: %lu) miss: %lu\n",
+		// 	ptr, endptr, nm->fileraw, size, nm->filesize,
+		// 	(size_t)endptr - (size_t)lastptr);
 		return (NM_ERROR);
 	}
 	return (NM_SUCCESS);
