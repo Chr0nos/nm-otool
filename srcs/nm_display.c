@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/14 10:11:59 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 12:43:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,51 @@ char		nm_getletter(const t_sym *sym, const t_nm *nm)
 	return (ret);
 }
 
+static int	handle_qsort(t_sym *a, t_sym *b)
+{
+	int				cmp;
+
+	cmp = ft_strcmp(a->name, b->name);
+	if (!cmp)
+		return ((int)(a->value - b->value));
+	return (cmp);
+}
+
+void		nm_display(t_list *lst, t_nm *nm)
+{
+	t_sym		**tab;
+	t_sym		*sym;
+	size_t		index;
+	char		letter;
+
+	if (!(tab = (t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort))))
+		return ;
+	index = 0;
+	while (tab[index])
+	{
+		sym = tab[index];
+		if (sym->type & (N_DESC_DISCARDED | N_STAB))
+			return ;
+		letter = nm_getletter(sym, nm);
+		if (!ft_strchr("uU?", letter))
+		{
+			ft_printf("%0*lx %c %s\n",
+				nm->display_size, sym->value, letter, sym->name);
+		}
+		else
+			ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);
+		index++;
+	}
+	free(tab);
+}
+
 void		nm_display_foreach(void *userdata, size_t size, void *content)
 {
 	const t_nm		*nm = userdata;
 	const t_sym		*sym = content;
 	char			letter;
 
-	if (sym->type & N_DESC_DISCARDED)
+	if (sym->type & (N_DESC_DISCARDED | N_STAB))
 		return ;
 	letter = nm_getletter(sym, nm);
 	if (!ft_strchr("uU?", letter))

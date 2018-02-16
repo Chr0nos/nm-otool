@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/14 10:00:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/14 10:46:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct				s_handlers
 	const char				*name;
 }							t_handlers;
 
+t_sym						**symbols_sort(t_list *symbols);
 uint32_t					swap(uint32_t x);
 size_t						swap64(const size_t x);
 void						nm_display_foreach(void *userdata, size_t size,
@@ -88,6 +89,7 @@ void						handle_x32(t_nm *nm);
 void						handle_x64(t_nm *nm);
 void						handle_fat(t_nm *nm);
 int							handle_files_types(t_nm *nm);
+void						nm_display(t_list *lst, t_nm *nm);
 t_list						*nm_display_list(t_list *lst, t_nm *nm);
 void						nm_display_sym(const t_sym *sym, t_nm *nm);
 int							handle_sort(t_list *a, t_list *b);
