@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 15:53:34 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 16:17:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,20 @@ int			handle_files_types(t_nm *nm)
 	return (NM_ERROR);
 }
 
-static int	handle_files(const char *filepath)
+static void	handle_real(t_nm *nm, const char *filepath,
+	const unsigned int magic)
+{
+	if (nm->total_files > 1)
+		ft_printf((nm->current_index > 1) ? "\n%s:\n" : "%s:\n", filepath);
+	nm->rootraw = nm->fileraw;
+	nm->filesize = nm->rfs;
+	nm->filepath = filepath;
+	nm->magic = magic;
+	handle_files_types(nm);
+}
+
+static int	handle_files(const char *filepath, const int files_count,
+	const int index)
 {
 	t_nm		nm;
 
@@ -51,16 +64,12 @@ static int	handle_files(const char *filepath)
 		ft_dprintf(2, "%s%s\n", "error: failed to open: ", filepath);
 		return (NM_ERROR);
 	}
-	nm.filesize = nm.rfs;
-	nm.rootraw = nm.fileraw;
+	nm.total_files = (unsigned int)files_count;
+	nm.current_index = (unsigned int)index;
 	if (nm.rfs < 4)
 		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
 	else
-	{
-		nm.filepath = filepath;
-		nm.magic = *(unsigned int *)(size_t)nm.fileraw;
-		handle_files_types(&nm);
-	}
+		handle_real(&nm, filepath, *(unsigned int *)(size_t)nm.fileraw);
 	munmap(nm.rootraw, nm.rfs);
 	if ((!(nm.flags & NM_FLAG_SYMTAB)) && (!(nm.flags & NM_FLAG_ERROR)))
 	{
@@ -94,10 +103,13 @@ int			main(int ac, char **av)
 	int		errcode;
 
 	if (ac < 2)
-		return (handle_files("a.out"));
+		return (handle_files("a.out", 1, 1));
 	p = 1;
 	errcode = EXIT_SUCCESS;
 	while (p < ac)
-		errcode += handle_files(av[p++]);
+	{
+		errcode += handle_files(av[p], ac - 1, p);
+		p++;
+	}
 	return (errcode);
 }
