@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 12:46:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 22:29:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ void			handle_x32(t_nm *nm)
 	lc = (struct load_command *)((size_t)nm->fileraw + sizeof(*header));
 	if (nm_security(nm, lc, header->ncmds * sizeof(*lc)) == NM_ERROR)
 		return ;
+	if (header->flags & MH_DYLDLINK)
+		nm->flags |= NM_FLAG_SHOWNAME;
 	while (i < header->ncmds)
 	{
 		if (lc->cmd == LC_SYMTAB)

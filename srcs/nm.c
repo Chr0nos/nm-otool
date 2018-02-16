@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 19:27:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 22:36:10 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,10 @@ int			handle_files_types(t_nm *nm)
 }
 
 static void	handle_real(t_nm *nm, const char *filepath,
-	const unsigned int magic, const int is_link)
+	const unsigned int magic)
 {
-	if ((nm->total_files > 1) || (is_link))
+	if (nm->total_files > 1)
 		nm->flags |= NM_FLAG_SHOWNAME;
-	if (nm->flags & NM_FLAG_SHOWNAME)
-		ft_printf((nm->current_index > 1) ? "\n%s:\n" : "%s:\n", filepath);
 	nm->fileraw = nm->rootraw;
 	nm->filesize = nm->rfs;
 	nm->filepath = filepath;
@@ -59,10 +57,9 @@ static int	handle_files(const char *filepath, const int files_count,
 	const int index)
 {
 	t_nm		nm;
-	int			is_link;
 
 	ft_bzero(&nm, sizeof(nm));
-	if (!(nm.rootraw = loadfile(filepath, &nm.rfs, &is_link)))
+	if (!(nm.rootraw = loadfile(filepath, &nm.rfs)))
 	{
 		ft_dprintf(2, "%s%s\n", "error: failed to open: ", filepath);
 		return (NM_ERROR);
@@ -73,13 +70,12 @@ static int	handle_files(const char *filepath, const int files_count,
 	{
 		nm.total_files = (unsigned int)files_count;
 		nm.current_index = (unsigned int)index;
-		handle_real(&nm, filepath, *(unsigned int *)(size_t)nm.rootraw,
-			is_link);
+		handle_real(&nm, filepath, *(unsigned int *)(size_t)nm.rootraw);
 	}
 	munmap(nm.rootraw, nm.rfs);
 	if ((!(nm.flags & NM_FLAG_SYMTAB)) && (!(nm.flags & NM_FLAG_ERROR)))
 	{
-		ft_dprintf(STDERR_FILENO, "%s", "error: no symboles table found.\n");
+		ft_dprintf(STDERR_FILENO, "%s", "error: no symbols table found.\n");
 		return (NM_ERROR);
 	}
 	return ((nm.flags & NM_FLAG_ERROR) != NM_FLAG_NONE);

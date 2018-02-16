@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 15:51:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/16 22:27:38 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void		nm_display(t_list *lst, t_nm *nm)
 	size_t		index;
 	char		letter;
 
+	if (nm->flags & NM_FLAG_SHOWNAME)
+		ft_printf((nm->current_index > 1) ? "\n%s:\n" : "%s:\n", nm->filepath);
 	if (!(tab = (t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort))))
 		return ;
 	index = 0;
