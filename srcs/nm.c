@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 22:36:10 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/18 13:18:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ int			handle_files_types(t_nm *nm)
 		(t_handlers){MH_MAGIC, 8, &handle_x32, NM_FLAG_NONE, "32bits"},
 		(t_handlers){MH_CIGAM, 8, &handle_x32, NM_FLAG_CIGAM, "32bits-cigam"},
 		(t_handlers){FAT_MAGIC_64, 8, &handle_fat, NM_FLAG_NONE, "fat binary"},
+		(t_handlers){NM_LIBRARY, 16, &handle_lib, NM_FLAG_NONE, "64 bits lib"},
 		(t_handlers){FAT_CIGAM, 8, &handle_fat, NM_FLAG_CIGAM, "fat binary-cig"}
 	};
 	size_t				p;
 
-	p = 6;
+	p = 7;
 	while (p--)
 	{
 		if (ptrs[p].magic == nm->magic)
@@ -37,6 +38,7 @@ int			handle_files_types(t_nm *nm)
 			return (NM_SUCCESS);
 		}
 	}
+	nm->flags |= NM_UNKNOW_FILETYPE | NM_FLAG_ERROR;
 	ft_dprintf(2, "%s%#x\n", "error: unknow file type: ", nm->magic);
 	return (NM_ERROR);
 }

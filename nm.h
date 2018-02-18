@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 22:19:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/18 13:16:15 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define NM_SUCCESS	0
 # define SEGSIZE64	sizeof(struct segment_command_64)
 # define SEGSIZE32	sizeof(struct segment_command)
+# define NM_LIBRARY 0x72613c21
 
 typedef struct				s_sym
 {
@@ -72,6 +73,7 @@ typedef struct				s_nm
 # define NM_FLAG_SYMTAB		(1u << 2)
 # define NM_FLAG_FAT		(1u << 3)
 # define NM_FLAG_SHOWNAME	(1u << 4)
+# define NM_UNKNOW_FILETYPE (1u << 5)
 
 typedef struct				s_handlers
 {
@@ -91,6 +93,7 @@ int							nm_security(t_nm *nm, const void *ptr,
 	const size_t size);
 void						handle_x32(t_nm *nm);
 void						handle_x64(t_nm *nm);
+void						handle_lib(t_nm *nm);
 void						handle_fat(t_nm *nm);
 int							handle_files_types(t_nm *nm);
 void						nm_display(t_list *lst, t_nm *nm);
