@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/18 13:16:15 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/22 12:57:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <mach-o/loader.h>
 # include <mach-o/nlist.h>
+# include <mach-o/ranlib.h>
 # include <mach-o/fat.h>
 # include <mach/machine.h>
 # include "libft.h"
@@ -40,6 +41,17 @@ typedef struct				s_segindex
 	unsigned int			bss;
 	unsigned int			sector;
 }							t_segindex;
+
+typedef struct				s_artab
+{
+	char					name[16];
+	size_t					date;
+	size_t					size;
+	unsigned int			uid;
+	unsigned int			gid;
+	unsigned int			mode;
+	unsigned int			padding;
+}							t_ar;
 
 /*
 ** magic        : the magic tag of the file, the start of fileraw
