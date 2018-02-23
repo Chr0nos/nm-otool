@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 17:35:32 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/23 15:29:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,45 @@ static void	fat_fix_cigam(struct fat_arch *arch)
 	arch->align = swap(arch->align);
 }
 
+static int	fat_run(struct fat_arch *arch, t_nm *nm)
+{
+	nm->flags &= ~NM_FLAG_CIGAM;
+	nm->flags |= NM_FLAG_FAT;
+	nm->fileraw = &nm->fileraw[arch->offset];
+	nm->filesize -= arch->offset;
+	nm->magic = *(unsigned int *)(size_t)nm->fileraw;
+	handle_files_types(nm);
+	return (NM_SUCCESS);
+}
+
 /*
-** this function will iterate throuth all availables architectures from the
-** end of the list (to get 64 bits first if available),
-** any architecture who's not 32 or 64 bits will return a NM_ERROR,
-** thus signal will allow the parent function to continue, the first NM_SUCCESS
-** stop the course of the loop
-** the filesize will be reduced by the offset,
-** the fileraw will be set at the good position,
-** please note that the REAL pointer is stored into rootraw and the real size is
-** stored into nm->rfs (Real File Size)
-** this implementation has been choosen to allow FAT inside FAT etc...
+** lookup for the best architecture in a fat binary
+** the priority is: X64 > X32 > first found
 */
 
-static int	fat_loop(struct fat_arch *arch, t_nm *nm)
+static struct fat_arch	*arch_lookup(struct fat_arch *arch,
+	unsigned int arch_left, const size_t nm_flags)
 {
-	if (nm->flags & NM_FLAG_CIGAM)
-		fat_fix_cigam(arch);
-	if ((arch->cputype == CPU_TYPE_X86_64) || (arch->cputype == CPU_TYPE_X86))
+	struct fat_arch		*selected;
+
+	selected = arch;
+	while (arch_left--)
 	{
-		nm->flags &= ~NM_FLAG_CIGAM;
-		nm->flags |= NM_FLAG_FAT;
-		nm->fileraw = &nm->fileraw[arch->offset];
-		nm->filesize -= arch->offset;
-		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
-		handle_files_types(nm);
-		return (NM_SUCCESS);
+		if (nm_flags & NM_FLAG_CIGAM)
+			fat_fix_cigam(arch);
+		if (arch->cputype == CPU_TYPE_X86)
+			selected = arch;
+		if (arch->cputype == CPU_TYPE_X86_64)
+			return (arch);
+		arch++;
 	}
-	return (NM_ERROR);
+	return (selected);
 }
 
 void		handle_fat(t_nm *nm)
 {
 	struct fat_header		*header;
 	struct fat_arch			*arch;
-	unsigned int			p;
 
 	if (nm_security(nm, header, sizeof(*header)) == NM_ERROR)
 		return ;
@@ -75,9 +79,8 @@ void		handle_fat(t_nm *nm)
 	if (nm->flags & NM_FLAG_CIGAM)
 		header->nfat_arch = swap(header->nfat_arch);
 	arch = (void*)((size_t)nm->fileraw + sizeof(struct fat_header));
-	p = header->nfat_arch;
-	if (nm_security(nm, arch, sizeof(*arch) * p) == NM_ERROR)
+	if (nm_security(nm, arch, sizeof(*arch) * header->nfat_arch) == NM_ERROR)
 		return ;
-	while ((p--) && (fat_loop(&arch[p], nm) == NM_ERROR))
-		;
+	arch = arch_lookup(arch, header->nfat_arch, nm->flags);
+	fat_run(arch, nm);
 }
