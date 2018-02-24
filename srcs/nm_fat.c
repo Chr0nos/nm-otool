@@ -6,13 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/23 15:29:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/23 19:15:22 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static void show(struct fat_arch *arch)
+static void 			show(struct fat_arch *arch)
 {
 	ft_printf("%s%9d%s%6d%s%6x%s%6x%s%6x%s%6x\n",
 		"cpu type: ", arch->cputype,
@@ -23,7 +23,7 @@ static void show(struct fat_arch *arch)
 		" arch: ", (unsigned int)arch->cputype & CPU_ARCH_MASK);
 }
 
-static void	fat_fix_cigam(struct fat_arch *arch)
+static void				fat_fix_cigam(struct fat_arch *arch)
 {
 	arch->cputype = (int)(swap((uint32_t)arch->cputype) & 0x7fffffff);
 	arch->cpusubtype = (int)(swap((uint32_t)arch->cpusubtype) & 0x7fffffff);
@@ -32,7 +32,7 @@ static void	fat_fix_cigam(struct fat_arch *arch)
 	arch->align = swap(arch->align);
 }
 
-static int	fat_run(struct fat_arch *arch, t_nm *nm)
+static int				fat_run(struct fat_arch *arch, t_nm *nm)
 {
 	nm->flags &= ~NM_FLAG_CIGAM;
 	nm->flags |= NM_FLAG_FAT;
@@ -67,7 +67,7 @@ static struct fat_arch	*arch_lookup(struct fat_arch *arch,
 	return (selected);
 }
 
-void		handle_fat(t_nm *nm)
+void					handle_fat(t_nm *nm)
 {
 	struct fat_header		*header;
 	struct fat_arch			*arch;
@@ -81,6 +81,5 @@ void		handle_fat(t_nm *nm)
 	arch = (void*)((size_t)nm->fileraw + sizeof(struct fat_header));
 	if (nm_security(nm, arch, sizeof(*arch) * header->nfat_arch) == NM_ERROR)
 		return ;
-	arch = arch_lookup(arch, header->nfat_arch, nm->flags);
-	fat_run(arch, nm);
+	fat_run(arch_lookup(arch, header->nfat_arch, nm->flags), nm);
 }
