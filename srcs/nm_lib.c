@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/18 13:16:28 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/22 13:28:20 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/25 07:52:49 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,32 @@ static int	load_ar(const struct ar_hdr *ar, t_ar *load)
 	return (success == 5);
 }
 
+static void	lib_rl(struct ranlib *rl, const size_t size, t_nm *nm)
+{
+	size_t				index;
+	struct ar_hdr		*ar;
+	const char			*name;
+
+	nm->flags |= NM_FLAG_SHOWNAME | NM_FLAG_SYMTAB;
+	index = 0;
+	while (index < size)
+	{
+		ar = (void*)&nm->rootraw[rl->ran_off];
+		name = (void*)((size_t)ar + sizeof(*ar));
+		nm->filepath = name;
+		nm->fileraw = (void*)((size_t)name + ft_strlen(name) + 4);
+		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
+		handle_files_types(nm);
+		rl++;
+		index += 8;
+	}
+}
+
 void		handle_lib(t_nm *nm)
 {
+	struct ranlib	*rl;
 	struct ar_hdr	*ar;
+	int				*size;
 	t_ar			ar_read;
 
 	ft_printf("library for %s\n", nm->filepath);
@@ -47,13 +70,9 @@ void		handle_lib(t_nm *nm)
 		return ;
 	}
 	ar = (void*)((size_t)nm->fileraw + SARMAG);
-	ft_printf("%s%.16s%s%.12s%s%.6s%s%.6s%s%.8s%s%.10s\n",
-		"name: ", ar->ar_name,
-		" date: ", ar->ar_date,
-		" uid: ", ar->ar_uid,
-		" gid: ", ar->ar_gid,
-		" mode: ", ar->ar_mode,
-		" size: ", ar->ar_size);
 	load_ar(ar, &ar_read);
-	nm->flags |= NM_FLAG_SYMTAB;
+	size = (void*)((size_t)nm->fileraw + sizeof(*ar) + SARMAG +
+		(size_t)ft_atoi(ar->ar_name + ft_strlen(AR_EFMT1)));
+	rl = (void*)((size_t)size + sizeof(int));
+	lib_rl(rl, (size_t)*size, nm);
 }
