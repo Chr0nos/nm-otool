@@ -53,7 +53,7 @@ static int	handle_qsort(t_sym *a, t_sym *b)
 	return ((cmp == 0) ? (int)(a->value - b->value) : cmp);
 }
 
-static void display_name(const t_nm *nm)
+static void	display_name(const t_nm *nm)
 {
 	if (nm->flags & NM_FLAG_SHOWNAME)
 	{

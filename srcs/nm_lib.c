@@ -29,7 +29,7 @@ static int	lib_cmp(t_ar *a, t_ar *b)
 	return (0);
 }
 
-static void lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
+static void	lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
 {
 	t_ar				*pl;
 
@@ -37,7 +37,8 @@ static void lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
 	{
 		pl = tab[index];
 		nm->subfilename = pl->filename;
-		nm->fileraw = &nm->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
+		nm->fileraw =
+			&nm->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
 		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
 		nm->filesize = pl->size;
 		nm->current_index = (unsigned int)index + 1;
@@ -46,9 +47,8 @@ static void lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
 	}
 }
 
-static void	lib_rl(struct ranlib *rl, const size_t size, t_nm *nm)
+static void	lib_rl(struct ranlib *rl, size_t index, const size_t size, t_nm *nm)
 {
-	size_t				index;
 	struct ar_hdr		*ar;
 	void				*ptr;
 	t_ar				*payload;
@@ -61,7 +61,6 @@ static void	lib_rl(struct ranlib *rl, const size_t size, t_nm *nm)
 	}
 	payload = ptr;
 	tab = (t_ar**)((size_t)ptr + (sizeof(t_ar) * size));
-	index = 0;
 	while (index < size)
 	{
 		ar = (void*)&nm->rootraw[rl->ran_off];
@@ -98,5 +97,5 @@ void		handle_lib(t_nm *nm)
 	size = (void*)((size_t)nm->fileraw + sizeof(*ar) + SARMAG +
 		(size_t)ft_atoi(ar->ar_name + ft_strlen(AR_EFMT1)));
 	rl = (void*)((size_t)size + sizeof(int));
-	lib_rl(rl, (size_t)*size / sizeof(struct ranlib), nm);
+	lib_rl(rl, 0, (size_t)*size / sizeof(struct ranlib), nm);
 }
