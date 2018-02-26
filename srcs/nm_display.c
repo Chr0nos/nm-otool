@@ -53,6 +53,18 @@ static int	handle_qsort(t_sym *a, t_sym *b)
 	return ((cmp == 0) ? (int)(a->value - b->value) : cmp);
 }
 
+static void display_name(const t_nm *nm)
+{
+	if (nm->flags & NM_FLAG_SHOWNAME)
+	{
+		if (nm->flags & NM_FLAG_LIBRARY)
+			ft_printf("\n%s(%s):\n", nm->filepath, nm->subfilename);
+		else
+			ft_printf((nm->current_index > 1) ? "\n%s:\n" : "%s:\n",
+				nm->filepath);
+	}
+}
+
 void		nm_display(t_list *lst, t_nm *nm)
 {
 	t_sym		**tab;
@@ -60,8 +72,7 @@ void		nm_display(t_list *lst, t_nm *nm)
 	size_t		index;
 	char		letter;
 
-	if (nm->flags & NM_FLAG_SHOWNAME)
-		ft_printf((nm->current_index > 1) ? "\n%s:\n" : "%s:\n", nm->filepath);
+	display_name(nm);
 	if (!(tab = (t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort))))
 		return ;
 	index = 0;

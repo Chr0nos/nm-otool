@@ -55,11 +55,12 @@ static void	lib_rl(struct ranlib *rl, const size_t size, t_nm *nm)
 	{
 		ar = (void*)&nm->rootraw[rl->ran_off];
 		load_ar(ar, &load);
-		nm->filepath = (char*)((size_t)ar + sizeof(*ar));
-		nm->fileraw = (char*)((size_t)nm->filepath + ft_strlen(nm->filepath));
-		nm->fileraw += 4;
+		nm->subfilename = (char*)((size_t)ar + sizeof(*ar));
+		nm->fileraw = &nm->subfilename[ft_strlen(nm->subfilename)];
+		nm->fileraw += sizeof(struct ranlib) + (load.size % 3);
 		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
 		nm->filesize = load.size;
+		nm->current_index = (unsigned int)index + 1;
 		handle_files_types(nm);
 		rl++;
 		index += 8;
@@ -79,6 +80,7 @@ void		handle_lib(t_nm *nm)
 		nm->flags |= NM_FLAG_ERROR;
 		return ;
 	}
+	nm->flags |= NM_FLAG_LIBRARY;
 	ar = (void*)((size_t)nm->fileraw + SARMAG);
 	load_ar(ar, &ar_read);
 	size = (void*)((size_t)nm->fileraw + sizeof(*ar) + SARMAG +

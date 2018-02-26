@@ -73,6 +73,8 @@ typedef struct				s_nm
 	t_segindex				indexes;
 	char					*fileraw;
 	char					*rootraw;
+	char					*subfilename;
+	char					*padding;
 	const char				*filepath;
 	t_list					*segments;
 	size_t					filesize;
@@ -85,7 +87,8 @@ typedef struct				s_nm
 # define NM_FLAG_SYMTAB		(1u << 2)
 # define NM_FLAG_FAT		(1u << 3)
 # define NM_FLAG_SHOWNAME	(1u << 4)
-# define NM_UNKNOW_FILETYPE (1u << 5)
+# define NM_FLAG_LIBRARY	(1u << 5)
+# define NM_UNKNOW_FILETYPE (1u << 6)
 
 typedef struct				s_handlers
 {
