@@ -23,9 +23,9 @@ static void		indexes_core(void *userdata, size_t content_size, void *content)
 	t_nm							*nm;
 	const struct segment_command_64	*seg = (void*)(size_t)content;
 	const void						*endsector;
-	struct section_64				*sec =
-		(void*)((size_t)content + sizeof(*seg));
+	struct section_64				*sec;
 
+	sec = (void*)((size_t)content + sizeof(*seg));
 	nm = userdata;
 	if (nm_security(nm, seg, content_size) == NM_ERROR)
 		return ;

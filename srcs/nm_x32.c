@@ -13,13 +13,15 @@
 #include "nm.h"
 #include "libft.h"
 
-static void		indexes_core(void *userdata, size_t content_size, void *content)
+static void			indexes_core(void *userdata, size_t content_size,
+	void *content)
 {
 	t_nm							*nm;
 	const struct segment_command	*seg = (void*)(size_t)content;
 	const void						*endsector;
-	struct section					*sec = (void*)((size_t)seg + sizeof(*seg));
+	struct section					*sec;
 
+	sec = (void*)((size_t)seg + sizeof(*seg));
 	nm = userdata;
 	if (nm_security(nm, sec, content_size * seg->nsects) == NM_ERROR)
 		return ;
@@ -41,7 +43,7 @@ static void		indexes_core(void *userdata, size_t content_size, void *content)
 	}
 }
 
-static void	handle_x32_list(t_list **lst,
+static void			handle_x32_list(t_list **lst,
 	const struct nlist *item, const char *name)
 {
 	t_sym		sym;
@@ -54,7 +56,7 @@ static void	handle_x32_list(t_list **lst,
 	ft_lstpush_front(lst, ft_lstnew(&sym, sizeof(sym)));
 }
 
-static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
+static void			print_symb_32(struct symtab_command *sym, size_t const ptr,
 		t_nm *nm)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
@@ -69,7 +71,7 @@ static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
 	while (i < sym->nsyms)
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		handle_x32_list(&lst, &array[i],  name);
+		handle_x32_list(&lst, &array[i], name);
 		i++;
 	}
 	nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
@@ -77,7 +79,7 @@ static void	print_symb_32(struct symtab_command *sym, size_t const ptr,
 	ft_lstdel(&nm->segments, NULL);
 }
 
-void			handle_x32(t_nm *nm)
+void				handle_x32(t_nm *nm)
 {
 	struct mach_header			*header;
 	struct load_command			*lc;

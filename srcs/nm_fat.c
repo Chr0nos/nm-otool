@@ -12,7 +12,7 @@
 
 #include "nm.h"
 
-static void 			show(struct fat_arch *arch)
+static void				show(struct fat_arch *arch)
 {
 	ft_printf("%s%9d%s%6d%s%6x%s%6x%s%6x%s%6x\n",
 		"cpu type: ", arch->cputype,

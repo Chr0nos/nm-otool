@@ -12,7 +12,7 @@
 
 #include "nm.h"
 
-static char get_sect_letter(const t_nm *nm, const unsigned int nsect)
+static char	get_sect_letter(const t_nm *nm, const unsigned int nsect)
 {
 	if (nsect == nm->indexes.text)
 		return ('T');

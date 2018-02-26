@@ -35,6 +35,14 @@ static int	load_ar(const struct ar_hdr *ar, t_ar *load)
 	return (success == 5);
 }
 
+/*
+** memory structure
+** struct ar_hdr
+** char* filepath
+** ??? (4 ?)
+** content
+*/
+
 static void	lib_rl(struct ranlib *rl, const size_t size, t_nm *nm)
 {
 	size_t				index;
@@ -48,7 +56,8 @@ static void	lib_rl(struct ranlib *rl, const size_t size, t_nm *nm)
 		ar = (void*)&nm->rootraw[rl->ran_off];
 		load_ar(ar, &load);
 		nm->filepath = (char*)((size_t)ar + sizeof(*ar));
-		nm->fileraw = (char*)((size_t)nm->filepath + ft_strlen(nm->filepath) + 4);
+		nm->fileraw = (char*)((size_t)nm->filepath + ft_strlen(nm->filepath));
+		nm->fileraw += 4;
 		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
 		nm->filesize = load.size;
 		handle_files_types(nm);

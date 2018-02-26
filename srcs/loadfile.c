@@ -33,7 +33,8 @@ char			*loadfile(const char *filepath, size_t *usize)
 
 	fd = 0;
 	data = NULL;
-	if ((!(fd = open(filepath, O_RDONLY))) || (!(size = filesize(fd))) ||
+	if ((!(fd = open(filepath, O_RDONLY))) ||
+		(!(size = filesize(fd))) ||
 		((data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0))
 		== MAP_FAILED))
 	{
