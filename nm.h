@@ -44,6 +44,8 @@ typedef struct				s_segindex
 
 typedef struct				s_artab
 {
+	size_t					offset;
+	char					*filename;
 	size_t					date;
 	size_t					size;
 	unsigned int			uid;
@@ -88,6 +90,7 @@ typedef struct				s_nm
 # define NM_FLAG_SHOWNAME	(1u << 4)
 # define NM_FLAG_LIBRARY	(1u << 5)
 # define NM_UNKNOW_FILETYPE (1u << 6)
+# define NM_FLAG_ERROR_MEM	(1u << 7)
 
 typedef struct				s_handlers
 {

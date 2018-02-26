@@ -20,26 +20,61 @@ static int	load_ar(const struct ar_hdr *ar, t_ar *load)
 			&load->mode, &load->size) == 8);
 }
 
+static int	lib_cmp(t_ar *a, t_ar *b)
+{
+	if (a->offset < b->offset)
+		return (-1);
+	if (a->offset > b->offset)
+		return (1);
+	return (0);
+}
+
+static void lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
+{
+	t_ar				*pl;
+
+	while (index < size)
+	{
+		pl = tab[index];
+		nm->subfilename = pl->filename;
+		nm->fileraw = &nm->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
+		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
+		nm->filesize = pl->size;
+		nm->current_index = (unsigned int)index + 1;
+		handle_files_types(nm);
+		index++;
+	}
+}
+
 static void	lib_rl(struct ranlib *rl, const size_t size, t_nm *nm)
 {
 	size_t				index;
 	struct ar_hdr		*ar;
-	t_ar				load;
+	void				*ptr;
+	t_ar				*payload;
+	t_ar				**tab;
 
+	if (!(ptr = malloc((sizeof(t_ar) + sizeof(t_ar*)) * size)))
+	{
+		nm->flags |= NM_ERROR | NM_FLAG_ERROR_MEM;
+		return ;
+	}
+	payload = ptr;
+	tab = (t_ar**)((size_t)ptr + (sizeof(t_ar) * size));
 	index = 0;
 	while (index < size)
 	{
 		ar = (void*)&nm->rootraw[rl->ran_off];
-		load_ar(ar, &load);
-		nm->subfilename = (char*)((size_t)ar + sizeof(*ar));
-		nm->fileraw = &nm->rootraw[rl->ran_off + sizeof(*ar) + load.len];
-		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
-		nm->filesize = load.size;
-		nm->current_index = (unsigned int)index + 1;
-		handle_files_types(nm);
+		payload[index].offset = rl->ran_off;
+		payload[index].filename = (char*)((size_t)ar + sizeof(*ar));
+		load_ar(ar, &payload[index]);
+		tab[index] = &payload[index];
 		rl++;
 		index++;
 	}
+	ft_quicksort((void**)tab, 0, size - 1, FT_CASTCMP(&lib_cmp));
+	lib_rl_run(nm, 0, size, tab);
+	free(ptr);
 }
 
 void		handle_lib(t_nm *nm)
