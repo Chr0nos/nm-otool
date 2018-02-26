@@ -44,13 +44,12 @@ typedef struct				s_segindex
 
 typedef struct				s_artab
 {
-	char					name[16];
 	size_t					date;
 	size_t					size;
 	unsigned int			uid;
 	unsigned int			gid;
 	unsigned int			mode;
-	unsigned int			padding;
+	unsigned int			len;
 }							t_ar;
 
 /*
