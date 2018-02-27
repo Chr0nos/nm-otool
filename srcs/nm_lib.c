@@ -6,15 +6,16 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/18 13:16:28 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/25 16:27:12 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/27 01:08:03 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 #include <ar.h>
 
-static int	load_ar(const struct ar_hdr *ar, t_ar *load)
+static int	load_ar(struct ar_hdr *ar, t_ar *load)
 {
+	load->ar = ar;
 	return (ft_sscanf(ar->ar_name, "%s%u\\s%lu\\s%u\\s%u\\s%x\\s%lu\\s%$",
 			AR_EFMT1, &load->len, &load->date, &load->uid, &load->gid,
 			&load->mode, &load->size) == 8);
@@ -29,21 +30,29 @@ static int	lib_cmp(t_ar *a, t_ar *b)
 	return (0);
 }
 
+/*
+** i store the pl->ar to check if ar->ar_name is equal to '\0'
+** in this case it's mean that this offset have already be done
+*/
+
 static void	lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
 {
 	t_ar				*pl;
 
 	while (index < size)
 	{
-		pl = tab[index];
+		pl = tab[index++];
+		if (!*pl->ar->ar_name)
+			continue ;
 		nm->subfilename = pl->filename;
 		nm->fileraw =
 			&nm->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
 		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
 		nm->filesize = pl->size;
-		nm->current_index = (unsigned int)index + 1;
+		nm->current_index = (unsigned int)index;
+		nm->indexes.sector = 0;
 		handle_files_types(nm);
-		index++;
+		pl->ar->ar_name[0] = '\0';
 	}
 }
 

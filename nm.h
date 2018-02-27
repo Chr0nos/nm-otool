@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/22 12:57:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/27 01:01:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct				s_artab
 {
 	size_t					offset;
 	char					*filename;
+	struct ar_hdr			*ar;
 	size_t					date;
 	size_t					size;
 	unsigned int			uid;
