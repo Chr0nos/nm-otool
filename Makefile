@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2018/02/18 13:17:30 by snicolet         ###   ########.fr        #
+#    Updated: 2018/02/27 23:16:53 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,5 +40,8 @@ re: fclean all
 norminette:
 	make -C libft norminette
 	norminette $(SRCS) nm.h
+
+otool: otool.o loadfile.o
+	$(CC) $(CFLAGS) $(LINKER) otool.o loadfile.o -o ft_otool
 
 .PHONY: re all clean fclean
