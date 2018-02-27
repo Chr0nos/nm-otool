@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/27 23:34:44 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/27 23:37:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,19 @@
 static void		otool_showmem(const unsigned char *ptr,
 	const size_t size, const size_t offset)
 {
-	size_t			pos;
+	const unsigned char		*lastptr = &ptr[size];
+	size_t					pos;
 
 	pos = 0;
-	while (pos < size)
+	while (ptr < lastptr)
 	{
 		ft_printf("%p\t\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
 			" %02x %02x %02x %02x %02x\n",
 			pos + offset, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5], ptr[6],
 			ptr[7], ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14],
 			ptr[15]);
-		pos += 16;
 		ptr += 16;
+		pos += 16;
 	}
 }
 
