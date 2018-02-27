@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 22:44:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/02/27 15:26:27 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ static void			indexes_core(void *userdata, size_t content_size,
 }
 
 static void			handle_x32_list(t_list **lst,
-	const struct nlist *item, const char *name)
+	const struct nlist *item, const char *name, t_nm *nm)
 {
 	t_sym		sym;
 
+	if (nm_security(nm, name, 0) == NM_ERROR)
+		return ;
 	sym.name = (char*)(size_t)name;
 	sym.type = item->n_type;
 	sym.value = item->n_value;
@@ -68,13 +70,14 @@ static void			print_symb_32(struct symtab_command *sym, size_t const ptr,
 	nm->flags |= NM_FLAG_SYMTAB;
 	i = 0;
 	lst = NULL;
-	while (i < sym->nsyms)
+	while ((i < sym->nsyms) && (!(nm->flags & NM_FLAG_ERROR)))
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		handle_x32_list(&lst, &array[i], name);
+		handle_x32_list(&lst, &array[i], name, nm);
 		i++;
 	}
-	nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
+	if (!(nm->flags & NM_FLAG_ERROR))
+		nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
 	ft_lstdel(&nm->segments, NULL);
 }
