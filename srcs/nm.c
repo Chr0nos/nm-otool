@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/27 16:03:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/01 09:33:56 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ int			nm_security(t_nm *nm, const void *ptr, const size_t size)
 
 	if ((!nm) || (!nm->fileraw))
 		return (NM_ERROR);
-	lastptr = (void*)((size_t)nm->fileraw + nm->filesize);
+	lastptr = &nm->rootraw[nm->rfs];
+	//lastptr = (void*)((size_t)nm->fileraw + nm->filesize);
 	endptr = (void*)((size_t)ptr + size);
 	if ((endptr > lastptr) || (ptr < (void*)nm->fileraw))
 	{
