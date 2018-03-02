@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 23:00:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:06:15 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "swap.h"
 # include "common.h"
 # include "flags.h"
+# include "security.h"
 # define NM_ERROR 	1
 # define NM_SUCCESS	0
 # define SEGSIZE64	sizeof(struct segment_command_64)
@@ -76,15 +77,15 @@ typedef struct				s_nm
 	const char				*filepath;
 	char					*fileraw;
 	t_list					*segments;
+	char					*rootraw;
+	size_t					rfs;
 	unsigned int			magic;
 	unsigned int			display_size;
 	unsigned int			current_index;
 	unsigned int			total_files;
 	t_segindex				indexes;
-	char					*rootraw;
 	char					*subfilename;
 	char					*padding;
-	size_t					rfs;
 }							t_nm;
 
 typedef struct				s_handlers
@@ -99,8 +100,8 @@ typedef struct				s_handlers
 t_sym						**symbols_sort(t_list *symbols);
 void						nm_display_foreach(void *userdata, size_t size,
 	void *content);
-int							nm_security(t_nm *nm, const void *ptr,
-	const size_t size);
+// int							nm_security(t_nm *nm, const void *ptr,
+	// const size_t size);
 void						handle_x32(t_nm *nm);
 void						handle_x64(t_nm *nm);
 void						handle_lib(t_nm *nm);

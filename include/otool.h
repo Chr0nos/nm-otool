@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:58:19 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:04:22 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct	s_otool
 	const char		*filepath;
 	unsigned char	*fileraw;
 	t_list			*segments;
+	char			*rootraw;
+	size_t			rfs;
 	void			*padding;
 }				t_otool;
 

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 19:38:20 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:49:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:05:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 size_t		security(t_common *com, const void *ptr, const size_t size)
 {
-	const unsigned char	*fileraw = com->fileraw;
-	const size_t		rawsize = com->filesize;
+	const unsigned char	*fileraw = com->rootraw;
+	const size_t		rawsize = com->rfs;
 
 
 	ptr = (const void *)((size_t)ptr + size);

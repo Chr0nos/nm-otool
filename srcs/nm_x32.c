@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:52:01 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:07:03 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void			indexes_core(void *userdata, size_t content_size,
 
 	sec = (void*)((size_t)seg + sizeof(*seg));
 	nm = userdata;
-	if (nm_security(nm, sec, content_size * seg->nsects) == NM_ERROR)
+	if (security((t_common*)nm, sec, content_size * seg->nsects))
 		return ;
 	endsector = (void*)((size_t)sec + (seg->nsects * sizeof(*sec)));
 	while ((void*)sec < endsector)
@@ -48,7 +48,7 @@ static void			handle_x32_list(t_list **lst,
 {
 	t_sym		sym;
 
-	if (nm_security(nm, name, 0) == NM_ERROR)
+	if (security((t_common*)nm, name, 0))
 		return ;
 	sym.name = (char*)(size_t)name;
 	sym.type = item->n_type;
@@ -92,7 +92,7 @@ void				handle_x32(t_nm *nm)
 	header = (void*)nm->fileraw;
 	i = 0;
 	lc = (struct load_command *)((size_t)nm->fileraw + sizeof(*header));
-	if (nm_security(nm, lc, header->ncmds * sizeof(*lc)) == NM_ERROR)
+	if (security((t_common*)nm, lc, header->ncmds * sizeof(*lc)))
 		return ;
 	while (i < header->ncmds)
 	{

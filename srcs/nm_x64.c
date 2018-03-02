@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:52:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:08:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void		indexes_core(void *userdata, size_t content_size, void *content)
 
 	sec = (void*)((size_t)content + sizeof(*seg));
 	nm = userdata;
-	if (nm_security(nm, seg, content_size) == NM_ERROR)
+	if (security((t_common*)nm, seg, content_size))
 		return ;
 	endsector = (void*)((size_t)sec + (seg->nsects * sizeof(*sec)));
 	while ((void*)sec < endsector)
@@ -52,7 +52,7 @@ static void		handle_x64_list(t_nm *nm, t_list **lst,
 {
 	t_sym		sym;
 
-	if (nm_security(nm, name, 0) == NM_ERROR)
+	if (security((t_common*)nm, name, 0))
 		return ;
 	sym.name = (char*)(size_t)name;
 	sym.type = item->n_type;
@@ -78,7 +78,7 @@ static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 	const char				*name;
 	t_list					*lst;
 
-	if (nm_security(nm, stringtable, sizeof(*stringtable) * sym->nsyms))
+	if (security((t_common*)nm, stringtable, sizeof(*stringtable) * sym->nsyms))
 		return ;
 	nm->flags |= FLAG_SYMTAB;
 	i = 0;
@@ -104,7 +104,7 @@ void			handle_x64(t_nm *nm)
 	header = (void*)(size_t)nm->fileraw;
 	i = 0;
 	lc = (struct load_command*)((size_t)nm->fileraw + sizeof(*header));
-	if (nm_security(nm, lc, header->ncmds * sizeof(*lc)) == NM_ERROR)
+	if (security((t_common*)nm, lc, header->ncmds * sizeof(*lc)))
 		return ;
 	while (i < header->ncmds)
 	{

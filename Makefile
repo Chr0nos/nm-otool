@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2018/03/02 22:45:31 by snicolet         ###   ########.fr        #
+#    Updated: 2018/03/02 23:09:22 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ OTOOL_OBJS=$(OTOOL_SRCS:%.c=$(BUILDDIR)%.o)
 
 
 NM=ft_nm
-NM_SRCS=nm.c nm_x32.c nm_x64.c loadfile.c nm_display.c nm_fat.c swap.c nm_lib.c
+NM_SRCS=nm.c nm_x32.c nm_x64.c loadfile.c nm_display.c nm_fat.c swap.c \
+	nm_lib.c security.c
 NM_SRCS_FULL=$(NM_SRCS:%.c=srcs/%.c)
 NM_OBJS=$(NM_SRCS:%.c=$(BUILDDIR)%.o)
 
