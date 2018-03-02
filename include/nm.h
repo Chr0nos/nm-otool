@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:49:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:00:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,6 @@ typedef struct				s_nm
 	char					*padding;
 	size_t					rfs;
 }							t_nm;
-
-// # define NM_FLAG_NONE		0
-// # define NM_FLAG_ERROR		(1u << 0)
-// # define NM_FLAG_CIGAM		(1u << 1)
-// # define NM_FLAG_SYMTAB		(1u << 2)
-// # define NM_FLAG_FAT		(1u << 3)
-// # define NM_FLAG_SHOWNAME	(1u << 4)
-// # define NM_FLAG_LIBRARY	(1u << 5)
-// # define NM_UNKNOW_FILETYPE (1u << 6)
-// # define NM_FLAG_ERROR_MEM	(1u << 7)
 
 typedef struct				s_handlers
 {

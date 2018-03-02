@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:58:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:02:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ static size_t	otool_macho_items(const t_otool *otool)
 }
 
 static void		otool_macho_symtab(const size_t ptr, t_list *segments,
-	const size_t flags)
+	t_otool *otool)
 {
 	struct symtab_command		*sym;
 	char						*stringtable;
 	struct segment_command_64	*seg;
 
-	(void)flags;
+	otool->flags |= FLAG_SYMTAB;
 	sym = (void*)ptr;
 	stringtable = (char*)(ptr + sym->symoff);
 	while (segments)
@@ -57,7 +57,7 @@ void			otool_macho(t_otool *otool)
 		(!security((t_common*)otool, lc, sizeof(*lc))))
 	{
 		if (lc->cmd == LC_SYMTAB)
-			otool_macho_symtab((size_t)lc, otool->segments, otool->flags);
+			otool_macho_symtab((size_t)lc, otool->segments, otool);
 		else if (lc->cmd == LC_SEGMENT_64)
 			ft_lstadd(&otool->segments, ft_lstnewlink(lc, 64));
 		else if (lc->cmd == LC_SEGMENT)
