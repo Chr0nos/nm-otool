@@ -91,7 +91,6 @@ int			nm_security(t_nm *nm, const void *ptr, const size_t size)
 	if ((!nm) || (!nm->fileraw))
 		return (NM_ERROR);
 	lastptr = &nm->rootraw[nm->rfs];
-	//lastptr = (void*)((size_t)nm->fileraw + nm->filesize);
 	endptr = (void*)((size_t)ptr + size);
 	if ((endptr > lastptr) || (ptr < (void*)nm->fileraw))
 	{

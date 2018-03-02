@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/27 01:01:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 16:03:50 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <mach-o/fat.h>
 # include <mach/machine.h>
 # include "libft.h"
+# include "loadfile.h"
 # define NM_ERROR 	1
 # define NM_SUCCESS	0
 # define SEGSIZE64	sizeof(struct segment_command_64)
@@ -118,6 +119,5 @@ void						nm_display(t_list *lst, t_nm *nm);
 t_list						*nm_display_list(t_list *lst, t_nm *nm);
 void						nm_display_sym(const t_sym *sym, t_nm *nm);
 char						nm_getletter(const t_sym *sym, const t_nm *nm);
-char						*loadfile(const char *filepath, size_t *usize);
 
 #endif

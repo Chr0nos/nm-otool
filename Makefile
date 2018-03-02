@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CFLAGS=-Wall -Werror -Wextra -Weverything -Wno-reserved-id-macro
-INC=-I./libft/include -I.
+INC=-I./libft/include -I./include
 LINKER=-L./libft -lft
 NAME=ft_nm
 OBJS=nm.o nm_x32.o nm_x64.o loadfile.o nm_display.o nm_fat.o swap.o nm_lib.o
