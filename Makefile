@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2018/03/02 20:15:14 by snicolet         ###   ########.fr        #
+#    Updated: 2018/03/02 21:30:28 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ BUILDDIR=./build/
 
 OTOOL=ft_otool
 OTOOL_SRCS=otool.c loadfile.c otool_filetype.c otool_macho.c otool_security.c \
-	swap.c
+	swap.c otool_showmem.c
 OTOOL_SRCS_FULL=$(OTOOL_SRCS:%.c=srcs/%.c)
 OTOOL_OBJS=$(OTOOL_SRCS:%.c=$(BUILDDIR)%.o)
 

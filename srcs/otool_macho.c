@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 21:24:54 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 21:28:24 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void		otool_macho_symtab(const size_t ptr, t_list *segments,
 	}
 }
 
-size_t			otool_macho(t_otool *otool)
+void			otool_macho(t_otool *otool)
 {
 	struct load_command		*lc;
 	size_t					i;
@@ -69,5 +69,4 @@ size_t			otool_macho(t_otool *otool)
 		lc = (void*)((size_t)lc + lc->cmdsize);
 	}
 	ft_lstdel(&otool->segments, NULL);
-	return (otool->flags);
 }

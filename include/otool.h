@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 21:26:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 21:28:29 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,10 @@ typedef struct	s_otool
 	void			*padding;
 }				t_otool;
 
+void			otool_macho(t_otool *otool);
 size_t			otool_filetype(char *fileraw, const size_t filesize);
-size_t			otool_macho(t_otool *otool);
 size_t			otool_security(t_otool *otool, const void *ptr);
 void			otool_showmem(const unsigned char *ptr,
 	const size_t size, const size_t offset, const size_t flags);
+
 #endif
