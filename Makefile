@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2018/03/02 16:32:21 by snicolet         ###   ########.fr        #
+#    Updated: 2018/03/02 18:38:01 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CC=clang
 BUILDDIR=./build/
 
 OTOOL=ft_otool
-OTOOL_SRCS=otool.c loadfile.c
+OTOOL_SRCS=otool.c loadfile.c otool_filetype.c
 OTOOL_SRCS_FULL=$(OTOOL_SRCS:%.c=srcs/%.c)
 OTOOL_OBJS=$(OTOOL_SRCS:%.c=$(BUILDDIR)%.o)
 

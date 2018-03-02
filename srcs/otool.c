@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 17:00:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 18:46:41 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,43 +23,13 @@ static void		otool_showmem(const unsigned char *ptr,
 	pos = 0;
 	while (ptr < lastptr)
 	{
-		ft_printf("%p\t\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
-			" %02x %02x %02x %02x %02x\n",
+		ft_printf("%016x\t\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
+			" %02x %02x %02x %02x %02x %02x\n",
 			pos + offset, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5],
 			ptr[6], ptr[7], ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13],
 			ptr[14], ptr[15]);
 		ptr += 16;
 		pos += 16;
-	}
-}
-
-/*
-** call: ft_printf("%K", otool_kernel, ptr, size, offset)
-*/
-
-static void		otool_kernel(t_printf *pf)
-{
-	unsigned char		*endptr;
-	unsigned char		*ptr;
-	size_t				size;
-	size_t				offset;
-	size_t				pos;
-
-	ptr = va_arg(*pf->ap, unsigned char *);
-	size = va_arg(*pf->ap, size_t);
-	offset = va_arg(*pf->ap, size_t);
-	endptr = &ptr[size];
-	pos = 0;
-	while (ptr < endptr)
-	{
-		ft_printf("-> %lu / %lu\n", pos, size);
-		ft_printf_stack(pf, "%08x\t\t%02x %02x %02x %02x %02x %02x %02x"
-			" %02x %02x %02x %02x %02x %02x %02x %02x %02x\n",
-			pos + offset, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5],
-			ptr[6], ptr[7], ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13],
-			ptr[14], ptr[15]);
-		pos += 16;
-		ptr += 16;
 	}
 }
 
@@ -67,6 +37,7 @@ static int		otool_run(const char *filepath, const int index, const int max)
 {
 	char		*fileraw;
 	size_t		filesize;
+	size_t		flags;
 
 	fileraw = loadfile(filepath, &filesize);
 	if (!fileraw)
@@ -78,8 +49,9 @@ static int		otool_run(const char *filepath, const int index, const int max)
 	if (max > 1)
 		ft_printf("%s:\n", filepath);
 	(void)index;
-	(void)otool_kernel;
-	otool_showmem((unsigned char*)(size_t)fileraw, filesize, 0);
+	flags = otool_filetype(fileraw, filesize);
+	ft_printf("filetype: %lb\n", flags, otool_showmem);
+	// otool_showmem((unsigned char*)(size_t)fileraw, filesize, 0);
 	// ft_printf("%K", otool_kernel, fileraw, filesize, 0);
 	munmap(fileraw, filesize);
 	return (EXIT_SUCCESS);

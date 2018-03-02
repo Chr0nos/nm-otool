@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loadfile.h                                         :+:      :+:    :+:   */
+/*   otool_macho.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/02 16:03:14 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 18:41:09 by snicolet         ###   ########.fr       */
+/*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
+/*   Updated: 2018/03/02 19:02:18 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LOADFILE_H
-# define LOADFILE_H
-# include <string.h>
+#include "otool.h"
 
-char						*loadfile(const char *filepath, size_t *usize);
+size_t		otool_macho(char *fileraw, size_t filesize, const size_t flags)
+{
+	struct mach_header		*header;
+	struct load_command		*lc;
 
-#endif
+	header = (void*)fileraw;
+	lc = (void*)nm->fileraw[sizeof(*header)];
+	return (OTOOL_FLAG_OK);
+}
