@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 20:24:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 20:54:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,31 @@
 #include "otool.h"
 #include <sys/mman.h>
 
-static void		otool_showmem(const unsigned char *ptr,
-	const size_t size, const size_t offset)
+void			otool_showmem(const unsigned char *ptr,
+	const size_t size, const size_t offset, const size_t flags)
 {
 	const unsigned char		*lastptr = &ptr[size];
 	size_t					pos;
+	const size_t			padding = 	(flags & OTOOL_FLAG_32BITS) ? 8 : 16;
 
 	pos = 0;
-	while (ptr < lastptr)
+	while ((ptr < lastptr) && (size - pos >= 16))
 	{
-		ft_printf("%016x\t\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
+		ft_printf("%0*x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
 			" %02x %02x %02x %02x %02x %02x\n",
+			padding,
 			pos + offset, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5],
 			ptr[6], ptr[7], ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13],
 			ptr[14], ptr[15]);
 		ptr += 16;
 		pos += 16;
+	}
+	if  (ptr < lastptr)
+		ft_printf("%0*x\t", padding, ptr);
+	while (ptr < lastptr)
+	{
+		ft_printf((ptr + 1 < lastptr) ? "%02x " : "%02x", *ptr);
+		ptr++;
 	}
 }
 
@@ -71,6 +80,7 @@ static int		otool_run(const char *filepath, const int index, const int max)
 		ft_dprintf(STDERR_FILENO, "%s", "error: unknow file type provided\n");
 	else
 		otool_run_valid(filepath, fileraw, filesize, flags);
+	// otool_showmem((void*)fileraw, filesize, 0, flags);
 	munmap(fileraw, filesize);
 	return (EXIT_SUCCESS);
 }
