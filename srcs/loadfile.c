@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 16:13:21 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/16 22:18:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 00:03:58 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/mman.h>
-#include "nm.h"
+#include "loadfile.h"
 
 static size_t	filesize(const int fd)
 {
