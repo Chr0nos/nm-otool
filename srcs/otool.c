@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 18:46:41 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 19:48:54 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static int		otool_run(const char *filepath, const int index, const int max)
 	(void)index;
 	flags = otool_filetype(fileraw, filesize);
 	ft_printf("filetype: %lb\n", flags, otool_showmem);
+	if (flags & (OTOOL_FLAG_64BITS | OTOOL_FLAG_32BITS))
+		flags |= otool_macho(fileraw, filesize, flags);
 	// otool_showmem((unsigned char*)(size_t)fileraw, filesize, 0);
 	// ft_printf("%K", otool_kernel, fileraw, filesize, 0);
 	munmap(fileraw, filesize);
