@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 21:28:24 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:58:02 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static size_t	otool_macho_items(const t_otool *otool)
 	size_t			size;
 
 	size = 0;
-	if (otool->flags & OTOOL_FLAG_64BITS)
+	if (otool->flags & FLAG_64BITS)
 		size = ((struct mach_header_64 *)(size_t)otool->fileraw)->ncmds;
-	if (otool->flags & OTOOL_FLAG_32BITS)
+	if (otool->flags & FLAG_32BITS)
 		size = ((struct mach_header *)(size_t)otool->fileraw)->ncmds;
-	if (otool->flags & OTOOL_FLAG_CIGAM)
+	if (otool->flags & FLAG_CIGAM)
 		return (swap64(size));
 	return (size);
 }
@@ -50,16 +50,12 @@ void			otool_macho(t_otool *otool)
 	size_t					i;
 	const size_t			ncmds = otool_macho_items(otool);
 
-	lc = (void*)&otool->fileraw[otool->flags & OTOOL_FLAG_64BITS ?
+	lc = (void*)&otool->fileraw[otool->flags & FLAG_64BITS ?
 		sizeof(struct mach_header_64) : sizeof(struct mach_header)];
 	i = 0;
-	while (i++ < ncmds)
+	while ((i++ < ncmds) &&
+		(!security((t_common*)otool, lc, sizeof(*lc))))
 	{
-		if (otool_security(otool, lc) != OTOOL_FLAG_OK)
-		{
-			otool->flags |= OTOOL_FLAG_ERROR;
-			break ;
-		}
 		if (lc->cmd == LC_SYMTAB)
 			otool_macho_symtab((size_t)lc, otool->segments, otool->flags);
 		else if (lc->cmd == LC_SEGMENT_64)

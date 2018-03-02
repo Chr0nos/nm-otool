@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 21:29:56 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 21:30:15 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:56:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void			otool_showmem(const unsigned char *ptr,
 {
 	const unsigned char		*lastptr = &ptr[size];
 	size_t					pos;
-	const size_t			padding = 	(flags & OTOOL_FLAG_32BITS) ? 8 : 16;
+	const size_t			padding = 	(flags & FLAG_32BITS) ? 8 : 16;
 
 	pos = 0;
 	while ((ptr < lastptr) && (size - pos >= 16))

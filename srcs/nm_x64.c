@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/27 15:52:17 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:52:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void		handle_x64_list(t_nm *nm, t_list **lst,
 	sym.value = (size_t)item->n_value;
 	sym.nsect = (unsigned int)item->n_sect;
 	sym.ndesc = (unsigned int)item->n_desc;
-	if (nm->flags & NM_FLAG_CIGAM)
+	if (nm->flags & FLAG_CIGAM)
 	{
 		sym.type = swap64(sym.type);
 		sym.value = swap64(sym.value);
@@ -80,16 +80,16 @@ static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 
 	if (nm_security(nm, stringtable, sizeof(*stringtable) * sym->nsyms))
 		return ;
-	nm->flags |= NM_FLAG_SYMTAB;
+	nm->flags |= FLAG_SYMTAB;
 	i = 0;
 	lst = NULL;
-	while ((i < sym->nsyms) && (!(nm->flags & NM_FLAG_ERROR)))
+	while ((i < sym->nsyms) && (!(nm->flags & FLAG_ERROR)))
 	{
 		name = &stringtable[array[i].n_un.n_strx];
 		handle_x64_list(nm, &lst, &array[i], name);
 		i++;
 	}
-	if (!(nm->flags & NM_FLAG_ERROR))
+	if (!(nm->flags & FLAG_ERROR))
 		nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
 }

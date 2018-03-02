@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/27 00:52:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:52:46 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ static int	handle_qsort(t_sym *a, t_sym *b)
 
 static void	display_name(const t_nm *nm)
 {
-	if (nm->flags & NM_FLAG_SHOWNAME)
+	if (nm->flags & FLAG_SNAME)
 	{
-		if (nm->flags & NM_FLAG_LIBRARY)
+		if (nm->flags & FLAG_LIB)
 			ft_printf("\n%s(%s):\n", nm->filepath, nm->subfilename);
 		else
 			ft_printf((nm->current_index > 1) ? "\n%s:\n" : "%s:\n",

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 21:32:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:54:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static size_t	otool_run_valid(const char *filepath,
 		.padding = NULL
 	};
 	ft_printf("filepath: %s (%lb)\n", filepath, flags);
-	if (flags & (OTOOL_FLAG_64BITS | OTOOL_FLAG_32BITS))
+	if (flags & (FLAG_64BITS | FLAG_32BITS))
 		otool_macho(&otool);
 	return (otool.flags);
 }
@@ -57,7 +57,7 @@ static int		otool_run(const char *filepath, const int index, const int max)
 	if (max > 1)
 		ft_printf("%s:\n", filepath, otool_showmem);
 	flags = otool_filetype(fileraw, filesize);
-	if (flags & (OTOOL_FLAG_UNKNKOW | OTOOL_FLAG_ERROR))
+	if (flags & (FLAG_UNKNKOW | FLAG_ERROR))
 		ft_dprintf(STDERR_FILENO, "%s", "error: unknow file type provided\n");
 	else
 		otool_run_valid(filepath, fileraw, filesize, flags);

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 20:15:00 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:49:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include "libft.h"
 # include "loadfile.h"
 # include "swap.h"
+# include "common.h"
+# include "flags.h"
 # define NM_ERROR 	1
 # define NM_SUCCESS	0
 # define SEGSIZE64	sizeof(struct segment_command_64)
@@ -70,30 +72,30 @@ typedef struct				s_artab
 typedef struct				s_nm
 {
 	size_t					flags;
+	size_t					filesize;
+	const char				*filepath;
+	char					*fileraw;
+	t_list					*segments;
 	unsigned int			magic;
 	unsigned int			display_size;
 	unsigned int			current_index;
 	unsigned int			total_files;
 	t_segindex				indexes;
-	char					*fileraw;
 	char					*rootraw;
 	char					*subfilename;
 	char					*padding;
-	const char				*filepath;
-	t_list					*segments;
-	size_t					filesize;
 	size_t					rfs;
 }							t_nm;
 
-# define NM_FLAG_NONE		0
-# define NM_FLAG_ERROR		(1u << 0)
-# define NM_FLAG_CIGAM		(1u << 1)
-# define NM_FLAG_SYMTAB		(1u << 2)
-# define NM_FLAG_FAT		(1u << 3)
-# define NM_FLAG_SHOWNAME	(1u << 4)
-# define NM_FLAG_LIBRARY	(1u << 5)
-# define NM_UNKNOW_FILETYPE (1u << 6)
-# define NM_FLAG_ERROR_MEM	(1u << 7)
+// # define NM_FLAG_NONE		0
+// # define NM_FLAG_ERROR		(1u << 0)
+// # define NM_FLAG_CIGAM		(1u << 1)
+// # define NM_FLAG_SYMTAB		(1u << 2)
+// # define NM_FLAG_FAT		(1u << 3)
+// # define NM_FLAG_SHOWNAME	(1u << 4)
+// # define NM_FLAG_LIBRARY	(1u << 5)
+// # define NM_UNKNOW_FILETYPE (1u << 6)
+// # define NM_FLAG_ERROR_MEM	(1u << 7)
 
 typedef struct				s_handlers
 {

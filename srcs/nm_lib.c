@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/18 13:16:28 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 16:32:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:54:21 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	lib_rl(struct ranlib *rl, size_t index, const size_t size, t_nm *nm)
 
 	if (!(ptr = malloc((sizeof(t_ar) + sizeof(t_ar*)) * size)))
 	{
-		nm->flags |= NM_ERROR | NM_FLAG_ERROR_MEM;
+		nm->flags |= NM_ERROR;
 		return ;
 	}
 	payload = ptr;
@@ -95,10 +95,10 @@ void		handle_lib(t_nm *nm)
 
 	if (ft_memcmp(nm->fileraw, ARMAG, SARMAG))
 	{
-		nm->flags |= NM_FLAG_ERROR;
+		nm->flags |= FLAG_ERROR;
 		return ;
 	}
-	nm->flags |= NM_FLAG_LIBRARY | NM_FLAG_SHOWNAME | NM_FLAG_SYMTAB;
+	nm->flags |= FLAG_LIB | FLAG_SNAME | FLAG_SYMTAB;
 	ar = (void*)((size_t)nm->fileraw + SARMAG);
 	symdef = (char*)((size_t)&ar[1]);
 	load_ar(ar, &ar_read);

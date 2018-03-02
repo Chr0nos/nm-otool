@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   otool.h                                            :+:      :+:    :+:   */
+/*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:58:19 by snicolet         ###   ########.fr       */
+/*   Created: 2018/03/02 22:42:51 by snicolet          #+#    #+#             */
+/*   Updated: 2018/03/02 22:43:21 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OTOOL_H
-# define OTOOL_H
-# include "loadfile.h"
+#ifndef COMMON_H
+# define COMMON_H
 # include "libft.h"
-# include "swap.h"
-# include "flags.h"
-# include "common.h"
-# include "security.h"
-# include <string.h>
-# include <mach-o/loader.h>
-# include <mach-o/nlist.h>
-# include <ar.h>
 
-typedef struct	s_otool
+typedef struct	s_common
 {
 	size_t			flags;
 	size_t			filesize;
@@ -31,11 +22,6 @@ typedef struct	s_otool
 	unsigned char	*fileraw;
 	t_list			*segments;
 	void			*padding;
-}				t_otool;
-
-void			otool_macho(t_otool *otool);
-size_t			otool_filetype(char *fileraw, const size_t filesize);
-void			otool_showmem(const unsigned char *ptr,
-	const size_t size, const size_t offset, const size_t flags);
+}				t_common;
 
 #endif

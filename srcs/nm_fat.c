@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/23 19:15:22 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 22:53:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static void				fat_fix_cigam(struct fat_arch *arch)
 
 static int				fat_run(struct fat_arch *arch, t_nm *nm)
 {
-	nm->flags &= ~NM_FLAG_CIGAM;
-	nm->flags |= NM_FLAG_FAT;
+	nm->flags &= ~FLAG_CIGAM;
+	nm->flags |= FLAG_FAT;
 	nm->fileraw = &nm->fileraw[arch->offset];
 	nm->filesize -= arch->offset;
 	nm->magic = *(unsigned int *)(size_t)nm->fileraw;
@@ -56,7 +56,7 @@ static struct fat_arch	*arch_lookup(struct fat_arch *arch,
 	selected = arch;
 	while (arch_left--)
 	{
-		if (nm_flags & NM_FLAG_CIGAM)
+		if (nm_flags & FLAG_CIGAM)
 			fat_fix_cigam(arch);
 		if (arch->cputype == CPU_TYPE_X86)
 			selected = arch;
@@ -76,7 +76,7 @@ void					handle_fat(t_nm *nm)
 		return ;
 	(void)show;
 	header = (void*)(size_t)nm->fileraw;
-	if (nm->flags & NM_FLAG_CIGAM)
+	if (nm->flags & FLAG_CIGAM)
 		header->nfat_arch = swap(header->nfat_arch);
 	arch = (void*)((size_t)nm->fileraw + sizeof(struct fat_header));
 	if (nm_security(nm, arch, sizeof(*arch) * header->nfat_arch) == NM_ERROR)
