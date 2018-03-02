@@ -6,13 +6,12 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 16:04:25 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 16:32:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OTOOL_H
 # define OTOOL_H
 # include "loadfile.h"
-
 
 #endif

@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2018/03/02 16:27:18 by snicolet         ###   ########.fr        #
+#    Updated: 2018/03/02 16:32:21 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,9 +49,11 @@ fclean: clean
 
 re: fclean all
 
-norminette:
+norminette-all: norminette
 	make -C libft norminette
-	norminette $(NM_SRCS) nm.h
+
+norminette:
+	norminette $(NM_SRCS_FULL) $(OTOOL_SRCS_FULL) include/*.h
 
 $(OTOOL): ./libft/libft.a $(BUILDDIR) $(OTOOL_OBJS)
 	$(CC) $(CFLAGS) $(LINKER) $(OTOOL_OBJS) -o $(OTOOL)
