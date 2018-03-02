@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/28 01:31:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 17:00:40 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static void		otool_showmem(const unsigned char *ptr,
 	pos = 0;
 	while (ptr < lastptr)
 	{
-		ft_printf("%08x\t\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
-			" %02x %02x %02x %02x %02x %02x\n",
+		ft_printf("%p\t\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
+			" %02x %02x %02x %02x %02x\n",
 			pos + offset, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5],
 			ptr[6], ptr[7], ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13],
 			ptr[14], ptr[15]);
@@ -85,7 +85,7 @@ static int		otool_run(const char *filepath, const int index, const int max)
 	return (EXIT_SUCCESS);
 }
 
-int		main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	int			p;
 	int			retcode;

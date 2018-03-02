@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/18 13:16:28 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/01 09:31:21 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 16:32:43 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ static void	lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
 		nm->fileraw =
 			&nm->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
 		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
-//		nm->filesize = pl->size;
+		nm->filesize = pl->size;
 		nm->current_index = (unsigned int)index;
-		nm->indexes.sector = 0;
+		ft_bzero(&nm->indexes, sizeof(nm->indexes));
 		handle_files_types(nm);
 		pl->ar->ar_name[0] = '\0';
 	}
@@ -101,7 +101,6 @@ void		handle_lib(t_nm *nm)
 	nm->flags |= NM_FLAG_LIBRARY | NM_FLAG_SHOWNAME | NM_FLAG_SYMTAB;
 	ar = (void*)((size_t)nm->fileraw + SARMAG);
 	symdef = (char*)((size_t)&ar[1]);
-	ft_printf("library (%s) for %s\n", symdef, nm->filepath);
 	load_ar(ar, &ar_read);
 	size = (void*)((size_t)nm->fileraw + sizeof(*ar) + SARMAG +
 		(size_t)ft_atoi(ar->ar_name + ft_strlen(AR_EFMT1)));
