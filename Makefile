@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2018/03/02 21:30:28 by snicolet         ###   ########.fr        #
+#    Updated: 2018/03/02 21:34:08 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,3 @@ $(BUILDDIR):
 	mkdir $(BUILDDIR)
 
 .PHONY: re all clean fclean
-
-test:
-	@echo $(NM_OBJS)
