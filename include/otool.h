@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 21:20:58 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 21:26:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@
 
 typedef struct	s_otool
 {
-	size_t		flags;
-	size_t		filesize;
-	const char	*filepath;
+	size_t			flags;
+	size_t			filesize;
+	const char		*filepath;
 	unsigned char	*fileraw;
-	t_list		*segments;
-	void		*padding;
+	t_list			*segments;
+	void			*padding;
 }				t_otool;
 
 size_t			otool_filetype(char *fileraw, const size_t filesize);
