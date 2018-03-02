@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:26:41 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 18:43:49 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 20:12:33 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@
 size_t		otool_filetype(char *fileraw, const size_t filesize)
 {
 	unsigned int		magic;
+	size_t				minsize;
 
-	if ((filesize < 4) || (!fileraw))
+	minsize = sizeof(unsigned int) + sizeof(struct mach_header_64) +
+		sizeof(struct load_command);
+	if ((filesize < minsize) || (!fileraw))
 		return (OTOOL_FLAG_UNKNKOW | OTOOL_FLAG_ERROR);
 	magic = *(unsigned int *)(size_t)fileraw;
 	if (magic == MH_MAGIC_64)

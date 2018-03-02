@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 16:03:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 20:15:00 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <mach/machine.h>
 # include "libft.h"
 # include "loadfile.h"
+# include "swap.h"
 # define NM_ERROR 	1
 # define NM_SUCCESS	0
 # define SEGSIZE64	sizeof(struct segment_command_64)
@@ -104,8 +105,6 @@ typedef struct				s_handlers
 }							t_handlers;
 
 t_sym						**symbols_sort(t_list *symbols);
-uint32_t					swap(uint32_t x);
-size_t						swap64(const size_t x);
 void						nm_display_foreach(void *userdata, size_t size,
 	void *content);
 int							nm_security(t_nm *nm, const void *ptr,
