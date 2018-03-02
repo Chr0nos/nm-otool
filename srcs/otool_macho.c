@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 23:02:30 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 23:36:49 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,13 @@ static void		otool_macho_symtab(const size_t ptr, t_list *segments,
 	otool->flags |= FLAG_SYMTAB;
 	sym = (void*)ptr;
 	stringtable = (char*)(ptr + sym->symoff);
-	while (segments)
+	while ((segments) && (!(otool->flags & FLAG_ERROR)))
 	{
 		seg = segments->content;
-		ft_printf("%p -> %12s\n", seg, seg->segname);
+		if (!security((t_common*)otool, seg, segments->content_size))
+		{
+			ft_printf("%p -> %12s\n", seg, seg->segname);
+		}
 		segments = segments->next;
 	}
 }
@@ -59,9 +62,9 @@ void			otool_macho(t_otool *otool)
 		if (lc->cmd == LC_SYMTAB)
 			otool_macho_symtab((size_t)lc, otool->segments, otool);
 		else if (lc->cmd == LC_SEGMENT_64)
-			ft_lstadd(&otool->segments, ft_lstnewlink(lc, 64));
+			ft_lstadd(&otool->segments, ft_lstnewlink(lc, SEGSIZE64));
 		else if (lc->cmd == LC_SEGMENT)
-			ft_lstadd(&otool->segments, ft_lstnewlink(lc, 32));
+			ft_lstadd(&otool->segments, ft_lstnewlink(lc, SEGSIZE32));
 		lc = (void*)((size_t)lc + lc->cmdsize);
 	}
 	ft_lstdel(&otool->segments, NULL);
