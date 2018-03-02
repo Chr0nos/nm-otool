@@ -6,7 +6,7 @@
 #    By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/09 17:33:00 by snicolet          #+#    #+#              #
-#    Updated: 2018/02/27 23:16:53 by snicolet         ###   ########.fr        #
+#    Updated: 2018/03/02 16:27:18 by snicolet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,34 +14,52 @@ CFLAGS=-Wall -Werror -Wextra -Weverything -Wno-reserved-id-macro
 INC=-I./libft/include -I./include
 LINKER=-L./libft -lft
 NAME=ft_nm
-OBJS=nm.o nm_x32.o nm_x64.o loadfile.o nm_display.o nm_fat.o swap.o nm_lib.o
-SRCS=$(OBJS:%.o=srcs/%.c)
 CC=clang
 
-all: $(NAME)
+BUILDDIR=./build/
 
-%.o: srcs/%.c
-	$(CC) $(INC) $(CFLAGS) -c $<
+OTOOL=ft_otool
+OTOOL_SRCS=otool.c loadfile.c
+OTOOL_SRCS_FULL=$(OTOOL_SRCS:%.c=srcs/%.c)
+OTOOL_OBJS=$(OTOOL_SRCS:%.c=$(BUILDDIR)%.o)
+
+
+NM=ft_nm
+NM_SRCS=nm.c nm_x32.c nm_x64.c loadfile.c nm_display.c nm_fat.c swap.c nm_lib.c
+NM_SRCS_FULL=$(NM_SRCS:%.c=srcs/%.c)
+NM_OBJS=$(NM_SRCS:%.c=$(BUILDDIR)%.o)
+
+
+all: $(NM) $(OTOOL)
+
+$(BUILDDIR)%.o: srcs/%.c
+	$(CC) $(INC) $(CFLAGS) -c $< -o $@
 
 ./libft/libft.a:
 	make -C libft
 
-$(NAME): ./libft/libft.a $(OBJS)
-	$(CC) $(INC) $(CFLAGS) $(OBJS) $(LINKER) -o $(NAME)
+$(NM): ./libft/libft.a $(BUILDDIR) $(NM_OBJS)
+	$(CC) $(INC) $(CFLAGS) $(NM_OBJS) $(LINKER) -o $(NM)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) -rf $(BUILDDIR)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NM)
 
 re: fclean all
 
 norminette:
 	make -C libft norminette
-	norminette $(SRCS) nm.h
+	norminette $(NM_SRCS) nm.h
 
-otool: otool.o loadfile.o
-	$(CC) $(CFLAGS) $(LINKER) otool.o loadfile.o -o ft_otool
+$(OTOOL): ./libft/libft.a $(BUILDDIR) $(OTOOL_OBJS)
+	$(CC) $(CFLAGS) $(LINKER) $(OTOOL_OBJS) -o $(OTOOL)
+
+$(BUILDDIR):
+	mkdir $(BUILDDIR)
 
 .PHONY: re all clean fclean
+
+test:
+	@echo $(NM_OBJS)
