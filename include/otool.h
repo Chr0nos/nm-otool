@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 20:15:05 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 21:20:58 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,19 @@
 # define OTOOL_FLAG_ERROR	(1u << 6)
 # define OTOOL_MASK_TYPE	0x5
 
-size_t		otool_filetype(char *fileraw, const size_t filesize);
-size_t		otool_macho(char *fileraw, size_t filesize, size_t flags);
-size_t		otool_security(const char *fileraw, const size_t rawsize,
-	const void *ptr);
+typedef struct	s_otool
+{
+	size_t		flags;
+	size_t		filesize;
+	const char	*filepath;
+	unsigned char	*fileraw;
+	t_list		*segments;
+	void		*padding;
+}				t_otool;
 
+size_t			otool_filetype(char *fileraw, const size_t filesize);
+size_t			otool_macho(t_otool *otool);
+size_t			otool_security(t_otool *otool, const void *ptr);
+void			otool_showmem(const unsigned char *ptr,
+	const size_t size, const size_t offset, const size_t flags);
 #endif

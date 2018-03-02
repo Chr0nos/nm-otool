@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 20:54:16 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/02 21:21:17 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,19 @@ static size_t	otool_run_valid(const char *filepath,
 	const size_t filesize,
 	const size_t flags)
 {
+	t_otool			otool;
+
+	otool = (t_otool){
+		.flags = flags,
+		.filepath = filepath,
+		.filesize = filesize,
+		.fileraw = (unsigned char *)(size_t)fileraw,
+		.segments = NULL,
+		.padding = NULL
+	};
 	ft_printf("filepath: %s\n", filepath);
 	if (flags & (OTOOL_FLAG_64BITS | OTOOL_FLAG_32BITS))
-		return (otool_macho(fileraw, filesize, flags));
+		return (otool_macho(&otool));
 	return (OTOOL_FLAG_OK);
 }
 
