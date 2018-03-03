@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 06:41:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:17:33 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@ static void	display_name(const t_nm *nm)
 	}
 }
 
+static t_sym **get_symtab(size_t flags, t_list *lst)
+{
+	if (flags & FLAG_NOSORT)
+		return ((t_sym**)ft_lsttotab(lst));
+	return ((t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort)));
+}
+
 void		nm_display(t_list *lst, t_nm *nm)
 {
 	unsigned int	display_size = (nm->flags & FLAG_64BITS) ? 16 : 8;
@@ -74,9 +81,7 @@ void		nm_display(t_list *lst, t_nm *nm)
 	char			letter;
 
 	display_name(nm);
-	if ((nm->flags & FLAG_NOSORT) && (!(tab = (t_sym**)ft_lsttotab(lst))))
-		return ;
-	else if (!(tab = (t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort))))
+	if (!(tab = get_symtab(nm->flags, lst)))
 		return ;
 	index = 0;
 	while (tab[index])

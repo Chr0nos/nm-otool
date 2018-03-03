@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/18 13:16:28 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 06:41:23 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:08:42 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static void	lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
 			&nm->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
 		sub.magic = *(unsigned int *)(size_t)sub.fileraw;
 		sub.filesize = pl->size;
-		// sub.current_index = (unsigned int)index;
 		ft_bzero(&sub.indexes, sizeof(nm->indexes));
 		handle_files_types(&sub);
 		pl->ar->ar_name[0] = '\0';
