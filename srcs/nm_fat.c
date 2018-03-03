@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 23:08:35 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 02:19:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ void					handle_fat(t_nm *nm)
 	struct fat_header		*header;
 	struct fat_arch			*arch;
 
+	header = (void*)(size_t)nm->fileraw;
 	if (security((t_common*)nm, header, sizeof(*header)))
 		return ;
 	(void)show;
-	header = (void*)(size_t)nm->fileraw;
 	if (nm->flags & FLAG_CIGAM)
 		header->nfat_arch = swap(header->nfat_arch);
 	arch = (void*)((size_t)nm->fileraw + sizeof(struct fat_header));
