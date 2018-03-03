@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 23:10:59 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:42:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	handle_files(const char *filepath, const int files_count,
 		ft_dprintf(2, "%s%s\n", "error: failed to open: ", filepath);
 		return (NM_ERROR);
 	}
-	if (nm.rfs < 4)
+	if (nm.rfs < sizeof(unsigned int) + sizeof(struct mach_header_64))
 		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
 	else
 	{

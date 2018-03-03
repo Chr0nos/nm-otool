@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:43:52 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:35:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:40:52 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ static size_t	macho_items(const t_common *com)
 		return (swap64(size));
 	return (size);
 }
+
+/*
+** symcall is the pointer of function used as a callback when the
+** symtab is found, a flag will be set automaticaly (FLAG_SYMTAB)
+*/
 
 void			macho(t_common *com,
 	void (*symcall)(size_t, t_list *, t_common *))
