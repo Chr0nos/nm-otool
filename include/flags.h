@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 22:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 23:11:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:03:34 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define FLAG_ERROR		(1u << 7)
 # define FLAG_SYMTAB	(1u << 8)
 # define FLAG_SNAME		(1u << 9)
+# define FLAG_NM		(1u << 10)
+# define FLAG_OTOOL		(1u << 11)
 # define MASK_TYPE		0x5
 
 #endif

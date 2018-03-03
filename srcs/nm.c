@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:47:53 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:04:10 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	handle_real(t_nm *nm, const char *filepath,
 {
 	if (nm->total_files > 1)
 		nm->flags |= FLAG_SNAME;
+	nm->flags |= FLAG_NM;
 	nm->fileraw = nm->rootraw;
 	nm->filesize = nm->rfs;
 	nm->filepath = filepath;

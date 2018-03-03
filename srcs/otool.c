@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 04:33:06 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:04:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static size_t	otool_run_valid(const char *filepath,
 	t_otool			otool;
 
 	otool = (t_otool){
-		.flags = flags,
+		.flags = flags | FLAG_OTOOL,
 		.filepath = filepath,
 		.filesize = filesize,
 		.fileraw = (unsigned char *)(size_t)fileraw,
