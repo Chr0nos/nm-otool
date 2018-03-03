@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 14:09:24 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 15:34:09 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,10 @@ typedef struct				s_nm
 	size_t					rfs;
 	unsigned int			magic;
 	unsigned int			display_size;
-	// unsigned int			current_index;
-	// unsigned int			total_files;
 	t_segindex				indexes;
 	char					*subfilename;
 	char					*padding;
 }							t_nm;
-
-typedef struct				s_handlers
-{
-	unsigned int			padding;
-	unsigned int			magic;
-	void					(*run)(t_nm *);
-	size_t					flags;
-	const char				*name;
-}							t_handlers;
 
 t_sym						**symbols_sort(t_list *symbols);
 void						nm_display_foreach(void *userdata, size_t size,

@@ -6,40 +6,36 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 14:28:45 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 15:33:26 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "nm.h"
+#include "filetype.h"
 #include <sys/mman.h>
 
-int			handle_files_types(t_nm *nm)
+int		handle_files_types(t_nm *nm)
 {
-	const t_handlers	ptrs[] = {
-		(t_handlers){0, MH_MAGIC_64, &handle_x64, FLAG_NONE, "64bits"},
-		(t_handlers){0, MH_CIGAM_64, &handle_x64, FLAG_CIGAM, "64bits-cig"},
-		(t_handlers){0, MH_MAGIC, &handle_x32, FLAG_NONE, "32bits"},
-		(t_handlers){0, MH_CIGAM, &handle_x32, FLAG_CIGAM, "32bits-cigam"},
-		(t_handlers){0, FAT_MAGIC_64, &handle_fat, FLAG_NONE, "fat binary"},
-		(t_handlers){0, NM_LIBRARY, &handle_lib, FLAG_NONE, "64 bits lib"},
-		(t_handlers){0, FAT_CIGAM, &handle_fat, FLAG_CIGAM, "fat binary-cig"}
-	};
-	size_t				p;
-
-	p = 7;
-	while (p--)
+	nm->flags |= filetype(nm->fileraw, nm->filesize);
+	if (nm->flags & FLAG_UNKNKOW)
 	{
-		if (ptrs[p].magic == nm->magic)
-		{
-			nm->flags |= ptrs[p].flags;
-			ptrs[p].run(nm);
-			return (NM_SUCCESS);
-		}
+		ft_dprintf(2, "%s%#x\n", "error: unknow file type: ", nm->magic);
+		nm->flags |= FLAG_ERROR;
+		return (NM_ERROR);
 	}
-	nm->flags |= FLAG_UNKNKOW | FLAG_ERROR;
-	ft_dprintf(2, "%s%#x\n", "error: unknow file type: ", nm->magic);
-	return (NM_ERROR);
+	if (nm->flags & FLAG_MACHO)
+	{
+		if (nm->flags & FLAG_32BITS)
+			handle_x32(nm);
+		else if (nm->flags & FLAG_64BITS)
+			handle_x64(nm);
+	}
+	else if (nm->flags & FLAG_FAT)
+		handle_fat(nm);
+	else if (nm->flags & FLAG_LIB)
+		handle_lib(nm);
+	return (NM_SUCCESS);
 }
 
 static int	nm_run(const char *filepath, char *fileraw,
