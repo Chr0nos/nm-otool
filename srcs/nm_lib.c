@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/18 13:16:28 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:54:21 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 05:55:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,22 @@ static int	lib_cmp(t_ar *a, t_ar *b)
 static void	lib_rl_run(t_nm *nm, size_t index, const size_t size, t_ar **tab)
 {
 	t_ar				*pl;
+	t_nm				sub;
 
 	while (index < size)
 	{
 		pl = tab[index++];
 		if (!*pl->ar->ar_name)
 			continue ;
-		nm->subfilename = pl->filename;
-		nm->fileraw =
+		sub = *nm;
+		sub.subfilename = pl->filename;
+		sub.fileraw =
 			&nm->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
-		nm->magic = *(unsigned int *)(size_t)nm->fileraw;
-		nm->filesize = pl->size;
-		nm->current_index = (unsigned int)index;
-		ft_bzero(&nm->indexes, sizeof(nm->indexes));
-		handle_files_types(nm);
+		sub.magic = *(unsigned int *)(size_t)sub.fileraw;
+		sub.filesize = pl->size;
+		sub.current_index = (unsigned int)index;
+		ft_bzero(&sub.indexes, sizeof(nm->indexes));
+		handle_files_types(&sub);
 		pl->ar->ar_name[0] = '\0';
 	}
 }

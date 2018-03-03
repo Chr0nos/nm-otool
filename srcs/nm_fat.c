@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 02:19:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 05:57:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,16 @@ static void				fat_fix_cigam(struct fat_arch *arch)
 
 static int				fat_run(struct fat_arch *arch, t_nm *nm)
 {
-	nm->flags &= ~FLAG_CIGAM;
-	nm->flags |= FLAG_FAT;
-	nm->fileraw = &nm->fileraw[arch->offset];
-	nm->filesize -= arch->offset;
-	nm->magic = *(unsigned int *)(size_t)nm->fileraw;
-	handle_files_types(nm);
+	t_nm		sub;
+
+	sub = *nm;
+	sub.flags &= ~FLAG_CIGAM;
+	sub.flags |= FLAG_FAT;
+	sub.fileraw = &nm->fileraw[arch->offset];
+	sub.filesize -= arch->offset;
+	sub.magic = *(unsigned int *)(size_t)sub.fileraw;
+	handle_files_types(&sub);
+	nm->flags |= FLAG_SYMTAB;
 	return (NM_SUCCESS);
 }
 
