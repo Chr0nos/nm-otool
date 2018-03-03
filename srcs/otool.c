@@ -6,12 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 23:12:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 02:48:02 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "otool.h"
+#include "macho.h"
 #include <sys/mman.h>
 
 /*
@@ -38,7 +39,7 @@ static size_t	otool_run_valid(const char *filepath,
 	};
 	ft_printf("filepath: %s (%lb)\n", filepath, flags);
 	if (flags & FLAG_MACHO)
-		otool_macho(&otool);
+		macho((t_common*)&otool, &otool_macho_symtab);
 	return (otool.flags);
 }
 

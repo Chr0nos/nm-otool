@@ -6,13 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 20:32:51 by snicolet          #+#    #+#             */
-/*   Updated: 2018/02/13 21:30:44 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 02:50:33 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-uint32_t	swap(uint32_t x)
+unsigned int	swap(unsigned int x)
 {
 	return ((x & 0xff000000) >> 24 |
 		(x & 0x00ff0000) >> 8 |
@@ -20,7 +20,7 @@ uint32_t	swap(uint32_t x)
 		(x & 0x000000ff) << 24);
 }
 
-size_t		swap64(const size_t x)
+size_t			swap64(const size_t x)
 {
 	return (
 		(x & 0xff00000000000000) >> 56 |
