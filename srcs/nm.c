@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 06:45:51 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:05:20 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	nm_run(const char *filepath, char *fileraw,
 	t_nm	nm;
 
 	ft_bzero(&nm, sizeof(nm));
-	nm.flags = flags | FLAG_NM;
+	nm.flags = flags;
 	nm.rfs = filesize;
 	nm.filesize = filesize;
 	nm.rootraw = fileraw;
@@ -84,21 +84,39 @@ static int	handle_file(const char *filepath, const size_t flags)
 	return (ret);
 }
 
-int			main(int ac, char **av)
+static int	main_options(int ac, char **av, size_t *flags)
 {
 	int		p;
-	int		errcode;
-	size_t	flags;
+
+	p = 1;
+	if (!ft_strcmp(av[p], "--no-sort"))
+	{
+		ft_printf("disabled sort\n");
+		*flags |= FLAG_NOSORT;
+		p++;
+	}
+	if (p < ac - 1)
+		*flags |= FLAG_SNAME;
+	return (p);
+}
+
+int			main(int ac, char **av)
+{
+	int			p;
+	int			error_count;
+	size_t		perma_flags;
+	size_t		flags;
 
 	if (ac < 2)
 		return (handle_file("a.out", FLAG_NONE));
-	p = 1;
-	errcode = EXIT_SUCCESS;
+	perma_flags = FLAG_NM;
+	p = main_options(ac, av, &perma_flags);
+	error_count = 0;
 	while (p < ac)
 	{
-		flags = (ac < p) ? FLAG_SNAME | FLAG_SKIPLINE : FLAG_NONE;
-		errcode += handle_file(av[p], flags);
+		flags = (ac < p) ? FLAG_SKIPLINE : FLAG_NONE;
+		error_count += handle_file(av[p], flags | perma_flags);
 		p++;
 	}
-	return (errcode);
+	return (error_count);
 }
