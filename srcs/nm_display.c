@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:45:24 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:13:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ void		nm_display(t_list *lst, t_nm *nm)
 	char			letter;
 
 	display_name(nm);
-	if (!(tab = (t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort))))
+	if ((nm->flags & FLAG_NOSORT) && (!(tab = (t_sym**)ft_lsttotab(lst))))
+		return ;
+	else if (!(tab = (t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort))))
 		return ;
 	index = 0;
 	while (tab[index])
