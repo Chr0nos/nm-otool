@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 22:52:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:45:24 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ static void	display_name(const t_nm *nm)
 
 void		nm_display(t_list *lst, t_nm *nm)
 {
-	t_sym		**tab;
-	t_sym		*sym;
-	size_t		index;
-	char		letter;
+	unsigned int	display_size = (nm->flags & FLAG_64BITS) ? 16 : 8;
+	t_sym			**tab;
+	t_sym			*sym;
+	size_t			index;
+	char			letter;
 
 	display_name(nm);
 	if (!(tab = (t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort))))
@@ -84,9 +85,9 @@ void		nm_display(t_list *lst, t_nm *nm)
 		letter = nm_getletter(sym, nm);
 		if (!ft_strchr("uU?", letter))
 			ft_printf("%0*lx %c %s\n",
-				nm->display_size, sym->value, letter, sym->name);
+				display_size, sym->value, letter, sym->name);
 		else
-			ft_printf("%*s %c %s\n", nm->display_size, "", 'U', sym->name);
+			ft_printf("%*s %c %s\n", display_size, "", 'U', sym->name);
 	}
 	free(tab);
 }

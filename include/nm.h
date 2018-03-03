@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:35:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:47:43 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ typedef struct				s_nm
 
 typedef struct				s_handlers
 {
+	unsigned int			padding;
 	unsigned int			magic;
-	unsigned int			display_size;
 	void					(*run)(t_nm *);
 	size_t					flags;
 	const char				*name;

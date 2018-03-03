@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:42:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:47:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 int			handle_files_types(t_nm *nm)
 {
 	const t_handlers	ptrs[] = {
-		(t_handlers){MH_MAGIC_64, 16, &handle_x64, FLAG_NONE, "64bits"},
-		(t_handlers){MH_CIGAM_64, 16, &handle_x64, FLAG_CIGAM, "64bits-cig"},
-		(t_handlers){MH_MAGIC, 8, &handle_x32, FLAG_NONE, "32bits"},
-		(t_handlers){MH_CIGAM, 8, &handle_x32, FLAG_CIGAM, "32bits-cigam"},
-		(t_handlers){FAT_MAGIC_64, 8, &handle_fat, FLAG_NONE, "fat binary"},
-		(t_handlers){NM_LIBRARY, 16, &handle_lib, FLAG_NONE, "64 bits lib"},
-		(t_handlers){FAT_CIGAM, 8, &handle_fat, FLAG_CIGAM, "fat binary-cig"}
+		(t_handlers){0, MH_MAGIC_64, &handle_x64, FLAG_NONE, "64bits"},
+		(t_handlers){0, MH_CIGAM_64, &handle_x64, FLAG_CIGAM, "64bits-cig"},
+		(t_handlers){0, MH_MAGIC, &handle_x32, FLAG_NONE, "32bits"},
+		(t_handlers){0, MH_CIGAM, &handle_x32, FLAG_CIGAM, "32bits-cigam"},
+		(t_handlers){0, FAT_MAGIC_64, &handle_fat, FLAG_NONE, "fat binary"},
+		(t_handlers){0, NM_LIBRARY, &handle_lib, FLAG_NONE, "64 bits lib"},
+		(t_handlers){0, FAT_CIGAM, &handle_fat, FLAG_CIGAM, "fat binary-cig"}
 	};
 	size_t				p;
 
@@ -32,7 +32,6 @@ int			handle_files_types(t_nm *nm)
 	{
 		if (ptrs[p].magic == nm->magic)
 		{
-			nm->display_size = ptrs[p].display_size;
 			nm->flags |= ptrs[p].flags;
 			ptrs[p].run(nm);
 			return (NM_SUCCESS);
