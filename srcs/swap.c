@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 20:32:51 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 02:50:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 14:18:35 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,18 @@ size_t			swap64(const size_t x)
 		(x & 0x0000000000ff0000) << 24 |
 		(x & 0x000000000000ff00) << 40 |
 		(x & 0x00000000000000ff) << 56);
+}
+
+size_t			smartswap64(const size_t x, const size_t flags)
+{
+	if (flags & FLAG_CIGAM)
+		return (swap64(x));
+	return (x);
+}
+
+unsigned int	smartswap32(const unsigned int x, const size_t flags)
+{
+	if (flags & FLAG_CIGAM)
+		return (swap(x));
+	return (x);
 }

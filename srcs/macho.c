@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:43:52 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:40:52 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 14:20:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static size_t	macho_items(const t_common *com)
 
 	size = 0;
 	if (com->flags & FLAG_64BITS)
-		size = ((struct mach_header_64 *)(size_t)com->fileraw)->ncmds;
+		size = smartswap64(
+			((struct mach_header_64 *)(size_t)com->fileraw)->ncmds, com->flags);
 	if (com->flags & FLAG_32BITS)
-		size = ((struct mach_header *)(size_t)com->fileraw)->ncmds;
-	if (com->flags & FLAG_CIGAM)
-		return (swap64(size));
+		size = smartswap32(((struct mach_header *)(size_t)com->fileraw)->ncmds,
+			com->flags);
 	return (size);
 }
 
