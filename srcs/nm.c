@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 14:12:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 14:28:45 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int			main(int ac, char **av)
 	error_count = 0;
 	while (p < ac)
 	{
-		flags = (ac < p) ? FLAG_SKIPLINE : FLAG_NONE;
+		flags = (p < ac) ? FLAG_SKIPLINE : FLAG_NONE;
 		error_count += handle_file(av[p], flags | perma_flags);
 		p++;
 	}
