@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/18 13:16:28 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 07:08:42 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 15:46:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,13 @@ void		handle_lib(t_nm *nm)
 	if (ft_memcmp(nm->fileraw, ARMAG, SARMAG))
 	{
 		nm->flags |= FLAG_ERROR;
+		nm->flags &= ~FLAG_SYMTAB;
 		return ;
 	}
-	nm->flags |= FLAG_LIB | FLAG_SNAME | FLAG_SYMTAB;
 	ar = (void*)((size_t)nm->fileraw + SARMAG);
 	symdef = (char*)((size_t)&ar[1]);
+	if (security((t_common*)nm, symdef, 8))
+		return ;
 	load_ar(ar, &ar_read);
 	size = (void*)((size_t)nm->fileraw + sizeof(*ar) + SARMAG +
 		(size_t)ft_atoi(ar->ar_name + ft_strlen(AR_EFMT1)));
