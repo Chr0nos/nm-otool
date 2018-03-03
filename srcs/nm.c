@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 06:04:10 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:45:51 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,59 +42,62 @@ int			handle_files_types(t_nm *nm)
 	return (NM_ERROR);
 }
 
-static void	handle_real(t_nm *nm, const char *filepath,
-	const unsigned int magic)
+static int	nm_run(const char *filepath, char *fileraw,
+	const size_t filesize, const size_t flags)
 {
-	if (nm->total_files > 1)
-		nm->flags |= FLAG_SNAME;
-	nm->flags |= FLAG_NM;
-	nm->fileraw = nm->rootraw;
-	nm->filesize = nm->rfs;
-	nm->filepath = filepath;
-	nm->magic = magic;
-	handle_files_types(nm);
-}
-
-static int	handle_files(const char *filepath, const int files_count,
-	const int index)
-{
-	t_nm		nm;
+	t_nm	nm;
 
 	ft_bzero(&nm, sizeof(nm));
-	if (!(nm.rootraw = loadfile(filepath, &nm.rfs)))
+	nm.flags = flags | FLAG_NM;
+	nm.rfs = filesize;
+	nm.filesize = filesize;
+	nm.rootraw = fileraw;
+	nm.fileraw = fileraw;
+	if (security((t_common*)&nm, fileraw, sizeof(unsigned int) +
+			sizeof(struct mach_header)))
+		return  (1);
+	nm.magic = *(unsigned int *)(size_t)fileraw;
+	nm.filepath = filepath;
+	handle_files_types(&nm);
+	if ((!(nm.flags & FLAG_SYMTAB)) && (!(nm.flags & FLAG_ERROR)))
+	{
+		ft_dprintf(STDERR_FILENO, "%s", "error: no symbols table found.\n");
+		return (1);
+	}
+	return (!((nm.flags & FLAG_ERROR) == FLAG_NONE));
+}
+
+static int	handle_file(const char *filepath, const size_t flags)
+{
+	char		*fileraw;
+	size_t		filesize;
+	int			ret;
+
+	fileraw = loadfile(filepath, &filesize);
+	if ((!fileraw) || (!filesize))
 	{
 		ft_dprintf(2, "%s%s\n", "error: failed to open: ", filepath);
 		return (NM_ERROR);
 	}
-	if (nm.rfs < sizeof(unsigned int) + sizeof(struct mach_header_64))
-		ft_dprintf(2, "%s%s\n", "error: invalid file: ", filepath);
-	else
-	{
-		nm.total_files = (unsigned int)files_count;
-		nm.current_index = (unsigned int)index;
-		handle_real(&nm, filepath, *(unsigned int *)(size_t)nm.rootraw);
-	}
-	munmap(nm.rootraw, nm.rfs);
-	if ((!(nm.flags & FLAG_SYMTAB)) && (!(nm.flags & FLAG_ERROR)))
-	{
-		ft_dprintf(STDERR_FILENO, "%s", "error: no symbols table found.\n");
-		return (NM_ERROR);
-	}
-	return ((nm.flags & FLAG_ERROR) != FLAG_NONE);
+	ret = nm_run(filepath, fileraw, filesize, flags);
+	munmap(fileraw, filesize);
+	return (ret);
 }
 
 int			main(int ac, char **av)
 {
 	int		p;
 	int		errcode;
+	size_t	flags;
 
 	if (ac < 2)
-		return (handle_files("a.out", 1, 1));
+		return (handle_file("a.out", FLAG_NONE));
 	p = 1;
 	errcode = EXIT_SUCCESS;
 	while (p < ac)
 	{
-		errcode += handle_files(av[p], ac - 1, p);
+		flags = (ac < p) ? FLAG_SNAME | FLAG_SKIPLINE : FLAG_NONE;
+		errcode += handle_file(av[p], flags);
 		p++;
 	}
 	return (errcode);

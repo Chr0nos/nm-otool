@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 05:59:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:31:47 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ typedef struct				s_nm
 	size_t					rfs;
 	unsigned int			magic;
 	unsigned int			display_size;
-	unsigned int			current_index;
-	unsigned int			total_files;
+	// unsigned int			current_index;
+	// unsigned int			total_files;
 	t_segindex				indexes;
 	char					*subfilename;
 	char					*padding;

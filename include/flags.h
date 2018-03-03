@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 22:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 06:13:28 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:39:32 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define FLAG_NM		(1u << 10)
 # define FLAG_OTOOL		(1u << 11)
 # define FLAG_NOSORT	(1u << 12)
+# define FLAG_SKIPLINE	(1u << 13)
 # define MASK_TYPE		0x5
 
 #endif
