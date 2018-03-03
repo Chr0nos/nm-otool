@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 06:31:47 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 14:09:24 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,7 @@ void						print_symb_32(struct symtab_command *sym,
 	size_t const ptr, t_common *com);
 void						print_symb_64(struct symtab_command *sym,
 	size_t const ptr, t_common *com);
+int							sort_by_names(t_sym *a, t_sym *b);
+int							sort_by_addr(t_sym *a, t_sym *b);
 
 #endif

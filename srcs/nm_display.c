@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 07:17:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 14:11:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,6 @@ char		nm_getletter(const t_sym *sym, const t_nm *nm)
 	return (ret);
 }
 
-static int	handle_qsort(t_sym *a, t_sym *b)
-{
-	const int	cmp = ft_strcmp(a->name, b->name);
-
-	return ((cmp == 0) ? (int)(a->value - b->value) : cmp);
-}
-
 static void	display_name(const t_nm *nm)
 {
 	if (nm->flags & FLAG_SNAME)
@@ -69,7 +62,9 @@ static t_sym **get_symtab(size_t flags, t_list *lst)
 {
 	if (flags & FLAG_NOSORT)
 		return ((t_sym**)ft_lsttotab(lst));
-	return ((t_sym**)ft_lstqsort(lst, FT_CASTCMP(&handle_qsort)));
+	if (flags & FLAG_BYADDR)
+		return ((t_sym**)ft_lstqsort(lst, FT_CASTCMP(&sort_by_addr)));
+	return ((t_sym**)ft_lstqsort(lst, FT_CASTCMP(&sort_by_names)));
 }
 
 void		nm_display(t_list *lst, t_nm *nm)

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 07:11:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 14:12:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,11 @@ static int	main_options(int ac, char **av, size_t *flags)
 	{
 		ft_printf("disabled sort\n");
 		*flags |= FLAG_NOSORT;
+		p++;
+	}
+	if (!ft_strcmp(av[p], "--by-addr"))
+	{
+		*flags |= FLAG_BYADDR;
 		p++;
 	}
 	if (p < ac - 1)
