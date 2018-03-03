@@ -6,12 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 02:54:36 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:11:07 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 #include "libft.h"
+#include "macho.h"
 
 static void			indexes_core(void *userdata, size_t content_size,
 	void *content)
@@ -44,11 +45,11 @@ static void			indexes_core(void *userdata, size_t content_size,
 }
 
 static void			handle_x32_list(t_list **lst,
-	const struct nlist *item, const char *name, t_nm *nm)
+	const struct nlist *item, const char *name, t_common *com)
 {
 	t_sym		sym;
 
-	if (security((t_common*)nm, name, 0))
+	if (security(com, name, 0))
 		return ;
 	sym.name = (char*)(size_t)name;
 	sym.type = item->n_type;
@@ -59,7 +60,7 @@ static void			handle_x32_list(t_list **lst,
 }
 
 static void			print_symb_32(struct symtab_command *sym, size_t const ptr,
-		t_nm *nm)
+		t_common *com)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
 	const struct nlist		*array = (void*)(ptr + sym->symoff);
@@ -67,28 +68,37 @@ static void			print_symb_32(struct symtab_command *sym, size_t const ptr,
 	const char				*name;
 	t_list					*lst;
 
-	nm->flags |= FLAG_SYMTAB;
+	com->flags |= FLAG_SYMTAB;
 	i = 0;
 	lst = NULL;
-	while ((i < sym->nsyms) && (!(nm->flags & FLAG_ERROR)))
+	while ((i < sym->nsyms) && (!(com->flags & FLAG_ERROR)))
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		handle_x32_list(&lst, &array[i], name, nm);
+		handle_x32_list(&lst, &array[i], name, com);
 		i++;
 	}
-	if (!(nm->flags & FLAG_ERROR))
-		nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
+	if (!(com->flags & FLAG_ERROR))
+		nm_display(lst, ft_lstforeach(com->segments, com, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
-	ft_lstdel(&nm->segments, NULL);
+	ft_lstdel(&com->segments, NULL);
+}
+
+static void			handle_wrapper(size_t ptr, t_list *segments, t_common *com)
+{
+	(void)segments;
+	print_symb_32((void*)ptr, (size_t)com->fileraw, com);
 }
 
 void				handle_x32(t_nm *nm)
 {
+	nm->flags |= FLAG_32BITS | FLAG_MACHO;
+	// macho((t_common*)nm, &handle_wrapper);
 	struct mach_header			*header;
 	struct load_command			*lc;
 	struct symtab_command		*sym;
 	size_t						i;
 
+	(void)handle_wrapper;
 	header = (void*)nm->fileraw;
 	i = 0;
 	lc = (struct load_command *)((size_t)nm->fileraw + sizeof(*header));
@@ -99,7 +109,7 @@ void				handle_x32(t_nm *nm)
 		if (lc->cmd == LC_SYMTAB)
 		{
 			sym = (struct symtab_command *)(size_t)lc;
-			print_symb_32(sym, (size_t)nm->fileraw, nm);
+			print_symb_32(sym, (size_t)nm->fileraw, (t_common*)nm);
 			break ;
 		}
 		else if (lc->cmd == LC_SEGMENT)

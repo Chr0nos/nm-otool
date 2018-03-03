@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:43:52 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 02:46:57 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:14:42 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void			macho(t_common *com,
 
 	lc = (void*)&com->fileraw[com->flags & FLAG_64BITS ?
 		sizeof(struct mach_header_64) : sizeof(struct mach_header)];
+	security(com, lc, ncmds * sizeof(*lc));
 	i = 0;
 	while ((i++ < ncmds) &&
 		(!security(com, lc, sizeof(*lc))))
