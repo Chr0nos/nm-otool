@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:11:07 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:36:02 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void			handle_x32_list(t_list **lst,
 	ft_lstpush_front(lst, ft_lstnew(&sym, sizeof(sym)));
 }
 
-static void			print_symb_32(struct symtab_command *sym, size_t const ptr,
+void				print_symb_32(struct symtab_command *sym, size_t const ptr,
 		t_common *com)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
@@ -68,7 +68,6 @@ static void			print_symb_32(struct symtab_command *sym, size_t const ptr,
 	const char				*name;
 	t_list					*lst;
 
-	com->flags |= FLAG_SYMTAB;
 	i = 0;
 	lst = NULL;
 	while ((i < sym->nsyms) && (!(com->flags & FLAG_ERROR)))
@@ -80,41 +79,10 @@ static void			print_symb_32(struct symtab_command *sym, size_t const ptr,
 	if (!(com->flags & FLAG_ERROR))
 		nm_display(lst, ft_lstforeach(com->segments, com, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
-	ft_lstdel(&com->segments, NULL);
-}
-
-static void			handle_wrapper(size_t ptr, t_list *segments, t_common *com)
-{
-	(void)segments;
-	print_symb_32((void*)ptr, (size_t)com->fileraw, com);
 }
 
 void				handle_x32(t_nm *nm)
 {
 	nm->flags |= FLAG_32BITS | FLAG_MACHO;
-	// macho((t_common*)nm, &handle_wrapper);
-	struct mach_header			*header;
-	struct load_command			*lc;
-	struct symtab_command		*sym;
-	size_t						i;
-
-	(void)handle_wrapper;
-	header = (void*)nm->fileraw;
-	i = 0;
-	lc = (struct load_command *)((size_t)nm->fileraw + sizeof(*header));
-	if (security((t_common*)nm, lc, header->ncmds * sizeof(*lc)))
-		return ;
-	while (i < header->ncmds)
-	{
-		if (lc->cmd == LC_SYMTAB)
-		{
-			sym = (struct symtab_command *)(size_t)lc;
-			print_symb_32(sym, (size_t)nm->fileraw, (t_common*)nm);
-			break ;
-		}
-		else if (lc->cmd == LC_SEGMENT)
-			ft_lstpush_back(&nm->segments, ft_lstnewlink(lc, SEGSIZE32));
-		lc = (void*)((size_t)lc + lc->cmdsize);
-		i++;
-	}
+	macho((t_common*)nm, &nm_wrapper);
 }

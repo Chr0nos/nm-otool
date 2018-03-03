@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 02:15:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:35:04 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,11 @@ void						nm_display(t_list *lst, t_nm *nm);
 t_list						*nm_display_list(t_list *lst, t_nm *nm);
 void						nm_display_sym(const t_sym *sym, t_nm *nm);
 char						nm_getletter(const t_sym *sym, const t_nm *nm);
+
+void				nm_wrapper(size_t ptr, t_list *segments, t_common *com);
+void				print_symb_32(struct symtab_command *sym, size_t const ptr,
+		t_common *com);
+void				print_symb_64(struct symtab_command *sym, size_t const ptr,
+		t_common *com);
 
 #endif

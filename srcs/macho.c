@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:43:52 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:14:42 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:35:53 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@ void			macho(t_common *com,
 		(!security(com, lc, sizeof(*lc))))
 	{
 		if (lc->cmd == LC_SYMTAB)
+		{
+			com->flags |= FLAG_SYMTAB;
 			symcall((size_t)lc, com->segments, com);
+		}
 		else if (lc->cmd == LC_SEGMENT_64)
-			ft_lstadd(&com->segments, ft_lstnewlink(lc, SEGSIZE64));
+			ft_lstpush_back(&com->segments, ft_lstnewlink(lc, SEGSIZE64));
 		else if (lc->cmd == LC_SEGMENT)
-			ft_lstadd(&com->segments, ft_lstnewlink(lc, SEGSIZE32));
+			ft_lstpush_back(&com->segments, ft_lstnewlink(lc, SEGSIZE32));
 		lc = (void*)((size_t)lc + lc->cmdsize);
 	}
 	ft_lstdel(&com->segments, NULL);

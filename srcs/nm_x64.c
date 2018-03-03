@@ -6,11 +6,12 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:58 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 02:54:22 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:36:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
+#include "macho.h"
 
 /*
 ** creates the indexes for TEXT, DATA and _bss sections
@@ -47,19 +48,19 @@ static void		indexes_core(void *userdata, size_t content_size, void *content)
 	}
 }
 
-static void		handle_x64_list(t_nm *nm, t_list **lst,
+static void		handle_x64_list(t_common *com, t_list **lst,
 	const struct nlist_64 *item, const char *name)
 {
 	t_sym		sym;
 
-	if (security((t_common*)nm, name, 0))
+	if (security(com, name, 0))
 		return ;
 	sym.name = (char*)(size_t)name;
 	sym.type = item->n_type;
 	sym.value = (size_t)item->n_value;
 	sym.nsect = (unsigned int)item->n_sect;
 	sym.ndesc = (unsigned int)item->n_desc;
-	if (nm->flags & FLAG_CIGAM)
+	if (com->flags & FLAG_CIGAM)
 	{
 		sym.type = swap64(sym.type);
 		sym.value = swap64(sym.value);
@@ -69,8 +70,8 @@ static void		handle_x64_list(t_nm *nm, t_list **lst,
 	ft_lstpush_front(lst, ft_lstnew(&sym, sizeof(sym)));
 }
 
-static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
-	t_nm *nm)
+void			print_symb_64(struct symtab_command *sym, size_t const ptr,
+	t_common *com)
 {
 	const char				*stringtable = (char *)(ptr + sym->stroff);
 	const struct nlist_64	*array = (void*)(ptr + sym->symoff);
@@ -78,46 +79,23 @@ static void		print_symb_64(struct symtab_command *sym, size_t const ptr,
 	const char				*name;
 	t_list					*lst;
 
-	if (security((t_common*)nm, stringtable, sizeof(*stringtable) * sym->nsyms))
+	if (security(com, stringtable, sizeof(*stringtable) * sym->nsyms))
 		return ;
-	nm->flags |= FLAG_SYMTAB;
 	i = 0;
 	lst = NULL;
-	while ((i < sym->nsyms) && (!(nm->flags & FLAG_ERROR)))
+	while ((i < sym->nsyms) && (!(com->flags & FLAG_ERROR)))
 	{
 		name = &stringtable[array[i].n_un.n_strx];
-		handle_x64_list(nm, &lst, &array[i], name);
+		handle_x64_list(com, &lst, &array[i], name);
 		i++;
 	}
-	if (!(nm->flags & FLAG_ERROR))
-		nm_display(lst, ft_lstforeach(nm->segments, nm, &indexes_core));
+	if (!(com->flags & FLAG_ERROR))
+		nm_display(lst, ft_lstforeach(com->segments, com, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
 }
 
 void			handle_x64(t_nm *nm)
 {
-	struct mach_header_64		*header;
-	struct load_command			*lc;
-	struct symtab_command		*sym;
-	size_t						i;
-
-	header = (void*)(size_t)nm->fileraw;
-	i = 0;
-	lc = (struct load_command*)((size_t)nm->fileraw + sizeof(*header));
-	if (security((t_common*)nm, lc, header->ncmds * sizeof(*lc)))
-		return ;
-	while (i < header->ncmds)
-	{
-		if (lc->cmd == LC_SYMTAB)
-		{
-			sym = (struct symtab_command *)(size_t)lc;
-			print_symb_64(sym, (size_t)nm->fileraw, nm);
-			break ;
-		}
-		else if (lc->cmd == LC_SEGMENT_64)
-			ft_lstpush_back(&nm->segments, ft_lstnewlink(lc, SEGSIZE64));
-		lc = (void*)((size_t)lc + lc->cmdsize);
-		i++;
-	}
-	ft_lstdel(&nm->segments, NULL);
+	nm->flags |= FLAG_64BITS | FLAG_MACHO;
+	macho((t_common*)nm, &nm_wrapper);
 }
