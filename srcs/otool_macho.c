@@ -6,22 +6,22 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/02 23:36:49 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 02:18:14 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "otool.h"
 
-static size_t	otool_macho_items(const t_otool *otool)
+static size_t	otool_macho_items(const t_common *com)
 {
 	size_t			size;
 
 	size = 0;
-	if (otool->flags & FLAG_64BITS)
-		size = ((struct mach_header_64 *)(size_t)otool->fileraw)->ncmds;
-	if (otool->flags & FLAG_32BITS)
-		size = ((struct mach_header *)(size_t)otool->fileraw)->ncmds;
-	if (otool->flags & FLAG_CIGAM)
+	if (com->flags & FLAG_64BITS)
+		size = ((struct mach_header_64 *)(size_t)com->fileraw)->ncmds;
+	if (com->flags & FLAG_32BITS)
+		size = ((struct mach_header *)(size_t)com->fileraw)->ncmds;
+	if (com->flags & FLAG_CIGAM)
 		return (swap64(size));
 	return (size);
 }
@@ -51,7 +51,7 @@ void			otool_macho(t_otool *otool)
 {
 	struct load_command		*lc;
 	size_t					i;
-	const size_t			ncmds = otool_macho_items(otool);
+	const size_t			ncmds = otool_macho_items((t_common*)otool);
 
 	lc = (void*)&otool->fileraw[otool->flags & FLAG_64BITS ?
 		sizeof(struct mach_header_64) : sizeof(struct mach_header)];
