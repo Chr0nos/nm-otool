@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:42:24 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 03:36:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 15:40:05 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,4 @@ void				print_symb_32(struct symtab_command *sym, size_t const ptr,
 	if (!(com->flags & FLAG_ERROR))
 		nm_display(lst, ft_lstforeach(com->segments, com, &indexes_core));
 	ft_lstdel(&lst, ft_lstpulverisator);
-}
-
-void				handle_x32(t_nm *nm)
-{
-	nm->flags |= FLAG_32BITS | FLAG_MACHO;
-	macho((t_common*)nm, &nm_wrapper);
 }

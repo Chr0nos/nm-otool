@@ -6,12 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 15:33:26 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 15:40:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "nm.h"
+#include "macho.h"
 #include "filetype.h"
 #include <sys/mman.h>
 
@@ -25,12 +26,7 @@ int		handle_files_types(t_nm *nm)
 		return (NM_ERROR);
 	}
 	if (nm->flags & FLAG_MACHO)
-	{
-		if (nm->flags & FLAG_32BITS)
-			handle_x32(nm);
-		else if (nm->flags & FLAG_64BITS)
-			handle_x64(nm);
-	}
+		macho((t_common*)nm, &nm_wrapper);
 	else if (nm->flags & FLAG_FAT)
 		handle_fat(nm);
 	else if (nm->flags & FLAG_LIB)
