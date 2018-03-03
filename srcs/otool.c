@@ -6,13 +6,14 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 02:48:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/03 04:33:06 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "otool.h"
 #include "macho.h"
+#include "filetype.h"
 #include <sys/mman.h>
 
 /*
@@ -59,7 +60,7 @@ static int		otool_run(const char *filepath, const int index, const int max)
 	}
 	if (max > 1)
 		ft_printf("%s:\n", filepath, otool_showmem);
-	flags = otool_filetype(fileraw, filesize);
+	flags = filetype(fileraw, filesize);
 	if (flags & (FLAG_UNKNKOW | FLAG_ERROR))
 		ft_dprintf(STDERR_FILENO, "%s", "error: unknow file type provided\n");
 	else
