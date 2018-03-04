@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:43:52 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:55:40 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 18:40:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ void			macho(t_common *com,
 		sizeof(struct mach_header_64) : sizeof(struct mach_header)];
 	security(com, lc, ncmds * sizeof(*lc));
 	i = 0;
-	while ((i++ < ncmds) &&
-		(!security(com, lc, sizeof(*lc))))
+	while ((i++ < ncmds) && (!security(com, lc, sizeof(*lc))))
 	{
 		if (lc->cmd == LC_SYMTAB)
 		{

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/04 17:21:15 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 18:22:49 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 21:33:39 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,11 @@ static void	lib_rl(struct ranlib *rl, size_t index, const size_t size,
 	tab = (t_ar**)((size_t)ptr + (sizeof(t_ar) * size));
 	while (index < size)
 	{
-		ar = (void*)&com->rootraw[rl->ran_off];
-		payload[index].offset = rl->ran_off;
+		ar = (void*)&com->rootraw[rl[index].ran_off];
+		payload[index].offset = rl[index].ran_off;
 		payload[index].filename = (char*)((size_t)ar + sizeof(*ar));
 		load_ar(ar, &payload[index]);
 		tab[index] = &payload[index];
-		rl++;
 		index++;
 	}
 	ft_quicksort((void**)tab, 0, size - 1, FT_CASTCMP(&lib_cmp));
@@ -75,15 +74,12 @@ void		handle_lib(t_common *com,
 
 	ar = (void*)((size_t)com->fileraw + SARMAG);
 	symdef = (char*)((size_t)&ar[1]);
-	if (security(com, symdef, 8))
+	if ((security(com, symdef, 8)) || (!load_ar(ar, &ar_read)))
 		return ;
-	load_ar(ar, &ar_read);
-	size = (void*)((size_t)com->fileraw + sizeof(*ar) + SARMAG +
-		(size_t)ft_atoi(ar->ar_name + ft_strlen(AR_EFMT1)));
+	size = (void*)(&symdef[ar_read.len]);
+	ft_printf("size: %lu - len: %lu - x: %u -> %s\n",
+		ar_read.size , ar_read.len, *size, symdef);
 	rl = (void*)((size_t)size + sizeof(int));
 	if (*size > 0)
 		lib_rl(rl, 0, (size_t)*size / sizeof(struct ranlib), com, callback);
-	else
-		ft_printf("%s%s%s", "warning: (", com->filepath,
-			") reported a 0 size.\n");
 }
