@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/04 17:21:15 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 21:33:39 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 22:07:14 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,32 @@ static int	lib_cmp(t_ar *a, t_ar *b)
 	return (0);
 }
 
-static void	lib_rl(struct ranlib *rl, size_t index, const size_t size,
-	t_common *com,
-	void (*callback)(t_common *, size_t, const size_t, t_ar **))
+static int	lib_rl_init(t_ar ***tab, t_ar **payload, size_t *flags,
+	const size_t size)
 {
-	struct ar_hdr		*ar;
-	void				*ptr;
-	t_ar				*payload;
-	t_ar				**tab;
+	void		*ptr;
 
 	if (!(ptr = malloc((sizeof(t_ar) + sizeof(t_ar*)) * size)))
 	{
-		com->flags |= FLAG_ERROR;
-		return ;
+		*flags |= FLAG_ERROR;
+		return (FLAG_ERROR);
 	}
-	payload = ptr;
-	tab = (t_ar**)((size_t)ptr + (sizeof(t_ar) * size));
+	*payload = ptr;
+	*tab = (t_ar**)((size_t)ptr + (sizeof(t_ar) * size));
+	return (FLAG_OK);
+}
+
+static void	lib_rl(struct ranlib *rl, const size_t size,
+	t_common *com, void (*callback)(t_common *, size_t, const size_t, t_ar **))
+{
+	size_t				index;
+	struct ar_hdr		*ar;
+	t_ar				*payload;
+	t_ar				**tab;
+
+	if (lib_rl_init(&tab, &payload, &com->flags, size))
+		return ;
+	index = 0;
 	while (index < size)
 	{
 		ar = (void*)&com->rootraw[rl[index].ran_off];
@@ -60,7 +70,7 @@ static void	lib_rl(struct ranlib *rl, size_t index, const size_t size,
 	}
 	ft_quicksort((void**)tab, 0, size - 1, FT_CASTCMP(&lib_cmp));
 	callback(com, 0, size, tab);
-	free(ptr);
+	free(payload);
 }
 
 void		handle_lib(t_common *com,
@@ -79,7 +89,7 @@ void		handle_lib(t_common *com,
 	size = (void*)(&symdef[ar_read.len]);
 	ft_printf("size: %lu - len: %lu - x: %u -> %s\n",
 		ar_read.size , ar_read.len, *size, symdef);
-	rl = (void*)((size_t)size + sizeof(int));
+	rl = (void*)&size[1];
 	if (*size > 0)
-		lib_rl(rl, 0, (size_t)*size / sizeof(struct ranlib), com, callback);
+		lib_rl(rl, (size_t)*size / sizeof(struct ranlib), com, callback);
 }
