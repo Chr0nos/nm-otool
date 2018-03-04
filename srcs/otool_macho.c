@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:58:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 18:28:44 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void			otool_macho_symtab(const size_t ptr, t_list *segments,
 	struct symtab_command		*sym;
 	char						*stringtable;
 ;
-	com->flags |= FLAG_SYMTAB;
 	sym = (void*)ptr;
 	stringtable = (char*)(ptr + sym->symoff);
 	while ((segments) && (!(com->flags & FLAG_ERROR)))

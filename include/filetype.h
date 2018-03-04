@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 04:05:51 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 04:30:46 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 18:33:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,16 @@ typedef struct		s_filehandler
 #pragma pack(pop)
 
 # define TFH t_filehandler
-# define HANDLERS_COUNT 6
+# define HANDLERS_COUNT 7
 
 static const TFH	g_handlers[HANDLERS_COUNT] = {
 	(TFH){"binary 64bits", MH_MAGIC_64, FLAG_64BITS | FLAG_MACHO, 4},
+	(TFH){"cig 64bits", MH_CIGAM_64, FLAG_64BITS | FLAG_MACHO | FLAG_CIGAM, 4},
 	(TFH){"binary 32bits", MH_MAGIC, FLAG_32BITS | FLAG_MACHO, 4},
 	(TFH){"cigam 32bits", MH_CIGAM, FLAG_32BITS | FLAG_MACHO | FLAG_CIGAM, 4},
 	(TFH){"fat bin 32 bits", FAT_MAGIC, FLAG_32BITS | FLAG_FAT, 4},
-	(TFH){"cbin 32 bits", FAT_CIGAM, FLAG_32BITS | FLAG_FAT | FLAG_CIGAM, 4},
-	(TFH){"cbin 64 bits", FAT_MAGIC_64, FLAG_64BITS | FLAG_FAT | FLAG_CIGAM, 4},
+	(TFH){"ccig 32 bits", FAT_CIGAM, FLAG_32BITS | FLAG_FAT | FLAG_CIGAM, 4},
+	(TFH){"fcig 64 bits", FAT_MAGIC_64, FLAG_64BITS | FLAG_FAT | FLAG_CIGAM, 4},
 };
 
 size_t				filetype(const char *fileraw, const size_t filesize);
