@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 15:40:18 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 15:49:28 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ t_sym						**symbols_sort(t_list *symbols);
 void						nm_display_foreach(void *userdata, size_t size,
 	void *content);
 void						handle_lib(t_nm *nm);
-void						handle_fat(t_nm *nm);
 int							handle_files_types(t_nm *nm);
 void						nm_display(t_list *lst, t_nm *nm);
 t_list						*nm_display_list(t_list *lst, t_nm *nm);
@@ -103,5 +102,6 @@ void						print_symb_64(struct symtab_command *sym,
 	size_t const ptr, t_common *com);
 int							sort_by_names(t_sym *a, t_sym *b);
 int							sort_by_addr(t_sym *a, t_sym *b);
+void						nm_fat_run(struct fat_arch *arch, t_common *com);
 
 #endif
