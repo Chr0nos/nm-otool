@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 22:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 16:02:03 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:07:34 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define FLAG_SKIPLINE	(1u << 13)
 # define FLAG_BYADDR	(1u << 14)
 # define FLAG_RECURSIVE	(1u << 15)
+# define FLAG_LIBNAME	(1u << 16)
 # define MASK_ARCH		(FLAG_32BITS | FLAG_64BITS)
 # define MASK_TYPE		(FLAG_LIB | FLAG_FAT | FLAG_MACHO)
 

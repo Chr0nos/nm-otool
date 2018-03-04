@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:49:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:12:11 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void					nm_fat_run(struct fat_arch *arch, t_common *com)
 
 	nm = (void*)com;
 	sub = *nm;
-	sub.flags &= ~FLAG_CIGAM;
-	sub.flags |= FLAG_FAT;
+	sub.flags &= ~(FLAG_CIGAM | MASK_ARCH | MASK_TYPE);
+	sub.flags |= FLAG_RECURSIVE;
 	sub.fileraw = &nm->fileraw[arch->offset];
 	sub.filesize -= arch->offset;
 	sub.magic = *(unsigned int *)(size_t)sub.fileraw;

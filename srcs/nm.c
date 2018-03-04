@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:48:33 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:20:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		handle_files_types(t_nm *nm)
 	else if (nm->flags & FLAG_FAT)
 		fat((t_common*)nm, &nm_fat_run);
 	else if (nm->flags & FLAG_LIB)
-		handle_lib(nm);
+		handle_lib((t_common*)nm, &lib_rl_run);
 	return (NM_SUCCESS);
 }
 

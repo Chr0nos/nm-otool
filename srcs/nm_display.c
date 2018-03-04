@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 14:11:11 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:12:43 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	display_name(const t_nm *nm)
 {
 	if (nm->flags & FLAG_SNAME)
 	{
-		if (nm->flags & FLAG_LIB)
+		if (nm->flags & FLAG_LIBNAME)
 			ft_printf("\n%s(%s):\n", nm->filepath, nm->subfilename);
 		else
 			ft_printf((nm->flags & FLAG_SKIPLINE) ? "\n%s:\n" : "%s:\n",
