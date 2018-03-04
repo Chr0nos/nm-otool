@@ -6,11 +6,12 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 02:53:00 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 05:57:51 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 15:38:22 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
+#include "arch_lookup.h"
 
 static void				show(struct fat_arch *arch)
 {
@@ -21,15 +22,6 @@ static void				show(struct fat_arch *arch)
 		" size: ", arch->size,
 		" align: ", arch->align,
 		" arch: ", (unsigned int)arch->cputype & CPU_ARCH_MASK);
-}
-
-static void				fat_fix_cigam(struct fat_arch *arch)
-{
-	arch->cputype = (int)(swap((uint32_t)arch->cputype) & 0x7fffffff);
-	arch->cpusubtype = (int)(swap((uint32_t)arch->cpusubtype) & 0x7fffffff);
-	arch->offset = swap(arch->offset);
-	arch->size = swap(arch->size);
-	arch->align = swap(arch->align);
 }
 
 static int				fat_run(struct fat_arch *arch, t_nm *nm)
@@ -45,30 +37,6 @@ static int				fat_run(struct fat_arch *arch, t_nm *nm)
 	handle_files_types(&sub);
 	nm->flags |= FLAG_SYMTAB;
 	return (NM_SUCCESS);
-}
-
-/*
-** lookup for the best architecture in a fat binary
-** the priority is: X64 > X32 > first found
-*/
-
-static struct fat_arch	*arch_lookup(struct fat_arch *arch,
-	unsigned int arch_left, const size_t nm_flags)
-{
-	struct fat_arch		*selected;
-
-	selected = arch;
-	while (arch_left--)
-	{
-		if (nm_flags & FLAG_CIGAM)
-			fat_fix_cigam(arch);
-		if (arch->cputype == CPU_TYPE_X86)
-			selected = arch;
-		if (arch->cputype == CPU_TYPE_X86_64)
-			return (arch);
-		arch++;
-	}
-	return (selected);
 }
 
 void					handle_fat(t_nm *nm)

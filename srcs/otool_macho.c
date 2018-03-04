@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:09:59 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 15:26:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,42 @@ static void		otool_macho64(struct segment_command_64 *seg, t_common *com)
 	const size_t				nsects = smartswap64(seg->nsects, com->flags);
 	const void					*ptr;
 
-	// ft_printf("%p -> %12s\n", seg, seg->segname, com);
 	if (ft_strcmp(seg->segname, SEG_TEXT))
 		return ;
 	index = 0;
-	while ((index < nsects) && (!(com->flags & FLAG_ERROR)))
+	while ((index++ < nsects) && (!(com->flags & FLAG_ERROR)))
 	{
-		// ft_printf("\t%s\n", sec->sectname);
+		if (ft_strcmp(sec->sectname, SECT_TEXT))
+			continue ;
 		ft_printf("%s%s,%s%s",
-			"Contents of (", sec->sectname, sec->segname, ") section\n");
+			"Contents of (", sec->segname, sec->sectname, ") section\n");
 		ptr = &com->fileraw[sec->offset];
 		if (!security(com, ptr, sec->size))
 			otool_showmem(ptr, sec->size, sec->addr, com->flags);
-			// otool_showmem(ptr, sec->size, sec->addr - sec->offset, com->flags);
-		index++;
+		break ;
+	}
+}
+
+static void		otool_macho32(struct segment_command *seg, t_common *com)
+{
+	const struct section		*sec = (void*)((size_t)seg + (sizeof(*seg)));
+	size_t						index;
+	const size_t				nsects = smartswap32(seg->nsects, com->flags);
+	const void					*ptr;
+
+	if (ft_strcmp(seg->segname, SEG_TEXT))
+		return ;
+	index = 0;
+	while ((index++ < nsects) && (!(com->flags & FLAG_ERROR)))
+	{
+		if (ft_strcmp(sec->sectname, SECT_TEXT))
+			continue ;
+		ft_printf("%s%s,%s%s",
+			"Contents of (", sec->segname, sec->sectname, ") section\n");
+		ptr = &com->fileraw[sec->offset];
+		if (!security(com, ptr, sec->size))
+			otool_showmem(ptr, sec->size, sec->addr, com->flags);
+		break ;
 	}
 }
 
@@ -51,6 +73,8 @@ void			otool_macho_symtab(const size_t ptr, t_list *segments,
 			break ;
 		if (segments->content_size == SEGSIZE64)
 			otool_macho64(segments->content, com);
+		else if (segments->content_size == SEGSIZE32)
+			otool_macho32(segments->content, com);
 		segments = segments->next;
 	}
 }
