@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:48:27 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:26:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:58:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ static void		otool_macho64(struct segment_command_64 *seg, t_common *com)
 	const size_t				nsects = smartswap64(seg->nsects, com->flags);
 	const void					*ptr;
 
-	if (ft_strcmp(seg->segname, SEG_TEXT))
-		return ;
 	index = 0;
 	while ((index++ < nsects) && (!(com->flags & FLAG_ERROR)))
 	{
@@ -63,7 +61,7 @@ void			otool_macho_symtab(const size_t ptr, t_list *segments,
 {
 	struct symtab_command		*sym;
 	char						*stringtable;
-
+;
 	com->flags |= FLAG_SYMTAB;
 	sym = (void*)ptr;
 	stringtable = (char*)(ptr + sym->symoff);
