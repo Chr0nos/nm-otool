@@ -6,13 +6,14 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:22:58 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 16:39:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "otool.h"
 #include "macho.h"
+#include "fat.h"
 #include "filetype.h"
 #include <sys/mman.h>
 
@@ -38,11 +39,31 @@ static size_t	otool_run_valid(const char *filepath,
 		.rfs = filesize,
 		.padding = NULL
 	};
-	// ft_printf("filepath: %s (%lb)\n", filepath, flags);
 	ft_printf("%s:\n", filepath);
-	if (flags & FLAG_MACHO)
-		macho((t_common*)&otool, &otool_macho_symtab);
-	return (otool.flags);
+	return (otool_stack(&otool));
+}
+
+t_otool			*otool_detect(t_otool *otool)
+{
+	otool->flags |= filetype((void*)otool->fileraw, otool->filesize);
+	if (otool->flags & (FLAG_UNKNKOW | FLAG_ERROR))
+	{
+		ft_dprintf(STDERR_FILENO, "%s",
+			"error: unknow subfile type provided\n");
+		otool->flags |= FLAG_ERROR;
+	}
+	return (otool);
+}
+
+size_t			otool_stack(t_otool *otool)
+{
+	if (otool->flags & FLAG_ERROR)
+		return (otool->flags);
+	else if (otool->flags & FLAG_MACHO)
+		macho((t_common*)otool, &otool_macho_symtab);
+	else if (otool->flags & FLAG_FAT)
+		fat((t_common*)otool, &otool_fat);
+	return (otool->flags);
 }
 
 static int		otool_run(const char *filepath, const int index, const int max)

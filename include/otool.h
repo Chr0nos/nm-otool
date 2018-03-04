@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:32:30 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 16:33:14 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <string.h>
 # include <mach-o/loader.h>
 # include <mach-o/nlist.h>
+# include <mach-o/fat.h>
 # include <ar.h>
 
 typedef struct		s_otool
@@ -35,11 +36,14 @@ typedef struct		s_otool
 	void			*padding;
 }					t_otool;
 
+
+t_otool				*otool_detect(t_otool *otool);
+size_t				otool_stack(t_otool *otool);
 void				otool_macho_symtab(const size_t ptr, t_list *segments,
 		t_common *com);
 void				otool_showmem(const unsigned char *ptr,
 	const size_t size, const size_t offset, const size_t flags);
-void				otool_fat(t_common *com);
+void				otool_fat(struct fat_arch *arch, t_common *com);
 
 
 #endif

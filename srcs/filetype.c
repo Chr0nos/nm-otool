@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:26:41 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 15:42:23 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 16:37:43 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,5 @@ size_t		filetype(const char *fileraw, const size_t filesize)
 		if (!ft_memcmp(fileraw, ARMAG, SARMAG))
 			return (FLAG_LIB | FLAG_SNAME | FLAG_SYMTAB);
 	}
-	return (FLAG_UNKNKOW);
+	return (FLAG_UNKNKOW | FLAG_ERROR);
 }
