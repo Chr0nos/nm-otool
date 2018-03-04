@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/04 17:21:15 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 22:07:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 22:35:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	lib_rl(struct ranlib *rl, const size_t size,
 	{
 		ar = (void*)&com->rootraw[rl[index].ran_off];
 		payload[index].offset = rl[index].ran_off;
-		payload[index].filename = (char*)((size_t)ar + sizeof(*ar));
+		payload[index].filename = (char*)&ar[1];
 		load_ar(ar, &payload[index]);
 		tab[index] = &payload[index];
 		index++;
@@ -87,8 +87,10 @@ void		handle_lib(t_common *com,
 	if ((security(com, symdef, 8)) || (!load_ar(ar, &ar_read)))
 		return ;
 	size = (void*)(&symdef[ar_read.len]);
-	ft_printf("size: %lu - len: %lu - x: %u -> %s\n",
-		ar_read.size , ar_read.len, *size, symdef);
+	// ft_printf("size: %lu - len: %lu - x: %u (%u) -> %s\n",
+	// 	ar_read.size , ar_read.len, *size,
+	// 	(size_t)*size / sizeof(struct ranlib),
+	// 	symdef);
 	rl = (void*)&size[1];
 	if (*size > 0)
 		lib_rl(rl, (size_t)*size / sizeof(struct ranlib), com, callback);
