@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 16:57:24 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:45:25 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static size_t	otool_run_valid(const char *filepath,
 		.segments = NULL,
 		.rootraw = fileraw,
 		.rfs = filesize,
-		.padding = NULL
+		.subfilename = NULL
 	};
 	return (otool_stack(&otool));
 }
@@ -56,7 +56,9 @@ t_otool			*otool_detect(t_otool *otool)
 
 size_t			otool_stack(t_otool *otool)
 {
-	if (otool->flags & FLAG_SNAME)
+	if (otool->flags & FLAG_LIBNAME)
+		ft_printf("%s(%s):\n", otool->filepath, otool->subfilename);
+	else if (otool->flags & FLAG_SNAME)
 		ft_printf("%s:\n", otool->filepath);
 	if (otool->flags & FLAG_ERROR)
 		return (otool->flags);
@@ -64,6 +66,8 @@ size_t			otool_stack(t_otool *otool)
 		macho((t_common*)otool, &otool_macho_symtab);
 	else if (otool->flags & FLAG_FAT)
 		fat((t_common*)otool, &otool_fat);
+	else if (otool->flags & FLAG_LIB)
+		handle_lib((t_common*)otool, &otool_lib);
 	else
 	{
 		ft_dprintf(STDERR_FILENO, "%s", "error: unknow file type provided\n");

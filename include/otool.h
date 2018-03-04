@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 16:33:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:34:22 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define OTOOL_H
 # include "loadfile.h"
 # include "libft.h"
+# include "lib.h"
 # include "swap.h"
 # include "flags.h"
 # include "common.h"
@@ -33,7 +34,7 @@ typedef struct		s_otool
 	t_list			*segments;
 	char			*rootraw;
 	size_t			rfs;
-	void			*padding;
+	char			*subfilename;
 }					t_otool;
 
 
@@ -44,6 +45,7 @@ void				otool_macho_symtab(const size_t ptr, t_list *segments,
 void				otool_showmem(const unsigned char *ptr,
 	const size_t size, const size_t offset, const size_t flags);
 void				otool_fat(struct fat_arch *arch, t_common *com);
-
+void				otool_lib(t_common *com, size_t index,
+	const size_t size, t_ar **tab);
 
 #endif

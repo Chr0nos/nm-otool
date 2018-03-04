@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 03:43:01 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:20:14 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 17:29:27 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ typedef struct				s_nm
 	t_list					*segments;
 	char					*rootraw;
 	size_t					rfs;
+	char					*subfilename;
 	unsigned int			magic;
 	unsigned int			display_size;
 	t_segindex				indexes;
-	char					*subfilename;
 	char					*padding;
 }							t_nm;
 
