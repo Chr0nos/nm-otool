@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 21:29:56 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/03 01:11:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 15:12:33 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void			otool_showmem(const unsigned char *ptr,
 	pos = 0;
 	while ((ptr < lastptr) && (size - pos >= 16))
 	{
-		ft_printf("%0*x\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
-			" %02x %02x %02x %02x %02x %02x\n",
+		ft_printf("%0*lx\t%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
+			" %02x %02x %02x %02x %02x %02x \n",
 			padding,
 			pos + offset, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5],
 			ptr[6], ptr[7], ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13],
@@ -32,10 +32,11 @@ void			otool_showmem(const unsigned char *ptr,
 		pos += 16;
 	}
 	if  (ptr < lastptr)
-		ft_printf("%0*x\t", padding, pos + offset);
+		ft_printf("%0*lx\t", padding, pos + offset);
 	while (ptr < lastptr)
 	{
 		ft_printf((ptr + 1 < lastptr) ? "%02x " : "%02x", *ptr);
 		ptr++;
 	}
+	ft_putchar('\n');
 }
