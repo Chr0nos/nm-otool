@@ -6,13 +6,22 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 21:29:56 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:16:31 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 16:52:09 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "otool.h"
 
-void			otool_showmem(const unsigned char *ptr,
+static inline void	otool_showmem_rest(const unsigned char *ptr,
+	const unsigned char *lastptr, const size_t offset, const size_t padding)
+{
+	ft_printf("%0*lx\t", padding, offset);
+	while (ptr < lastptr)
+		ft_printf("%02x ", *(ptr++));
+	ft_putchar('\n');
+}
+
+void				otool_showmem(const unsigned char *ptr,
 	const size_t size, const size_t offset, const size_t flags)
 {
 	const unsigned char		*lastptr = &ptr[size];
@@ -32,8 +41,5 @@ void			otool_showmem(const unsigned char *ptr,
 		pos += 16;
 	}
 	if  (ptr < lastptr)
-		ft_printf("%0*lx\t", padding, pos + offset);
-	while (ptr < lastptr)
-		ft_printf("%02x ", *(ptr++));
-	ft_putchar('\n');
+		otool_showmem_rest(ptr, lastptr, pos + offset, padding);
 }
