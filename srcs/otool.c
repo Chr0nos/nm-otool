@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 18:00:15 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 18:10:30 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static size_t	otool_run_valid(const char *filepath,
 	t_otool			otool;
 
 	otool = (t_otool){
-		.flags = flags | FLAG_OTOOL,
+		.flags = flags | FLAG_OTOOL | FLAG_SNAME,
 		.filepath = filepath,
 		.filesize = filesize,
 		.fileraw = (unsigned char *)(size_t)fileraw,
@@ -58,7 +58,7 @@ size_t			otool_stack(t_otool *otool)
 {
 	if (otool->flags & FLAG_LIB)
 		ft_printf("%s%s\n", "Archive : ", otool->filepath);
-	if (otool->flags & FLAG_LIBNAME)
+	else if (otool->flags & FLAG_LIBNAME)
 	{
 		if (otool->subfilename)
 			ft_printf("%s(%s):\n", otool->filepath, otool->subfilename);
@@ -81,13 +81,12 @@ size_t			otool_stack(t_otool *otool)
 	return (otool->flags);
 }
 
-static int		otool_run(const char *filepath, const int index, const int max)
+static int		otool_run(const char *filepath, const int max)
 {
 	char		*fileraw;
 	size_t		filesize;
 	size_t		flags;
 
-	(void)index;
 	fileraw = loadfile(filepath, &filesize);
 	if (!fileraw)
 	{
@@ -119,9 +118,6 @@ int				main(int ac, char **av)
 	retcode = EXIT_SUCCESS;
 	p = 1;
 	while (p < ac)
-	{
-		retcode += otool_run(av[p], p, ac - 1);
-		p++;
-	}
+		retcode += otool_run(av[p++], ac - 1);
 	return (retcode);
 }
