@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 16:45:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/04 16:57:24 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ size_t			otool_stack(t_otool *otool)
 		macho((t_common*)otool, &otool_macho_symtab);
 	else if (otool->flags & FLAG_FAT)
 		fat((t_common*)otool, &otool_fat);
+	else
+	{
+		ft_dprintf(STDERR_FILENO, "%s", "error: unknow file type provided\n");
+		otool->flags |= FLAG_UNKNKOW | FLAG_ERROR;
+	}
 	return (otool->flags);
 }
 
@@ -87,9 +92,9 @@ static int		otool_run(const char *filepath, const int index, const int max)
 	if (flags & (FLAG_UNKNKOW | FLAG_ERROR))
 		ft_dprintf(STDERR_FILENO, "%s", "error: unknow file type provided\n");
 	else
-		otool_run_valid(filepath, fileraw, filesize, flags);
+		flags = otool_run_valid(filepath, fileraw, filesize, flags);
 	munmap(fileraw, filesize);
-	return (EXIT_SUCCESS);
+	return ((flags & FLAG_ERROR) ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
 int				main(int ac, char **av)
