@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:26:41 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:09:42 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:49:13 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 ** return the proper flags for the file
 */
 
-size_t		filetype(const char *fileraw, const size_t filesize)
+size_t		filetype(const char *fileraw, const size_t filesize,
+	const size_t flags)
 {
 	const t_filehandler		*hand;
 	size_t					p;
@@ -31,7 +32,11 @@ size_t		filetype(const char *fileraw, const size_t filesize)
 	{
 		hand = &g_handlers[p++];
 		if ((hand->minsize <= filesize) && (hand->magic == magic))
+		{
+			if (flags & FLAG_SHOWTYPE)
+				ft_printf("%s%s\n", "file type: ", hand->desc);
 			return (hand->flags);
+		}
 	}
 	if (filesize >= SARMAG)
 	{

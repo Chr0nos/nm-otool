@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/05 14:22:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:50:18 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int			handle_files_types(t_nm *nm)
 {
-	nm->flags |= filetype(nm->fileraw, nm->filesize);
+	nm->flags |= filetype(nm->fileraw, nm->filesize, FLAG_NONE);
 	if (nm->flags & FLAG_UNKNKOW)
 	{
 		ft_dprintf(2, "%s%#x\n", "error: unknow file type: ", nm->magic);

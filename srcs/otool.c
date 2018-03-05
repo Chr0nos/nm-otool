@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 18:10:30 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:51:50 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static size_t	otool_run_valid(const char *filepath,
 
 t_otool			*otool_detect(t_otool *otool)
 {
-	otool->flags |= filetype((void*)otool->fileraw, otool->filesize);
+	otool->flags |= filetype((void*)otool->fileraw, otool->filesize, FLAG_NONE);
 	if (otool->flags & (FLAG_UNKNKOW | FLAG_ERROR))
 	{
 		ft_dprintf(STDERR_FILENO, "%s",
@@ -94,7 +94,7 @@ static int		otool_run(const char *filepath, const int max)
 			filepath);
 		return (EXIT_FAILURE);
 	}
-	flags = filetype(fileraw, filesize);
+	flags = filetype(fileraw, filesize, FLAG_NONE);
 	if (max > 1)
 		flags |= FLAG_SNAME | FLAG_SKIPLINE;
 	if (flags & (FLAG_UNKNKOW | FLAG_ERROR))

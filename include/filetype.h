@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 04:05:51 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/05 14:40:58 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:50:36 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,6 @@ static const t_filehandler	g_handlers[HANDLERS_COUNT] = {
 };
 
 size_t						filetype(const char *fileraw,
-	const size_t filesize);
+	const size_t filesize, const size_t flags);
 
 #endif
