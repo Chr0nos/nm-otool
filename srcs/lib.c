@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/04 17:21:15 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/05 17:57:04 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 20:55:31 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,25 @@ static void	lib_rl(struct ranlib *rl, const size_t size,
 	free(payload);
 }
 
+static void		lib_hack(t_common *com, struct ar_hdr *ar)
+{
+	t_ar			ar_read;
+	char			*filename;
+	unsigned char	*fileraw;
+
+	while ((!(com->flags & FLAG_ERROR)) &&
+		((void*)ar < (void*)&com->rootraw[com->rfs]) &&
+		(load_ar(ar, &ar_read)))
+	{
+		filename = (void*)((size_t)ar + sizeof(*ar));
+		fileraw = (void*)&filename[ft_strlen(filename) + 8];
+		ft_printf("%s(%s):\n%s\n", com->filepath, filename,
+			"Contents of (__TEXT,__text) section");
+		ft_printf("%#x\n", *(unsigned int *)(void*)fileraw);
+		ar = (void*)((size_t)&ar[1] + ar_read.size);
+	}
+}
+
 /*
 ** struct ar_hdr                    |
 ** char		        symdef[?]       |- at_read.len
@@ -97,18 +116,12 @@ void		handle_lib(t_common *com,
 	rl = (void*)&size[1];
 	if (security(com, rl, sizeof(*rl)))
 		return ;
+	// *size = 0;
 	if (*size > 0)
 		lib_rl(rl, (size_t)*size / sizeof(struct ranlib), com, callback);
-	else
+	else if (com->flags & FLAG_OTOOL)
 	{
 		ar = (void*)&symdef[ar_read.size];
-		while ((!(com->flags & FLAG_ERROR)) && (load_ar(ar, &ar_read)))
-		{
-			ft_printf("%s(%s):\n%s\n", com->filepath,
-				(void*)((size_t)ar + sizeof(*ar)),
-				"Contents of (__TEXT,__text) section");
-			ar = (void*)((size_t)ar + sizeof(*ar) + ar_read.size);
-			security(com, ar, sizeof(*ar));
-		}
+		lib_hack(com, ar);
 	}
 }

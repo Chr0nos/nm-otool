@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/05 14:51:50 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 19:14:49 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,18 @@ t_otool			*otool_detect(t_otool *otool)
 
 size_t			otool_stack(t_otool *otool)
 {
-	if (otool->flags & FLAG_LIB)
-		ft_printf("%s%s\n", "Archive : ", otool->filepath);
-	else if (otool->flags & FLAG_LIBNAME)
+	if (otool->flags & FLAG_SNAME)
 	{
-		if (otool->subfilename)
-			ft_printf("%s(%s):\n", otool->filepath, otool->subfilename);
+		if (otool->flags & FLAG_LIBNAME)
+		{
+			if (otool->subfilename)
+				ft_printf("%s(%s):\n", otool->filepath, otool->subfilename);
+		}
+		else if (otool->flags & FLAG_LIB)
+			ft_printf("%s%s\n", "Archive : ", otool->filepath);
+		else
+			ft_printf("%s:\n", otool->filepath);
 	}
-	else if (otool->flags & FLAG_SNAME)
-		ft_printf("%s:\n", otool->filepath);
 	if (otool->flags & FLAG_ERROR)
 		return (otool->flags);
 	else if (otool->flags & FLAG_MACHO)

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/04 17:28:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 22:33:59 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 19:14:01 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		otool_lib(t_common *com, size_t index,
 			&com->rootraw[pl->offset + sizeof(struct ar_hdr) + pl->len];
 		otool.filesize = pl->size;
 		otool.flags &= ~MASK_RECUSIVE;
-		otool.flags |= FLAG_RECURSIVE;
+		otool.flags |= FLAG_RECURSIVE | FLAG_LIBNAME;
 		otool_stack(otool_detect(&otool));
 		if (otool.flags & FLAG_ERROR)
 			com->flags |= FLAG_ERROR;

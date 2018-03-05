@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 18:26:41 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/05 14:49:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 19:15:08 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ size_t		filetype(const char *fileraw, const size_t filesize,
 	if (filesize >= SARMAG)
 	{
 		if (!ft_memcmp(fileraw, ARMAG, SARMAG))
-			return (FLAG_LIB | FLAG_SNAME | FLAG_SYMTAB | FLAG_LIBNAME);
+			return (FLAG_LIB | FLAG_SNAME | FLAG_SYMTAB);
 	}
 	return (FLAG_UNKNKOW | FLAG_ERROR);
 }
