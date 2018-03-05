@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 22:42:51 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:30:02 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:28:16 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct		s_common
 	t_list			*segments;
 	unsigned char	*rootraw;
 	size_t			rfs;
-	char 			*subfilename;
+	char			*subfilename;
 }					t_common;
 
 # define SEGSIZE64	sizeof(struct segment_command_64)

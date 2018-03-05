@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 04:05:51 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 18:33:13 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:28:59 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct		s_filehandler
 	size_t			minsize;
 }					t_filehandler;
 
-#pragma pack(pop)
+# pragma pack(pop)
 
 # define TFH t_filehandler
 # define HANDLERS_COUNT 7

@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:13:38 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:20:55 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:22:55 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "filetype.h"
 #include <sys/mman.h>
 
-int		handle_files_types(t_nm *nm)
+int			handle_files_types(t_nm *nm)
 {
 	nm->flags |= filetype(nm->fileraw, nm->filesize);
 	if (nm->flags & FLAG_UNKNKOW)
@@ -48,7 +48,7 @@ static int	nm_run(const char *filepath, char *fileraw,
 	nm.fileraw = fileraw;
 	if (security((t_common*)&nm, fileraw, sizeof(unsigned int) +
 			sizeof(struct mach_header)))
-		return  (1);
+		return (1);
 	nm.magic = *(unsigned int *)(size_t)fileraw;
 	nm.filepath = filepath;
 	handle_files_types(&nm);

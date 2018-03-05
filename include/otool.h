@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:34:22 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:28:37 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct		s_otool
 	size_t			rfs;
 	char			*subfilename;
 }					t_otool;
-
 
 t_otool				*otool_detect(t_otool *otool);
 size_t				otool_stack(t_otool *otool);

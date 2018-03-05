@@ -6,13 +6,13 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/11 02:16:50 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 17:12:43 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:25:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static char	get_sect_letter(const t_nm *nm, const unsigned int nsect)
+static char		get_sect_letter(const t_nm *nm, const unsigned int nsect)
 {
 	if (nsect == nm->indexes.text)
 		return ('T');
@@ -23,7 +23,7 @@ static char	get_sect_letter(const t_nm *nm, const unsigned int nsect)
 	return ('S');
 }
 
-char		nm_getletter(const t_sym *sym, const t_nm *nm)
+char			nm_getletter(const t_sym *sym, const t_nm *nm)
 {
 	const size_t		type = sym->type & N_TYPE;
 	char				ret;
@@ -46,7 +46,7 @@ char		nm_getletter(const t_sym *sym, const t_nm *nm)
 	return (ret);
 }
 
-static void	display_name(const t_nm *nm)
+static void		display_name(const t_nm *nm)
 {
 	if (nm->flags & FLAG_SNAME)
 	{
@@ -58,7 +58,7 @@ static void	display_name(const t_nm *nm)
 	}
 }
 
-static t_sym **get_symtab(size_t flags, t_list *lst)
+static t_sym	**get_symtab(size_t flags, t_list *lst)
 {
 	if (flags & FLAG_NOSORT)
 		return ((t_sym**)ft_lsttotab(lst));
@@ -67,13 +67,13 @@ static t_sym **get_symtab(size_t flags, t_list *lst)
 	return ((t_sym**)ft_lstqsort(lst, FT_CASTCMP(&sort_by_names)));
 }
 
-void		nm_display(t_list *lst, t_nm *nm)
+void			nm_display(t_list *lst, t_nm *nm)
 {
-	unsigned int	display_size = (nm->flags & FLAG_64BITS) ? 16 : 8;
-	t_sym			**tab;
-	t_sym			*sym;
-	size_t			index;
-	char			letter;
+	const unsigned int	display_size = (nm->flags & FLAG_64BITS) ? 16 : 8;
+	t_sym				**tab;
+	t_sym				*sym;
+	size_t				index;
+	char				letter;
 
 	display_name(nm);
 	if (!(tab = get_symtab(nm->flags, lst)))

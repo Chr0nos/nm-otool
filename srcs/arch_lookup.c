@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/04 15:34:17 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/04 15:38:10 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/05 14:26:21 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "flags.h"
 #include "swap.h"
 
-static void				fat_fix_cigam(struct fat_arch *arch)
+static void			fat_fix_cigam(struct fat_arch *arch)
 {
 	arch->cputype = (int)(swap((uint32_t)arch->cputype) & 0x7fffffff);
 	arch->cpusubtype = (int)(swap((uint32_t)arch->cpusubtype) & 0x7fffffff);
@@ -28,7 +28,7 @@ static void				fat_fix_cigam(struct fat_arch *arch)
 ** the priority is: X64 > X32 > first found
 */
 
-struct fat_arch	*arch_lookup(struct fat_arch *arch,
+struct fat_arch		*arch_lookup(struct fat_arch *arch,
 	unsigned int arch_left, const size_t flags)
 {
 	struct fat_arch		*selected;
