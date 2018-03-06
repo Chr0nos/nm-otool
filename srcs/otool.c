@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 23:08:07 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/05 19:14:49 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/06 02:19:57 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ t_otool			*otool_detect(t_otool *otool)
 	otool->flags |= filetype((void*)otool->fileraw, otool->filesize, FLAG_NONE);
 	if (otool->flags & (FLAG_UNKNKOW | FLAG_ERROR))
 	{
-		ft_dprintf(STDERR_FILENO, "%s",
-			"error: unknow subfile type provided\n");
+		ft_dprintf(STDERR_FILENO, "%s%#x\n",
+			"error: unknow subfile type provided: ",
+			*(unsigned int*)(void*)otool->fileraw);
 		otool->flags |= FLAG_ERROR;
 	}
 	return (otool);
