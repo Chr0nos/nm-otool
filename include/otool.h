@@ -6,7 +6,7 @@
 /*   By: snicolet <snicolet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/02 16:04:09 by snicolet          #+#    #+#             */
-/*   Updated: 2018/03/05 14:28:37 by snicolet         ###   ########.fr       */
+/*   Updated: 2018/03/07 15:06:27 by snicolet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ void				otool_showmem(const unsigned char *ptr,
 void				otool_fat(struct fat_arch *arch, t_common *com);
 void				otool_lib(t_common *com, size_t index,
 	const size_t size, t_ar **tab);
+void				otool_sname(const t_otool *otool);
 
 #endif
